@@ -1,0 +1,1 @@
+1. Remove colors from file logs, they should be filtered before writing to file!
