@@ -1,11 +1,11 @@
 package application
 
 import (
-	configEvents "github.com/KyaXTeam/go-core/v2/core/config/events"
-	"github.com/KyaXTeam/go-core/v2/core/logger"
-	"github.com/KyaXTeam/go-core/v2/core/logger/application/vars"
-	loggerConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
-	loggerPaths "github.com/KyaXTeam/go-core/v2/core/logger/paths"
+	configEvents "github.com/kyaxcorp/go-core/core/config/events"
+	"github.com/kyaxcorp/go-core/core/logger"
+	"github.com/kyaxcorp/go-core/core/logger/application/vars"
+	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
+	loggerPaths "github.com/kyaxcorp/go-core/core/logger/paths"
 )
 
 // Define variables

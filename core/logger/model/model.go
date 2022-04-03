@@ -4,7 +4,7 @@ import (
 	"github.com/rs/zerolog"
 	"io"
 )
-import "github.com/KyaXTeam/go-core/v2/core/logger/config"
+import "github.com/kyaxcorp/go-core/core/logger/config"
 
 type Logger struct {
 	// This is where the entire config lies...

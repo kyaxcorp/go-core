@@ -2,17 +2,17 @@ package client
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/config"
-	"github.com/KyaXTeam/go-core/v2/core/clients/websocket"
-	websocketConfig "github.com/KyaXTeam/go-core/v2/core/clients/websocket/config"
-	wsConnection "github.com/KyaXTeam/go-core/v2/core/clients/websocket/connection"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/logger"
-	loggerConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
-	loggerPaths "github.com/KyaXTeam/go-core/v2/core/logger/paths"
+	"github.com/kyaxcorp/go-core/core/clients/broker/config"
+	"github.com/kyaxcorp/go-core/core/clients/websocket"
+	websocketConfig "github.com/kyaxcorp/go-core/core/clients/websocket/config"
+	wsConnection "github.com/kyaxcorp/go-core/core/clients/websocket/connection"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/logger"
+	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
+	loggerPaths "github.com/kyaxcorp/go-core/core/logger/paths"
 )
 
 func New(

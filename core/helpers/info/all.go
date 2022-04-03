@@ -1,7 +1,7 @@
 package info
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/bootstrap"
+	"github.com/kyaxcorp/go-core/core/bootstrap"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 	"os"

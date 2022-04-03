@@ -1,10 +1,10 @@
 package err
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/error_reporting"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
-	"github.com/KyaXTeam/go-core/v2/core/logger/application/vars"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/error_reporting"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/logger/application/vars"
 )
 
 var report = true

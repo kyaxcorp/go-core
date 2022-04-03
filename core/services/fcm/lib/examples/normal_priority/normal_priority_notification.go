@@ -2,7 +2,7 @@ package normal_priority
 
 import (
 	"fmt"
-	"github.com/KyaXTeam/go-core/v2/core/services/fcm/lib"
+	"github.com/kyaxcorp/go-core/core/services/fcm/lib"
 	"log"
 )
 

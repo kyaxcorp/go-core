@@ -1,7 +1,7 @@
 package events
 
 import (
-	"github.com/KyaXTeam/go-core/core/helpers/event"
+	"github.com/kyaxcorp/go-core/core/helpers/event"
 	"log"
 	"time"
 )

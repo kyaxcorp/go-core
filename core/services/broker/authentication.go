@@ -1,9 +1,9 @@
 package broker
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/middlewares/authentication"
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/color"
+	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
 	"github.com/rs/zerolog"
 )
 

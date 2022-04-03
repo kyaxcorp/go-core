@@ -1,10 +1,10 @@
 package path
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/hash"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/str"
+	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
+	"github.com/kyaxcorp/go-core/core/helpers/hash"
+	"github.com/kyaxcorp/go-core/core/helpers/str"
 	"log"
 	"os"
 	"path/filepath"

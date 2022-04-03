@@ -2,8 +2,8 @@ package events
 
 import (
 	"errors"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
 )
 
 var onLoadedAsyncCallbacks = make(map[string]func())

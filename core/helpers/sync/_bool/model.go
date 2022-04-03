@@ -2,8 +2,8 @@ package _bool
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_map_string_interface"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/waiter"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_map_string_interface"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/waiter"
 	"sync"
 )
 

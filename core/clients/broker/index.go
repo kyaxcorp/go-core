@@ -2,13 +2,13 @@ package broker
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/client"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/config"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/instances"
-	mainConfig "github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/clients/broker/client"
+	"github.com/kyaxcorp/go-core/core/clients/broker/config"
+	"github.com/kyaxcorp/go-core/core/clients/broker/instances"
+	mainConfig "github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
 )
 
 // New -> creates a new client based on the provided configuration

@@ -1,6 +1,6 @@
 package message
 
-import "github.com/KyaXTeam/go-core/v2/core/services/fcm/lib"
+import "github.com/kyaxcorp/go-core/core/services/fcm/lib"
 
 func Create(message lib.Message) {
 	/*

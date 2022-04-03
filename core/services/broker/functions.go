@@ -1,6 +1,6 @@
 package broker
 
-import "github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server"
+import "github.com/kyaxcorp/go-core/core/listeners/websocket/server"
 
 func (b *Broker) GetNrOfPipes() int {
 	defer b.pipesLock.RUnlock()

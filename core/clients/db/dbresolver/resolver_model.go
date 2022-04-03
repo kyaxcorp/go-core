@@ -2,10 +2,10 @@ package dbresolver
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/gor"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_int"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_uint16"
+	"github.com/kyaxcorp/go-core/core/helpers/gor"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_int"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_uint16"
 	"gorm.io/gorm"
 	"sync"
 	"time"

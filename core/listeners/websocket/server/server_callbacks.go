@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
 )
 
 func (s *Server) OnStart(name string, callback OnStart) bool {

@@ -1,6 +1,6 @@
 package _struct
 
-import "github.com/KyaXTeam/go-core/v2/core/helpers/_struct/defaults"
+import "github.com/kyaxcorp/go-core/core/helpers/_struct/defaults"
 
 // SetDefaultValues -> Set initializes members in a struct referenced by a pointer.
 // Maps and slices are initialized by `make` and other primitive types are set with default values.

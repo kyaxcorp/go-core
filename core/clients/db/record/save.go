@@ -1,12 +1,12 @@
 package record
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/Map"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_interface"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/json"
 	"github.com/google/uuid"
+	"github.com/kyaxcorp/go-core/core/helpers/Map"
+	"github.com/kyaxcorp/go-core/core/helpers/_interface"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/json"
 	"gorm.io/gorm"
 	"reflect"
 	"time"

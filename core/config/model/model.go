@@ -1,16 +1,16 @@
 package model
 
 import (
-	brokerClientConfig "github.com/KyaXTeam/go-core/v2/core/clients/broker/config"
-	// cassandraConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/cassandra/config"
-	cockroachConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/cockroach/config"
-	mysqlConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/mysql/config"
-	//sqliteConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/sqlite/config"
-	websocketClientConfig "github.com/KyaXTeam/go-core/v2/core/clients/websocket/config"
-	httpConfig "github.com/KyaXTeam/go-core/v2/core/listeners/http/config"
-	websocketConfig "github.com/KyaXTeam/go-core/v2/core/listeners/websocket/config"
-	loggingConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
-	brokerConfig "github.com/KyaXTeam/go-core/v2/core/services/broker/config"
+	brokerClientConfig "github.com/kyaxcorp/go-core/core/clients/broker/config"
+	// cassandraConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cassandra/config"
+	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
+	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
+	//sqliteConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/sqlite/config"
+	websocketClientConfig "github.com/kyaxcorp/go-core/core/clients/websocket/config"
+	httpConfig "github.com/kyaxcorp/go-core/core/listeners/http/config"
+	websocketConfig "github.com/kyaxcorp/go-core/core/listeners/websocket/config"
+	loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
+	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 )
 
 // Here we will be storing default configuration key from the map!

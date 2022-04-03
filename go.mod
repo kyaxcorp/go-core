@@ -1,4 +1,4 @@
-module github.com/KyaXTeam/go-core/v2
+module github.com/kyaxcorp/go-core
 
 go 1.17
 

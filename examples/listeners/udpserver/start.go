@@ -2,7 +2,7 @@ package udpserver
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/core/listeners/udp/server"
+	"github.com/kyaxcorp/go-core/core/listeners/udp/server"
 	"log"
 )
 

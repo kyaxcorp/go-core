@@ -3,10 +3,10 @@ package server
 import (
 	"crypto/tls"
 	"flag"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/network/port"
 	"github.com/gookit/color"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/network/port"
 	"github.com/rs/zerolog"
 	"net/http"
 	"strings"

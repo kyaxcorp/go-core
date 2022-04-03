@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/dbresolver"
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/driver"
+	"github.com/kyaxcorp/go-core/core/clients/db/dbresolver"
+	"github.com/kyaxcorp/go-core/core/clients/db/driver"
 )
 
 // Multiple resolvers should be used on your own risk...

@@ -1,9 +1,9 @@
 package request_timing
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/color"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"time"
 )
 

@@ -1,9 +1,9 @@
 package data
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/config/model"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/config/model"
+	"github.com/kyaxcorp/go-core/core/helpers/sync"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
 	"github.com/spf13/viper"
 )
 

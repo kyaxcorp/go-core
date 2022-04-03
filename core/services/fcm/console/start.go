@@ -1,9 +1,9 @@
 package console
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/console/command"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/services/broker"
+	"github.com/kyaxcorp/go-core/core/console/command"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/services/broker"
 	"github.com/spf13/cobra"
 	"log"
 	"time"

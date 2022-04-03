@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/KyaXTeam/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"log"
 	"time"
 )

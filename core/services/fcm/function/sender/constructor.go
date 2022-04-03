@@ -1,6 +1,6 @@
 package sender
 
-import "github.com/KyaXTeam/go-core/v2/core/clients/db"
+import "github.com/kyaxcorp/go-core/core/clients/db"
 
 func New(sender *Sender) (*Sender, error) {
 	sender.stopSender = make(chan bool)

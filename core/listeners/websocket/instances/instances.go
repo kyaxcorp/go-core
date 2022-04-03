@@ -1,8 +1,8 @@
 package instances
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server"
 	"sync"
 )
 

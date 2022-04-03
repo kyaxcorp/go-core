@@ -1,8 +1,8 @@
 package error_reporting
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/version"
 	"github.com/getsentry/sentry-go"
+	"github.com/kyaxcorp/go-core/core/helpers/version"
 	"log"
 	"time"
 )

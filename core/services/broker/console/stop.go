@@ -1,7 +1,7 @@
 package console
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/console/command"
+	"github.com/kyaxcorp/go-core/core/console/command"
 	"github.com/spf13/cobra"
 )
 

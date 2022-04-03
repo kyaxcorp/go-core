@@ -1,6 +1,6 @@
 package server
 
-import "github.com/KyaXTeam/go-core/v2/core/helpers/function"
+import "github.com/kyaxcorp/go-core/core/helpers/function"
 
 func (h *Hub) runGetter() {
 	// On Start callback

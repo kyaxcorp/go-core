@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server/msg"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server/msg"
 	"time"
 	//"GoCore/core/listeners/websocket/server/Message"
 )

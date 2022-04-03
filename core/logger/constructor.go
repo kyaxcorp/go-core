@@ -1,13 +1,13 @@
 package logger
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/io/writer"
-	"github.com/KyaXTeam/go-core/v2/core/logger/application/vars"
-	"github.com/KyaXTeam/go-core/v2/core/logger/config"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
-	"github.com/KyaXTeam/go-core/v2/core/logger/multi_writer"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
+	"github.com/kyaxcorp/go-core/core/helpers/io/writer"
+	"github.com/kyaxcorp/go-core/core/logger/application/vars"
+	"github.com/kyaxcorp/go-core/core/logger/config"
+	"github.com/kyaxcorp/go-core/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/logger/multi_writer"
 	"github.com/mattn/go-colorable"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

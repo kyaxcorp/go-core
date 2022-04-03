@@ -1,7 +1,7 @@
 package local
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/cmap"
+	"github.com/kyaxcorp/go-core/core/helpers/cmap"
 	"time"
 )
 

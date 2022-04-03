@@ -4,7 +4,7 @@ import (
 	"compress/gzip"
 	"errors"
 	"fmt"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/cmap"
+	"github.com/kyaxcorp/go-core/core/helpers/cmap"
 	"io"
 	"io/ioutil"
 	"os"

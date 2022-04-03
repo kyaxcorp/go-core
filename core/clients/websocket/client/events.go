@@ -1,6 +1,6 @@
 package client
 
-import "github.com/KyaXTeam/go-core/v2/core/helpers/function"
+import "github.com/kyaxcorp/go-core/core/helpers/function"
 
 func (c *Client) OnConnect(name string, callback OnConnect) bool {
 	if !function.IsCallable(callback) || name == "" {

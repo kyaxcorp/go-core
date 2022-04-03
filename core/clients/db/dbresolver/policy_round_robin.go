@@ -1,8 +1,8 @@
 package dbresolver
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/codes"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/clients/db/codes"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"sync"

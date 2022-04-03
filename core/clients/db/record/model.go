@@ -2,10 +2,10 @@ package record
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_map_string_interface"
 	"github.com/google/uuid"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_map_string_interface"
 	"gorm.io/gorm"
 )
 

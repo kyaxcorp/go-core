@@ -1,8 +1,8 @@
 package console
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/array"
+	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/array"
 	"log"
 	"strings"
 )

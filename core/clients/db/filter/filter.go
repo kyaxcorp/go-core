@@ -1,9 +1,9 @@
 package filter
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/helper"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/clients/db/helper"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	//"log"

@@ -2,12 +2,12 @@ package websocket
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/clients/websocket/client"
-	"github.com/KyaXTeam/go-core/v2/core/clients/websocket/config"
-	"github.com/KyaXTeam/go-core/v2/core/clients/websocket/instances"
-	mainConfig "github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/clients/websocket/client"
+	"github.com/kyaxcorp/go-core/core/clients/websocket/config"
+	"github.com/kyaxcorp/go-core/core/clients/websocket/instances"
+	mainConfig "github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
 )
 
 // New -> creates a new client based on the provided configuration

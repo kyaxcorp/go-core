@@ -2,7 +2,7 @@ package gor
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
 )
 
 func (g *GInstance) IsRunning() bool {

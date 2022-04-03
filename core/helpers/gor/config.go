@@ -1,7 +1,7 @@
 package gor
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"time"
 )
 

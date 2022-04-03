@@ -1,11 +1,11 @@
 package lock
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem"
-	fsPath "github.com/KyaXTeam/go-core/v2/core/helpers/filesystem/path"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/hash"
 	"github.com/gofrs/flock"
+	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
+	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"log"
 	"sync"
 )

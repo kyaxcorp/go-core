@@ -2,8 +2,8 @@ package waiter
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_uint64"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_uint64"
 	"sync"
 )
 

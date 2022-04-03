@@ -1,8 +1,8 @@
 package driver
 
 import (
-	loggerConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"gorm.io/gorm"
 	"time"
 )

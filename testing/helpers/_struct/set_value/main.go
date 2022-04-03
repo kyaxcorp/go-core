@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/KyaXTeam/go-core/core/helpers/_struct"
 	"github.com/google/uuid"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"log"
 )
 

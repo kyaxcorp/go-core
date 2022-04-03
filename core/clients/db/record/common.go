@@ -1,7 +1,7 @@
 package record
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db"
+	"github.com/kyaxcorp/go-core/core/clients/db"
 	"gorm.io/gorm"
 )
 

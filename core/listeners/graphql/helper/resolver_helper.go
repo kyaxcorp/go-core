@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/middlewares/authentication"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/middlewares/connection"
 	"github.com/gin-gonic/gin"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
+	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/connection"
 )
 
 type ResolverHelper struct {

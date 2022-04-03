@@ -1,11 +1,11 @@
 package config
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/config/model"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/config/model"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/tidwall/gjson"
 )
-import "github.com/KyaXTeam/go-core/v2/core/config/data"
+import "github.com/kyaxcorp/go-core/core/config/data"
 
 func GetConfig() model.Model {
 	ProcessConfig()

@@ -1,8 +1,8 @@
 package broker
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server"
 	"github.com/gookit/color"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server"
 	"github.com/rs/zerolog"
 	"time"
 )

@@ -1,11 +1,11 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/middlewares/authentication"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server/msg"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server/msg"
 	"github.com/rs/zerolog"
 	"io"
 	"strconv"

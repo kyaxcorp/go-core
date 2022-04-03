@@ -1,7 +1,7 @@
 package _time
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"time"
 )
 

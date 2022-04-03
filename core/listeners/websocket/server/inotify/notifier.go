@@ -2,10 +2,10 @@ package inotify
 
 import (
 	"encoding/json"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem/fsnotify"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/str"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem/fsnotify"
+	"github.com/kyaxcorp/go-core/core/helpers/str"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server"
 	"log"
 	"path/filepath"
 	"time"

@@ -1,7 +1,7 @@
 package function
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/value"
+	"github.com/kyaxcorp/go-core/core/helpers/value"
 	"reflect"
 )
 

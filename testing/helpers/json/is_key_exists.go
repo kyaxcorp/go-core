@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/KyaXTeam/go-core/core/helpers/json"
+	"github.com/kyaxcorp/go-core/core/helpers/json"
 	"log"
 )
 

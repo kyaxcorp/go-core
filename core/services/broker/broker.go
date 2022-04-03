@@ -2,9 +2,9 @@ package broker
 
 import (
 	"context"
-	mainConfig "github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
+	mainConfig "github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
 )
 
 // What is Broker?!

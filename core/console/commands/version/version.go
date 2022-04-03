@@ -2,9 +2,9 @@ package version
 
 import (
 	"fmt"
-	"github.com/KyaXTeam/go-core/v2/core/console/command"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/json"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/version"
+	"github.com/kyaxcorp/go-core/core/console/command"
+	"github.com/kyaxcorp/go-core/core/helpers/json"
+	"github.com/kyaxcorp/go-core/core/helpers/version"
 )
 
 var ShowVersion = &command.AddCmd{

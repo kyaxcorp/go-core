@@ -1,6 +1,6 @@
 package config
 
-import "github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
+import "github.com/kyaxcorp/go-core/core/helpers/_struct"
 
 func SetDefaults(config *Config) (*Config, error) {
 	if config == nil {

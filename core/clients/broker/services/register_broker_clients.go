@@ -1,11 +1,11 @@
 package services
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/bootstrap/register_service"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/client"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/logger/appLog"
+	"github.com/kyaxcorp/go-core/core/bootstrap/register_service"
+	"github.com/kyaxcorp/go-core/core/clients/broker"
+	"github.com/kyaxcorp/go-core/core/clients/broker/client"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/logger/appLog"
 )
 
 type BrokerClientsService struct {

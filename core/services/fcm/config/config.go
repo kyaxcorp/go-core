@@ -1,6 +1,6 @@
 package config
 
-import loggerConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
+import loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
 
 /*
 We need to have a unique name of the instance

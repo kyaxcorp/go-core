@@ -2,11 +2,11 @@ package dbresolver
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/driver"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/gor"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_int"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/clients/db/driver"
+	"github.com/kyaxcorp/go-core/core/helpers/gor"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_int"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"gorm.io/gorm"
 	"sync"
 )

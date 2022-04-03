@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/info"
 	"github.com/gin-gonic/gin"
+	"github.com/kyaxcorp/go-core/core/helpers/info"
 	"strings"
 )
 

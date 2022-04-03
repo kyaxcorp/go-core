@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/middlewares/authentication"
 	"github.com/gin-gonic/gin"
+	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
 	"strconv"
 	"time"
 )

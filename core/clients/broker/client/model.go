@@ -2,12 +2,12 @@ package client
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/config"
-	wsClient "github.com/KyaXTeam/go-core/v2/core/clients/websocket/client"
-	wsConfig "github.com/KyaXTeam/go-core/v2/core/clients/websocket/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/clients/broker/config"
+	wsClient "github.com/kyaxcorp/go-core/core/clients/websocket/client"
+	wsConfig "github.com/kyaxcorp/go-core/core/clients/websocket/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 )
 
 type Client struct {

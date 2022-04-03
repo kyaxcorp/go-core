@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server/msg"
 	"github.com/gorilla/websocket"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server/msg"
 	"github.com/rs/zerolog"
 	"strconv"
 )

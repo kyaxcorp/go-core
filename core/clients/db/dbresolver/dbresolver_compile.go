@@ -1,11 +1,11 @@
 package dbresolver
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/codes"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_int"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_uint16"
+	"github.com/kyaxcorp/go-core/core/clients/db/codes"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_int"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_uint16"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"sync"

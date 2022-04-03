@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/array"
+	"github.com/kyaxcorp/go-core/core/helpers/array"
 	"math"
 	"sync"
 )

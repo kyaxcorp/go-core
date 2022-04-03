@@ -1,8 +1,8 @@
 package instances
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/broker/client"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/clients/broker/client"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"sync"
 )
 

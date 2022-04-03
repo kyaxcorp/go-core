@@ -3,8 +3,8 @@ package _map_string_interface
 import (
 	"sync"
 
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
-	"github.com/KyaXTeam/go-core/v2/core/logger/appLog"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/logger/appLog"
 )
 
 type MapStringInterface struct {

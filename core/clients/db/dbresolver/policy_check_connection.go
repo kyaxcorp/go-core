@@ -2,8 +2,8 @@ package dbresolver
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
 	"github.com/gookit/color"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"time"

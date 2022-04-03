@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/json"
 	"github.com/google/uuid"
+	"github.com/kyaxcorp/go-core/core/helpers/json"
 	"log"
 )
 

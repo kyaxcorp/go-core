@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/KyaXTeam/go-core/core/config"
-	configModel "github.com/KyaXTeam/go-core/core/config/model"
+	"github.com/kyaxcorp/go-core/core/config"
+	configModel "github.com/kyaxcorp/go-core/core/config/model"
 	"log"
 )
 

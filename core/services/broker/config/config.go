@@ -1,7 +1,7 @@
 package config
 
 import (
-	loggerConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
+	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
 )
 
 /*

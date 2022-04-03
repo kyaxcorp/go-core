@@ -2,12 +2,12 @@ package db
 
 import (
 	"context"
-	dbClient "github.com/KyaXTeam/go-core/v2/core/clients/db/constructor"
-	dbDriver "github.com/KyaXTeam/go-core/v2/core/clients/db/driver"
-	cockroachConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/cockroach/config"
-	mysqlConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/mysql/config"
-	"github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
+	dbClient "github.com/kyaxcorp/go-core/core/clients/db/constructor"
+	dbDriver "github.com/kyaxcorp/go-core/core/clients/db/driver"
+	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
+	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
+	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"gorm.io/gorm"
 )
 

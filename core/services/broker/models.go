@@ -2,11 +2,11 @@ package broker
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/websocket/server"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
-	brokerConfig "github.com/KyaXTeam/go-core/v2/core/services/broker/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/listeners/websocket/server"
+	"github.com/kyaxcorp/go-core/core/logger/model"
+	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 	"sync"
 )
 

@@ -2,12 +2,12 @@ package gor
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/logger"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/logger"
 	"github.com/rs/zerolog"
 )
 

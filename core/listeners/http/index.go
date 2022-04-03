@@ -2,12 +2,12 @@ package http
 
 import (
 	"context"
-	mainConfig "github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/config"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/instances"
-	"github.com/KyaXTeam/go-core/v2/core/listeners/http/server"
+	mainConfig "github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/listeners/http/config"
+	"github.com/kyaxcorp/go-core/core/listeners/http/instances"
+	"github.com/kyaxcorp/go-core/core/listeners/http/server"
 )
 
 // New -> creates a new server based on the provided configuration

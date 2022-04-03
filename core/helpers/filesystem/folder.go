@@ -1,7 +1,7 @@
 package filesystem
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"io/fs"
 	"io/ioutil"
 	"log"

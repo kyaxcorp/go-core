@@ -1,7 +1,7 @@
 package register_service
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/logger/appLog"
+	"github.com/kyaxcorp/go-core/core/logger/appLog"
 	"github.com/rs/zerolog"
 	"sync"
 )

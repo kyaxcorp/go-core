@@ -7,7 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	//"gorm.io/plugin/dbresolver"
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/dbresolver"
+	"github.com/kyaxcorp/go-core/core/clients/db/dbresolver"
 )
 
 type User struct {

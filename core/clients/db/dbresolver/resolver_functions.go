@@ -1,6 +1,6 @@
 package dbresolver
 
-import "github.com/KyaXTeam/go-core/v2/core/helpers/_context"
+import "github.com/kyaxcorp/go-core/core/helpers/_context"
 
 func (r *resolver) getActiveSources() []detailedConnPool {
 	r.activeSourcesLock.RLock()

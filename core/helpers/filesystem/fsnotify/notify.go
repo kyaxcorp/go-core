@@ -1,9 +1,9 @@
 package fsnotify
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem"
 	"github.com/fsnotify/fsnotify"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"log"
 	"path/filepath"
 	"strings"

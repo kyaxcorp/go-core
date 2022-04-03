@@ -1,16 +1,16 @@
 package record
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db"
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/helper"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/Map"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_interface"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/json"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/ptr"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
 	"github.com/jinzhu/copier"
+	"github.com/kyaxcorp/go-core/core/clients/db"
+	"github.com/kyaxcorp/go-core/core/clients/db/helper"
+	"github.com/kyaxcorp/go-core/core/helpers/Map"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/_interface"
+	"github.com/kyaxcorp/go-core/core/helpers/_struct"
+	"github.com/kyaxcorp/go-core/core/helpers/json"
+	"github.com/kyaxcorp/go-core/core/helpers/ptr"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
 	"reflect"
 	"strings"
 )

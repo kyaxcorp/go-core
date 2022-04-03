@@ -2,9 +2,9 @@ package shutdown
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/_context"
-	"github.com/KyaXTeam/go-core/v2/core/logger"
+	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/logger"
 	"net/http"
 	"os"
 	"os/signal"

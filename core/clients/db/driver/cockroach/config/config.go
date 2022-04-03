@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/driver"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	loggerConfig "github.com/KyaXTeam/go-core/v2/core/logger/config"
+	"github.com/kyaxcorp/go-core/core/clients/db/driver"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
 )
 
 type Config struct {

@@ -1,10 +1,10 @@
 package server
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/function"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_bool"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_map_string_interface"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/sync/_time"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_map_string_interface"
+	"github.com/kyaxcorp/go-core/core/helpers/sync/_time"
 )
 
 func newHub(WSServer *Server) *Hub {

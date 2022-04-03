@@ -3,7 +3,7 @@ package defaults
 import (
 	"encoding/json"
 	"errors"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"reflect"
 	"strconv"
 	"time"

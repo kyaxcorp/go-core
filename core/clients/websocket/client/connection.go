@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/websocket/connection"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/slice"
+	"github.com/kyaxcorp/go-core/core/clients/websocket/connection"
+	"github.com/kyaxcorp/go-core/core/helpers/slice"
 )
 
 // AddConnection -> adds additional Connection Config to current ones

@@ -1,8 +1,8 @@
 package helper
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/logger/channel"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/logger/channel"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"github.com/rs/zerolog"
 )
 

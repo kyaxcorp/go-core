@@ -1,11 +1,11 @@
 package channel
 
 import (
-	mainConfig "github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
-	"github.com/KyaXTeam/go-core/v2/core/logger"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
-	loggerPaths "github.com/KyaXTeam/go-core/v2/core/logger/paths"
+	mainConfig "github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/logger"
+	"github.com/kyaxcorp/go-core/core/logger/model"
+	loggerPaths "github.com/kyaxcorp/go-core/core/logger/paths"
 	"github.com/rs/zerolog"
 )
 

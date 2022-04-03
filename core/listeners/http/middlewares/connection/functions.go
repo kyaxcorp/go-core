@@ -1,8 +1,8 @@
 package connection
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/conv"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/slice"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/slice"
 )
 
 func (c *ConnDetails) getClientIP() string {

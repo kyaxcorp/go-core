@@ -2,7 +2,7 @@ package realpath
 
 import (
 	"bytes"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/str"
+	"github.com/kyaxcorp/go-core/core/helpers/str"
 	"os"
 	"path/filepath"
 )

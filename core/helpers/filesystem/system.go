@@ -1,7 +1,7 @@
 package filesystem
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/helpers/filesystem/realpath"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem/realpath"
 	"path/filepath"
 )
 

@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/driver"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/clients/db/driver"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

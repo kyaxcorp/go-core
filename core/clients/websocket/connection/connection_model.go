@@ -1,6 +1,6 @@
 package connection
 
-import "github.com/KyaXTeam/go-core/v2/core/helpers/_struct"
+import "github.com/kyaxcorp/go-core/core/helpers/_struct"
 
 // AuthByToken -> this is the library default auth type which is set in the Header
 const AuthByToken = 1

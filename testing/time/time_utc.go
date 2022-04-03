@@ -1,7 +1,7 @@
 package main
 
 import (
-	timezone "github.com/KyaXTeam/go-core/core/helpers/time"
+	timezone "github.com/kyaxcorp/go-core/core/helpers/time"
 	"log"
 	"time"
 )

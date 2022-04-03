@@ -2,7 +2,7 @@ package constructor
 
 import (
 	"context"
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/dbinstance"
+	"github.com/kyaxcorp/go-core/core/clients/db/dbinstance"
 	"sync"
 )
 

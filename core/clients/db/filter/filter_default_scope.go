@@ -1,7 +1,7 @@
 package filter
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/scope"
+	"github.com/kyaxcorp/go-core/core/clients/db/scope"
 	"gorm.io/gorm"
 )
 

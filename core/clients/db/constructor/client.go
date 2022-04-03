@@ -1,14 +1,14 @@
 package constructor
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/codes"
-	"github.com/KyaXTeam/go-core/v2/core/clients/db/dbinstance"
-	dbDriver "github.com/KyaXTeam/go-core/v2/core/clients/db/driver"
-	cockroachConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/cockroach/config"
-	mysqlConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/mysql/config"
-	mainConfig "github.com/KyaXTeam/go-core/v2/core/config"
-	"github.com/KyaXTeam/go-core/v2/core/helpers/err"
-	// mysqlConfig "github.com/KyaXTeam/go-core/v2/core/clients/db/driver/mysql/config"
+	"github.com/kyaxcorp/go-core/core/clients/db/codes"
+	"github.com/kyaxcorp/go-core/core/clients/db/dbinstance"
+	dbDriver "github.com/kyaxcorp/go-core/core/clients/db/driver"
+	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
+	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
+	mainConfig "github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/err"
+	// mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
 	"gorm.io/gorm"
 )
 

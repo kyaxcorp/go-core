@@ -1,8 +1,8 @@
 package appLog
 
 import (
-	"github.com/KyaXTeam/go-core/v2/core/logger"
-	"github.com/KyaXTeam/go-core/v2/core/logger/model"
+	"github.com/kyaxcorp/go-core/core/logger"
+	"github.com/kyaxcorp/go-core/core/logger/model"
 	"github.com/rs/zerolog"
 )
 
