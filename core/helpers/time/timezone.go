@@ -2,6 +2,8 @@ package time
 
 import (
 	"time"
+	// we import tzdata because on some systems timezones are missing and can give an error!
+	_ "time/tzdata"
 )
 
 var savedLocalTimezone *time.Location
