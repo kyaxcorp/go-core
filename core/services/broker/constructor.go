@@ -7,6 +7,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
 	websocketConfig "github.com/kyaxcorp/go-core/core/listeners/websocket/config"
@@ -80,7 +81,7 @@ func New(
 		// Let's set the one defined by the config/user, but add another sub folder
 		loggerDirPath = config.Logger.DirLogPath
 		// Correct the path!
-		config.Logger.DirLogPath = filesystem.FilterPath(loggerDirPath + filesystem.DirSeparator() + "server" + filesystem.DirSeparator())
+		config.Logger.DirLogPath = file.FilterPath(loggerDirPath + filesystem.DirSeparator() + "server" + filesystem.DirSeparator())
 		_debug().Str("generated_dir_log_path", config.Logger.DirLogPath).Msg("correcting dir log path")
 	}
 
