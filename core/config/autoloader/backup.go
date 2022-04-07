@@ -2,8 +2,8 @@ package autoloader
 
 import (
 	"github.com/kyaxcorp/go-core/core/config"
-	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 )
 
 func GetBackupFullPath() string {
@@ -14,8 +14,8 @@ func GetBackupFullPath() string {
 	}
 
 	// Create the backup folder
-	if !filesystem.Exists(backupPath) {
-		filesystem.MkDir(backupPath)
+	if !folder.Exists(backupPath) {
+		folder.MkDir(backupPath)
 	}
 
 	return backupPath

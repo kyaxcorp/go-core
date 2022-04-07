@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
@@ -117,7 +118,7 @@ func (s *Server) UpgradeToWS(
 	// Get the clients log path
 	clientsLogPath := s.GetClientsLogPath()
 	// Creating clients path
-	loggerConfig.DirLogPath = filesystem.FilterPath(clientsLogPath + filesystem.DirSeparator() +
+	loggerConfig.DirLogPath = file.FilterPath(clientsLogPath + filesystem.DirSeparator() +
 		identifiedBy + filesystem.DirSeparator() + clientIdentifier + filesystem.DirSeparator())
 	// Set the name
 	loggerConfig.Name = clientIdentifier

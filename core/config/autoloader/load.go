@@ -10,8 +10,10 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/_struct/defaults"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"github.com/kyaxcorp/go-core/core/helpers/json"
 	"github.com/kyaxcorp/go-core/core/helpers/process"
@@ -125,7 +127,7 @@ func StartAutoLoader(c Config) error {
 		// Keep a max nr of backups in a folder!
 		// For that we will use a special function which will clean the map by time order
 		// We will store backups for 30 days period
-		filesystem.ScanAndClean(backupFullPath, 30, nil, nil, nil)
+		folder.ScanAndClean(backupFullPath, 30, nil, nil, nil)
 
 		// Create additional map folder separated by day month and year
 		backupFullPath += filesystem.DirSeparator() + time.Now().Format("02.01.2006")
@@ -133,8 +135,8 @@ func StartAutoLoader(c Config) error {
 		backupFolderPath := backupFullPath
 
 		// Create the folder...
-		if !filesystem.Exists(backupFullPath) {
-			filesystem.MkDir(backupFullPath)
+		if !folder.Exists(backupFullPath) {
+			folder.MkDir(backupFullPath)
 		}
 
 		// The backup will be created based on the comparison with the previous existing file from the existing folder
@@ -183,7 +185,7 @@ func StartAutoLoader(c Config) error {
 				time.Now().Format("02.01.2006_15.04.05.999999999") +
 				"_" + conv.IntToStr(process.GetCurrentProcessPID()) + ".backup.yaml"
 
-			_, _err := filesystem.Copy(configFilePath, backupFullPath)
+			_, _err := file.Copy(configFilePath, backupFullPath)
 			if _err != nil {
 				return err.New(0, "failed to create a backup of the current config file! -> "+_err.Error())
 			}

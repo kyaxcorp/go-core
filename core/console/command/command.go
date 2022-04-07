@@ -2,13 +2,12 @@ package command
 
 import (
 	"context"
-	"fmt"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/helpers/process"
 	"github.com/spf13/cobra"
-	"log"
 	"os"
 	"strconv"
 )
@@ -110,42 +109,46 @@ func (c *AddCmd) GetProcessLockName() string {
 	return c.Cmd
 }
 
-func (c *AddCmd) PIDDestroy() bool {
+func (c *AddCmd) PIDDestroy() (bool, error) {
 	return process.PIDDestroy(c.GetProcessName())
 }
 
-func (c *AddCmd) GenPID() bool {
+func (c *AddCmd) GenPID() (bool, error) {
 	return process.GeneratePID(c.GetProcessName())
 }
 
-func (c *AddCmd) GetExistingPID() string {
+func (c *AddCmd) GetExistingPID() (string, error) {
 	return process.GetExistingPID(c.GetProcessName())
 }
 
-func (c *AddCmd) StopProcess() bool {
-	pid := c.GetExistingPID()
-	log.Println(pid)
+func (c *AddCmd) StopProcess() (bool, error) {
+	pid, _err := c.GetExistingPID()
+	if _err != nil {
+		return false, _err
+	}
+
+	//log.Println(pid)
 	if pid == "" {
-		log.Println("PID Empty...")
-		return false
+		//log.Println("PID Empty...")
+		return false, define.Err(0, "pid empty")
 	}
 
 	// Call SIGTERM
 
-	_pid, err := strconv.Atoi(pid)
-	p, err := os.FindProcess(_pid)
-	if err != nil {
-		log.Println("Process not found!")
-		return false
+	_pid, _err := strconv.Atoi(pid)
+	p, _err := os.FindProcess(_pid)
+	if _err != nil {
+		//log.Println("Process not found!")
+		return false, define.Err(0, "process not found -> ", _err.Error())
 	}
 
-	err = p.Signal(os.Interrupt)
-	if err != nil {
-		log.Println("Failed to Interrupt process!!")
-		return false
+	_err = p.Signal(os.Interrupt)
+	if _err != nil {
+		//log.Println("Failed to Interrupt process!!")
+		return false, define.Err(0, "failed to interrupt process -> ", _err.Error())
 	}
-	fmt.Println("Process stopped!")
-	return true
+	//log.Println("Process stopped!")
+	return true, nil
 }
 
 func NewCmd() *AddCmd {

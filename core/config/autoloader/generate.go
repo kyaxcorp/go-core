@@ -1,6 +1,7 @@
 package autoloader
 
 import (
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/slice"
 	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 
@@ -16,7 +17,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/config/model"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/err"
-	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"github.com/kyaxcorp/go-core/core/helpers/token"
@@ -524,7 +524,7 @@ func SaveConfigFromMemory(cfg Config) error {
 	// Compare the 2 configs
 	tmpConfigHash, _err := hash.FileSha256(configTmpPath)
 	// Delete the tmp config
-	filesystem.Delete(configTmpPath)
+	file.Delete(configTmpPath)
 	if _err != nil {
 		return _err
 	}
@@ -617,7 +617,7 @@ func IsConfigExists() bool {
 	if path == "" {
 		return false
 	}
-	return filesystem.Exists(path)
+	return file.Exists(path)
 }
 
 func IsCustomConfigExists() bool {
@@ -625,7 +625,7 @@ func IsCustomConfigExists() bool {
 	if path == "" {
 		return false
 	}
-	return filesystem.Exists(path)
+	return file.Exists(path)
 }
 
 func IsConfigValid() bool {
