@@ -93,8 +93,13 @@ func (e *Export) GenerateExcel() bool {
 	for columnNr, columnDetails := range e.Columns {
 		headerName := columnDetails.HeaderName
 		dbColumn := ""
+		var _err error
 		if columnDetails.FieldName != "" {
-
+			dbColumn, _err = e.Filter.getDBFieldName(columnDetails.FieldName)
+			if _err != nil {
+				e.excelError = _err
+				return false
+			}
 		} else if columnDetails.DBFieldName != "" {
 			dbColumn = columnDetails.DBFieldName
 		} else {
