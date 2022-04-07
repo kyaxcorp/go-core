@@ -1,13 +1,13 @@
-input FilterExport {
+input FilterExportInput {
     Pdf: Boolean
     Excel: Boolean
     Word: Boolean
     Html: Boolean
 
-    Options: FilterExportOptions
+    Options: FilterExportOptionsInput
 }
 
-input FilterExportOptions {
+input FilterExportOptionsInput {
     # Default columns should be the ones that have been queried
     Columns: [String!]
     MaxRows: Int
