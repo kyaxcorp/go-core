@@ -1,7 +1,7 @@
 package filter
 
 type Export struct {
-	filter *Input
+	Filter *Input
 	// items -> here we will receive the queried items
 	items []map[string]interface{}
 	// if items are set

@@ -11,7 +11,7 @@ func (f *Input) SetDB(db *gorm.DB) *Input {
 
 // Because when calling in each method from gorm, they call a function called
 // get instance, and this function is cloning it! that's why we need to call back the get db client from
-// the filter!
+// the Filter!
 // a new address for the pointer it's been set each time! the old address is not touched anymore!
 
 func (f *Input) SetDb(dbClient *gorm.DB) *Input {

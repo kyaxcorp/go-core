@@ -12,7 +12,7 @@ func (e *Export) GeneratePdf() {
 }
 
 func (e *Export) GenerateExcel() bool {
-	// based on the input filter, we should query and generate
+	// based on the input Filter, we should query and generate
 
 	// Let's initially export everything...
 	f := excelize.NewFile()
@@ -78,9 +78,9 @@ func (e *Export) GenerateExcel() bool {
 }
 
 func (e *Export) QueryItems() error {
-	// based on the input filter, we should query and generate
+	// based on the input Filter, we should query and generate
 
-	dbResult := e.filter.DB().Find(&e.items)
+	dbResult := e.Filter.DB().Find(&e.items)
 
 	if dbResult.Error != nil {
 		return dbResult.Error
