@@ -278,6 +278,12 @@ func (e *Export) QueryItems() error {
 		_db = e.Filter.DB()
 	}
 
+	if len(e.Preloads) > 0 {
+		for _, preload := range e.Preloads {
+			_db = _db.Preload(preload)
+		}
+	}
+
 	dbResult := _db.Find(&e.items)
 
 	if dbResult.Error != nil {

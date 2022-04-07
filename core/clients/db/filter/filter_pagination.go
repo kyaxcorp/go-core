@@ -16,3 +16,13 @@ func (f *Input) applyPagination(db *gorm.DB) *gorm.DB {
 	)
 	return db
 }
+
+func (f *Input) SetNrOfItems(nrOfItems int) *Input {
+	f.NrOfItems = &nrOfItems
+	return f
+}
+
+func (f *Input) SetPageNr(pageNr int) *Input {
+	f.PageNr = &pageNr
+	return f
+}

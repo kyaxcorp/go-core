@@ -11,8 +11,8 @@ type Export struct {
 	TableName  string
 	Model      interface{}
 	Columns    []ExportColumn
-
-	Filter *Input
+	Filter     *Input
+	Preloads   []string
 	// It will delete itself after a period of time...
 	// if 0, then it will not be deleted!
 	SelfDeleteAfterSeconds int64
