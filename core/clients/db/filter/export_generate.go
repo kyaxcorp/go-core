@@ -2,9 +2,11 @@ package filter
 
 import (
 	"github.com/google/uuid"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/xuri/excelize/v2"
+	"time"
 )
 
 func (e *Export) GeneratePdf() {
@@ -100,7 +102,13 @@ func (e *Export) GenerateExcel() bool {
 
 	// TODO: we should save the file id into a memory stack with id's... maybe in the filter somewhere...
 
-	e.excelFileName = fileName
+	if e.ExportName == "" {
+		e.ExportName = id.String()
+	}
+
+	now := time.Now()
+	e.excelFileID = id
+	e.excelFileName = e.ExportName + "_" + conv.Int64ToStr(now.UnixMilli())
 	e.excelFullFileName = fullFileName
 	e.excelFileExtension = fileExtension
 
@@ -120,6 +128,7 @@ func (e *Export) GenerateExcel() bool {
 		e.excelError = _err
 		return false
 	}
+	e.excelCreatedAt = time.Now()
 
 	e.excelFileSizeBytes, _err = file.Size(fullFilePath)
 	if _err != nil {
@@ -127,7 +136,17 @@ func (e *Export) GenerateExcel() bool {
 		return false
 	}
 
+	if e.SelfDeleteAfterSeconds != 0 {
+		time.AfterFunc(time.Second*time.Duration(e.SelfDeleteAfterSeconds), func() {
+			file.Delete(fullFilePath)
+		})
+	}
+
 	return true
+}
+
+func (e *Export) GetExcelFileID() uuid.UUID {
+	return e.excelFileID
 }
 
 func (e *Export) GetExcelFileName() string {
