@@ -1,6 +1,7 @@
 package filter
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
@@ -8,7 +9,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
-	"log"
+	//"log"
 	"time"
 )
 
@@ -91,6 +92,7 @@ func (e *Export) GenerateExcel() bool {
 
 	var headerFields []HeaderField
 	for columnNr, columnDetails := range e.Columns {
+		clNr := columnNr + 1
 		headerName := columnDetails.HeaderName
 		dbColumn := ""
 		var _err error
@@ -114,7 +116,7 @@ func (e *Export) GenerateExcel() bool {
 			}
 		}
 
-		xAxis, _err := excelize.ColumnNumberToName(columnNr)
+		xAxis, _err := excelize.ColumnNumberToName(clNr)
 		if _err != nil {
 			e.excelError = _err
 			return false
@@ -127,12 +129,44 @@ func (e *Export) GenerateExcel() bool {
 		})
 	}
 
+	for _, headerField := range headerFields {
+		excelRowNr := 1
+
+		style, err := f.NewStyle(
+			`{
+					"alignment":{
+						"horizontal":"center"
+					},
+					"font":{
+						"bold":true
+					}
+				}`,
+		)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		XYAxis := headerField.XAxis + conv.IntToStr(excelRowNr)
+
+		_err := f.SetCellStyle(sheetName, XYAxis, XYAxis, style)
+		if _err != nil {
+			e.excelError = _err
+			return false
+		}
+		_err = f.SetCellValue(sheetName, XYAxis, headerField.Header)
+		if _err != nil {
+			e.excelError = _err
+			return false
+		}
+	}
+
 	for rowNr, row := range e.items {
 		for _, headerField := range headerFields {
+			excelRowNr := rowNr + 2
 			// row contains the db field names!
 			if fieldValue, ok := row[headerField.DBFieldName]; ok {
-				XYAxis := headerField.XAxis + conv.IntToStr(rowNr)
-				log.Println("XYAxis", XYAxis, fieldValue)
+				XYAxis := headerField.XAxis + conv.IntToStr(excelRowNr)
+				//log.Println("XYAxis", XYAxis, fieldValue)
 				_err := f.SetCellValue(sheetName, XYAxis, fieldValue)
 				if _err != nil {
 					e.excelError = _err
@@ -202,6 +236,14 @@ func (e *Export) GenerateExcel() bool {
 
 func (e *Export) GetExcelFileID() uuid.UUID {
 	return e.excelFileID
+}
+
+func (e *Export) GetExcelCreatedAt() time.Time {
+	return e.excelCreatedAt
+}
+
+func (e *Export) GetExcelFileSizeBytes() int64 {
+	return e.excelFileSizeBytes
 }
 
 func (e *Export) GetExcelFileName() string {
