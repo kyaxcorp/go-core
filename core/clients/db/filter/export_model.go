@@ -15,6 +15,7 @@ type Export struct {
 	// Excel part
 	excelFileName      string
 	excelFullFileName  string
+	excelFullFilePath  string
 	excelFileExtension string
 	excelFileSizeBytes int64
 	excelError         error

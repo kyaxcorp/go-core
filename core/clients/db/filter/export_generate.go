@@ -11,6 +11,55 @@ func (e *Export) GeneratePdf() {
 
 }
 
+func (e *Export) GetExportPath(paths ...string) (string, error) {
+	_paths := append([]string{"exporter"}, paths...)
+	tmpPath, _err := filesystem.GetAppTmpPath(_paths...)
+	if _err != nil {
+		return "", _err
+	}
+	return tmpPath, nil
+}
+
+func (e *Export) GetExcelExportPath() (string, error) {
+	tmpPath, _err := e.GetExportPath("excel")
+	if _err != nil {
+		return "", _err
+	}
+	return tmpPath, nil
+}
+
+func (e *Export) GetPdfExportPath() (string, error) {
+	tmpPath, _err := e.GetExportPath("pdf")
+	if _err != nil {
+		return "", _err
+	}
+	return tmpPath, nil
+}
+
+func (e *Export) GetHtmlExportPath() (string, error) {
+	tmpPath, _err := e.GetExportPath("html")
+	if _err != nil {
+		return "", _err
+	}
+	return tmpPath, nil
+}
+
+func (e *Export) GetJsonExportPath() (string, error) {
+	tmpPath, _err := e.GetExportPath("json")
+	if _err != nil {
+		return "", _err
+	}
+	return tmpPath, nil
+}
+
+func (e *Export) GetWordExportPath() (string, error) {
+	tmpPath, _err := e.GetExportPath("word")
+	if _err != nil {
+		return "", _err
+	}
+	return tmpPath, nil
+}
+
 func (e *Export) GenerateExcel() bool {
 	// based on the input Filter, we should query and generate
 
@@ -49,16 +98,20 @@ func (e *Export) GenerateExcel() bool {
 	fileName := id.String()
 	fullFileName := fileName + "." + fileExtension
 
+	// TODO: we should save the file id into a memory stack with id's... maybe in the filter somewhere...
+
 	e.excelFileName = fileName
 	e.excelFullFileName = fullFileName
 	e.excelFileExtension = fileExtension
 
-	tmpPath, _err := filesystem.GetAppTmpPath()
+	tmpPath, _err := e.GetExcelExportPath()
 	if _err != nil {
 		e.excelError = _err
 		return false
 	}
+
 	fullFilePath := tmpPath + fileName
+	e.excelFullFilePath = fullFilePath
 
 	// Set active sheet of the workbook.
 	f.SetActiveSheet(sheetIndex)
@@ -75,6 +128,26 @@ func (e *Export) GenerateExcel() bool {
 	}
 
 	return true
+}
+
+func (e *Export) GetExcelFileName() string {
+	return e.excelFileName
+}
+
+func (e *Export) GetExcelFullFileName() string {
+	return e.excelFullFileName
+}
+
+func (e *Export) GetExcelFileExtension() string {
+	return e.excelFileExtension
+}
+
+func (e *Export) GetExcelFullFilePath() string {
+	return e.excelFullFilePath
+}
+
+func (e *Export) GetExcelError() error {
+	return e.excelError
 }
 
 func (e *Export) QueryItems() error {
