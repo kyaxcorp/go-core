@@ -8,6 +8,9 @@ import (
 type Export struct {
 	// This is a prefix for exporting/generating the file!
 	ExportName string
+	TableName  string
+	Model      interface{}
+	Columns    []ExportColumn
 
 	Filter *Input
 	// It will delete itself after a period of time...
@@ -21,8 +24,6 @@ type Export struct {
 	nrOfRows    int64
 	nrOfColumns int64
 
-	columns []string
-
 	// Excel part
 	excelFileID        uuid.UUID
 	excelFileName      string
@@ -35,4 +36,13 @@ type Export struct {
 
 	// TODO....
 	pdfFileName string
+}
+
+type ExportColumn struct {
+	// you can choose of these options: (it's the search criteria)
+	FieldName   string
+	DBFieldName string
+
+	// This is the name of the column in the header
+	HeaderName string
 }

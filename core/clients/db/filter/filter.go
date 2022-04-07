@@ -99,7 +99,7 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 			dbTableName: tableName,
 		}
 
-		// Let's also parse model columns!
+		// Let's also parse model Columns!
 		//modelFields := _struct.GetExportableFieldsByJSONTag(model)
 		//lowerCaseModelFields := make(map)
 		//for _,fieldName := range modelFields{

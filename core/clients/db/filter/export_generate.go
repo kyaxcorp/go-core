@@ -4,8 +4,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
 	"github.com/xuri/excelize/v2"
+	"gorm.io/gorm"
+	"log"
 	"time"
 )
 
@@ -65,22 +68,67 @@ func (e *Export) GetWordExportPath() (string, error) {
 func (e *Export) GenerateExcel() bool {
 	// based on the input Filter, we should query and generate
 
+	if e.nrOfRows == 0 {
+		return false
+	}
+
 	// Let's initially export everything...
 	f := excelize.NewFile()
 
 	sheetName := "Sheet1"
 	sheetIndex := f.GetSheetIndex(sheetName)
 
-	for _, row := range e.items {
-		for columnOrder, columnName := range e.columns {
-			columnNr := columnOrder + 1
-			if fieldValue, ok := row[columnName]; ok {
-				axis, _err := excelize.ColumnNumberToName(columnNr)
-				if _err != nil {
-					e.excelError = _err
-					return false
-				}
-				_err = f.SetCellValue(sheetName, axis, fieldValue)
+	// First, let's create the struct for speeding up the process!
+
+	type HeaderField struct {
+		Header      string
+		DBFieldName string
+		XAxis       string // this is the column
+	}
+
+	//firstRow := e.items[0]
+	// TODO: later on if no columns defined, we can set to get from the DB or model/table
+
+	var headerFields []HeaderField
+	for columnNr, columnDetails := range e.Columns {
+		headerName := columnDetails.HeaderName
+		dbColumn := ""
+		if columnDetails.FieldName != "" {
+
+		} else if columnDetails.DBFieldName != "" {
+			dbColumn = columnDetails.DBFieldName
+		} else {
+			continue
+		}
+
+		if headerName == "" {
+			if columnDetails.FieldName != "" {
+				headerName = columnDetails.FieldName
+			} else {
+				headerName = columnDetails.DBFieldName
+			}
+		}
+
+		xAxis, _err := excelize.ColumnNumberToName(columnNr)
+		if _err != nil {
+			e.excelError = _err
+			return false
+		}
+
+		headerFields = append(headerFields, HeaderField{
+			Header:      headerName,
+			DBFieldName: dbColumn,
+			XAxis:       xAxis,
+		})
+	}
+
+	for rowNr, row := range e.items {
+		for _, headerField := range headerFields {
+			// row contains the db field names!
+			if fieldValue, ok := row[headerField.DBFieldName]; ok {
+				XYAxis := headerField.XAxis + conv.IntToStr(rowNr)
+				log.Println("XYAxis", XYAxis, fieldValue)
+				_err := f.SetCellValue(sheetName, XYAxis, fieldValue)
 				if _err != nil {
 					e.excelError = _err
 					return false
@@ -97,8 +145,7 @@ func (e *Export) GenerateExcel() bool {
 	}
 
 	fileExtension := "xlsx"
-	fileName := id.String()
-	fullFileName := fileName + "." + fileExtension
+	//fileName := id.String()
 
 	// TODO: we should save the file id into a memory stack with id's... maybe in the filter somewhere...
 
@@ -109,6 +156,8 @@ func (e *Export) GenerateExcel() bool {
 	now := time.Now()
 	e.excelFileID = id
 	e.excelFileName = e.ExportName + "_" + conv.Int64ToStr(now.UnixMilli())
+	fullFileName := e.excelFileName + "." + fileExtension
+
 	e.excelFullFileName = fullFileName
 	e.excelFileExtension = fileExtension
 
@@ -118,7 +167,7 @@ func (e *Export) GenerateExcel() bool {
 		return false
 	}
 
-	fullFilePath := tmpPath + fileName
+	fullFilePath := tmpPath + filesystem.DirSeparator() + fullFileName
 	e.excelFullFilePath = fullFilePath
 
 	// Set active sheet of the workbook.
@@ -173,7 +222,16 @@ func (e *Export) GetExcelError() error {
 func (e *Export) QueryItems() error {
 	// based on the input Filter, we should query and generate
 
-	dbResult := e.Filter.DB().Find(&e.items)
+	var _db *gorm.DB
+	if e.TableName != "" {
+		_db = e.Filter.DB().Table(e.TableName)
+	} else if e.Model != nil {
+		_db = e.Filter.DB().Model(e.Model)
+	} else {
+		_db = e.Filter.DB()
+	}
+
+	dbResult := _db.Find(&e.items)
 
 	if dbResult.Error != nil {
 		return dbResult.Error
@@ -183,9 +241,17 @@ func (e *Export) QueryItems() error {
 	return nil
 }
 
-func (e *Export) SetColumns(columns []string) *Export {
-	e.columns = columns
+func (e *Export) SetColumns(columns []ExportColumn) *Export {
+	e.Columns = columns
 	return e
+}
+
+func (e *Export) GetNrOfRows() int64 {
+	return e.nrOfRows
+}
+
+func (e *Export) GetItems() []map[string]interface{} {
+	return e.items
 }
 
 func (e *Export) SetItems(items []map[string]interface{}) *Export {

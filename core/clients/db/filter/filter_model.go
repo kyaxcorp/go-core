@@ -26,7 +26,7 @@ type cachedModel struct {
 	// this is the raw structure
 	modelName string
 	model     interface{}
-	// these are the columns having as index (the model column name) and the value as the GORM Field Name
+	// these are the Columns having as index (the model column name) and the value as the GORM Field Name
 	dbColumns   map[string]string
 	dbTableName string
 }
