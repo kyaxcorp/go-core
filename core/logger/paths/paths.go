@@ -2,8 +2,10 @@ package paths
 
 import (
 	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 )
 
 // cum sa fac ca valoarea interfetilor date sa ajunga in alta parte?!!...
@@ -28,52 +30,52 @@ func GetLogsPath() string {
 	}
 
 	// Create the backup folder
-	if !filesystem.Exists(logsPath) {
-		filesystem.MkDir(logsPath)
+	if !folder.Exists(logsPath) {
+		folder.MkDir(logsPath)
 	}
 	return logsPath
 }
 
 // GetApplicationErrorPath -> gets the path where error logs will be stored from the entire app
 func GetApplicationErrorLogsPath() string {
-	return filesystem.FilterPath(GetLogsPath() + "errors" + filesystem.DirSeparator())
+	return file.FilterPath(GetLogsPath() + "errors" + filesystem.DirSeparator())
 }
 
 func GetApplicationLogsPath() string {
-	return filesystem.FilterPath(GetLogsPath() + "application" + filesystem.DirSeparator())
+	return file.FilterPath(GetLogsPath() + "application" + filesystem.DirSeparator())
 }
 
 // GetLogsPathForChannels -> channels are additional logging based on the configuration provided in the config file
 func GetLogsPathForChannels(optFolder string) string {
-	_path := filesystem.FilterPath(GetLogsPath() + "channels" + filesystem.DirSeparator())
+	_path := file.FilterPath(GetLogsPath() + "channels" + filesystem.DirSeparator())
 	if optFolder != "" {
-		_path += filesystem.FilterPath(optFolder) + filesystem.DirSeparator()
+		_path += file.FilterPath(optFolder) + filesystem.DirSeparator()
 	}
 	return _path
 }
 
 // GetLogsPathForClients -> gets the path for clients, param: optional folder
 func GetLogsPathForClients(optFolder string) string {
-	_path := filesystem.FilterPath(GetLogsPath() + "clients" + filesystem.DirSeparator())
+	_path := file.FilterPath(GetLogsPath() + "clients" + filesystem.DirSeparator())
 	if optFolder != "" {
-		_path += filesystem.FilterPath(optFolder) + filesystem.DirSeparator()
+		_path += file.FilterPath(optFolder) + filesystem.DirSeparator()
 	}
 	return _path
 }
 
 func GetDatabasePath(optFolder string) string {
-	_path := filesystem.FilterPath(GetLogsPath() + "db" + filesystem.DirSeparator())
+	_path := file.FilterPath(GetLogsPath() + "db" + filesystem.DirSeparator())
 	if optFolder != "" {
-		_path += filesystem.FilterPath(optFolder) + filesystem.DirSeparator()
+		_path += file.FilterPath(optFolder) + filesystem.DirSeparator()
 	}
 	return _path
 }
 
 // GetLogsPathForServers -> gets the path for servers, param: optional folder
 func GetLogsPathForServers(optFolder string) string {
-	_path := filesystem.FilterPath(GetLogsPath() + "servers" + filesystem.DirSeparator())
+	_path := file.FilterPath(GetLogsPath() + "servers" + filesystem.DirSeparator())
 	if optFolder != "" {
-		_path += filesystem.FilterPath(optFolder) + filesystem.DirSeparator()
+		_path += file.FilterPath(optFolder) + filesystem.DirSeparator()
 	}
 	return _path
 }

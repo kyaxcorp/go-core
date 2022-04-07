@@ -4,6 +4,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/config"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"log"
 )
 
@@ -16,8 +17,8 @@ func GetCertsFullPath() string {
 		log.Println(err)
 	}
 
-	if !filesystem.Exists(certsPath) {
-		filesystem.MkDir(certsPath)
+	if !folder.Exists(certsPath) {
+		folder.MkDir(certsPath)
 	}
 
 	return certsPath
@@ -30,8 +31,8 @@ func GetCertsFullPathByScope(scope string) string {
 	}
 
 	certsPath = certsPath + filesystem.DirSeparator() + scope
-	if !filesystem.Exists(certsPath) {
-		filesystem.MkDir(certsPath)
+	if !folder.Exists(certsPath) {
+		folder.MkDir(certsPath)
 	}
 	return certsPath
 }

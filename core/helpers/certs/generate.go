@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct/defaults"
 	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"math/big"
 	"net"
@@ -210,10 +211,10 @@ func GenerateCerts(scope string, options *CertGeneration) error {
 	//log.Print("wrote key.pem\n")
 	// Check if files exist
 
-	if !filesystem.FileExists(options.CertPath) {
+	if !file.Exists(options.CertPath) {
 		return err.New(0, "cert file doesn't exist", options.CertPath)
 	}
-	if !filesystem.FileExists(options.KeyPath) {
+	if !file.Exists(options.KeyPath) {
 		return err.New(0, "key file doesn't exist", options.KeyPath)
 	}
 

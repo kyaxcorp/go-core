@@ -5,6 +5,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"strings"
 )
 
@@ -22,8 +23,8 @@ func GetAppTmpPath(paths ...string) (string, error) {
 		itemPath = itemPath + strings.Join(paths, filesystem.DirSeparator())
 	}
 
-	if !filesystem.Exists(itemPath) {
-		if !filesystem.MkDir(itemPath) {
+	if !folder.Exists(itemPath) {
+		if !folder.MkDir(itemPath) {
 			return "", define.Err(0, "failed to create path -> ", itemPath)
 		}
 	}

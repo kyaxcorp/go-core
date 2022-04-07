@@ -2,76 +2,86 @@ package process
 
 import (
 	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
-	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 )
 
-func getPIDsFolderPath() string {
-	var err error = nil
+func getPIDsFolderPath() (string, error) {
+	var _err error = nil
 	pidsPath := config.GetConfig().Application.PIDsPath
-	pidsPath, err = fsPath.GenRealPath(pidsPath, true)
+	pidsPath, _err = fsPath.GenRealPath(pidsPath, true)
 
-	if err != nil {
-		log.Println(err)
+	if _err != nil {
+		//log.Println(err)
+		return "", _err
 	}
 
-	if !filesystem.Exists(pidsPath) {
-		filesystem.MkDir(pidsPath)
+	if !folder.Exists(pidsPath) {
+		folder.MkDir(pidsPath)
 	}
 
-	return pidsPath
+	return pidsPath, nil
 }
 
-func getPidPath(name string) string {
-	return getPIDsFolderPath() + filesystem.DirSeparator() + hash.Sha256(name) + ".pid"
-}
-
-func PIDDestroy(name string) bool {
-	pidFilePath := getPidPath(name)
-	if pidFilePath == "" {
-		return false
+func getPidPath(name string) (string, error) {
+	pidsFolder, _err := getPIDsFolderPath()
+	if pidsFolder == "" || _err != nil {
+		return "", _err
 	}
-
-	return filesystem.Unlink(pidFilePath)
+	return pidsFolder + filesystem.DirSeparator() + hash.Sha256(name) + ".pid", nil
 }
 
-func GeneratePID(name string) bool {
-	pidFilePath := getPidPath(name)
-	if pidFilePath == "" {
-		return false
+func PIDDestroy(name string) (bool, error) {
+	pidFilePath, _err := getPidPath(name)
+	if pidFilePath == "" || _err != nil {
+		return false, _err
+	}
+	return file.Unlink(pidFilePath)
+}
+
+func GeneratePID(name string) (bool, error) {
+	pidFilePath, _err := getPidPath(name)
+	if pidFilePath == "" || _err != nil {
+		return false, _err
 	}
 
 	processPid := os.Getpid()
-	filesystem.FilePutContents(pidFilePath, strconv.FormatInt(int64(processPid), 10))
-	return true
+	_err = file.PutContents(pidFilePath, strconv.FormatInt(int64(processPid), 10))
+	if _err != nil {
+		return false, _err
+	}
+	return true, nil
 }
 
 func GetCurrentProcessPID() int {
 	return os.Getpid()
 }
 
-func GetExistingPID(name string) string {
-	pidFilePath := getPidPath(name)
-	if pidFilePath == "" {
-		return ""
+func GetExistingPID(name string) (string, error) {
+	pidFilePath, _err := getPidPath(name)
+	if pidFilePath == "" || _err != nil {
+		return "", _err
 	}
 
-	if !filesystem.FileExists(pidFilePath) {
-		return ""
+	exists, _err := file.ExistsErr(pidFilePath)
+	if _err != nil || !exists {
+		return "", _err
 	}
 
 	//log.Println(pid_file_path)
 
-	pid, err := filesystem.FileGetContents(pidFilePath)
-	if err != nil {
-		log.Println(err)
+	pid, _err := file.GetContents(pidFilePath)
+	if _err != nil {
+		//log.Println(_ere)
+		return "", _err
 	}
-	return pid
+	return pid, nil
 }
 
 func GetCurrentProcessFolder() (string, error) {

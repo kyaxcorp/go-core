@@ -3,8 +3,8 @@ package lock
 import (
 	"github.com/gofrs/flock"
 	"github.com/kyaxcorp/go-core/core/config"
-	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"log"
 	"sync"
@@ -34,8 +34,8 @@ func getLocksDir() string {
 		log.Println(err)
 	}
 
-	if !filesystem.Exists(locksPath) {
-		filesystem.MkDir(locksPath)
+	if !folder.Exists(locksPath) {
+		folder.MkDir(locksPath)
 	}
 
 	return locksPath
