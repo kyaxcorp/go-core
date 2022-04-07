@@ -2,7 +2,7 @@ package logger
 
 import (
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
-	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/io/writer"
 	"github.com/kyaxcorp/go-core/core/logger/application/vars"
 	"github.com/kyaxcorp/go-core/core/logger/config"
@@ -172,7 +172,7 @@ func getFileHandler(config config.Config) io.Writer {
 	if config.FileName != "" {
 		fileName = config.FileName
 	}
-	fullFilePath := filesystem.FilterPath(path.Join(config.DirLogPath, fileName))
+	fullFilePath := file.FilterPath(path.Join(config.DirLogPath, fileName))
 	writersByFileFullPathLock.Lock()
 	defer writersByFileFullPathLock.Unlock()
 	if _writer, ok := writersByFileFullPath[fullFilePath]; ok {
@@ -200,7 +200,7 @@ func newRollingFile(config config.Config) io.Writer {
 	}
 
 	return &writer.Logger{
-		Filename:   filesystem.FilterPath(path.Join(config.DirLogPath, fileName)),
+		Filename:   file.FilterPath(path.Join(config.DirLogPath, fileName)),
 		MaxBackups: config.FileRotateMaxFiles, // files
 		MaxSize:    config.FileLogMaxSize,     // megabytes
 		MaxAge:     config.FileMaxAge,         // days
