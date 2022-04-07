@@ -1,0 +1,23 @@
+input FilterExport {
+    Pdf: Boolean
+    Excel: Boolean
+    Word: Boolean
+    Html: Boolean
+
+    Options: FilterExportOptions
+}
+
+input FilterExportOptions {
+    # Default columns should be the ones that have been queried
+    Columns: [String!]
+    MaxRows: Int
+    MaxColumns: Int
+}
+
+type FilterExport {
+    Pdf: FileDescription
+    Excel: FileDescription
+    Word: FileDescription
+    Html: FileDescription
+}
+

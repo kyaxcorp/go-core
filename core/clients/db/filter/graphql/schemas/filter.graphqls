@@ -20,4 +20,7 @@ input FilterInput {
     #    RootConditions: [GroupCondition]
     # it's a single one because it's the root level!
     RootConditions: GroupCondition
+
+    Export: FilterExport
 }
+
