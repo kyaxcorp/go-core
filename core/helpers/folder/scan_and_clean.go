@@ -1,33 +1,12 @@
-package filesystem
+package folder
 
 import (
+	"github.com/kyaxcorp/go-core/core/helpers/file"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"io/fs"
 	"io/ioutil"
-	"log"
-	"os"
 )
-
-func Exists(path string) bool {
-	if _, err := os.Stat(path); !os.IsNotExist(err) {
-		return true
-	}
-	return false
-}
-
-func MkDir(path string) bool {
-	/*err := os.Mkdir(path, 0751)
-	if err != nil {
-		log.Fatal(err)
-	}*/
-
-	err := os.MkdirAll(path, 0751)
-	if err != nil {
-		log.Fatal(err)
-		return false
-	}
-	return true
-}
 
 type ScanAndCleanResult struct {
 	NrOfDeletedItems   int
@@ -84,7 +63,7 @@ func ScanAndClean(
 	for _, f := range files {
 
 		// Create the full item path
-		itemPath := FilterPath(path + DirSeparator() + f.Name())
+		itemPath := file.FilterPath(path + filesystem.DirSeparator() + f.Name())
 		// Call the onScan callback
 		if isOnScan {
 			onScan(f, itemPath)
@@ -101,7 +80,7 @@ func ScanAndClean(
 
 			//log.Println("Deleting...", itemPath)
 			// Delete the item!
-			if _err := RemoveRecursive(itemPath); _err == nil {
+			if _err := file.RemoveRecursive(itemPath); _err == nil {
 				deletedItems = append(deletedItems, itemPath)
 			} else {
 				undeletedItems = append(undeletedItems, itemPath)

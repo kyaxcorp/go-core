@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
-	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
 	"github.com/xuri/excelize/v2"
 	"time"
 )
@@ -15,7 +15,7 @@ func (e *Export) GeneratePdf() {
 
 func (e *Export) GetExportPath(paths ...string) (string, error) {
 	_paths := append([]string{"exporter"}, paths...)
-	tmpPath, _err := filesystem.GetAppTmpPath(_paths...)
+	tmpPath, _err := tmp.GetAppTmpPath(_paths...)
 	if _err != nil {
 		return "", _err
 	}
@@ -138,6 +138,7 @@ func (e *Export) GenerateExcel() bool {
 
 	if e.SelfDeleteAfterSeconds != 0 {
 		time.AfterFunc(time.Second*time.Duration(e.SelfDeleteAfterSeconds), func() {
+			// Check if exists...!?
 			file.Delete(fullFilePath)
 		})
 	}

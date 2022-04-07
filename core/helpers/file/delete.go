@@ -1,8 +1,14 @@
 package file
 
-import "os"
+import (
+	"os"
+)
 
 func Remove(filePath string) (bool, error) {
+	return Delete(filePath)
+}
+
+func Unlink(filePath string) (bool, error) {
 	return Delete(filePath)
 }
 
