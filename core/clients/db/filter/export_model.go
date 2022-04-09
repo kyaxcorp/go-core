@@ -44,9 +44,15 @@ type Export struct {
 
 type ExportColumn struct {
 	// you can choose of these options: (it's the search criteria)
-	FieldName   string
-	DBFieldName string
+	FieldName string // it can contain .
+	//DBFieldName string
 
 	// This is the name of the column in the header
 	HeaderName string
+	Handler    ExportHandler
 }
+
+type ExportHandler func(row ExportRow) ExportValue
+
+type ExportValue interface{}
+type ExportRow interface{}

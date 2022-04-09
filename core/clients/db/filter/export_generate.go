@@ -3,10 +3,12 @@ package filter
 import (
 	"fmt"
 	"github.com/google/uuid"
-	dbHelper "github.com/kyaxcorp/go-core/core/clients/db/helper"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"strings"
+
+	//"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
@@ -87,59 +89,64 @@ func (e *Export) GenerateExcel() bool {
 	// First, let's create the struct for speeding up the process!
 
 	type HeaderField struct {
-		Header      string
-		FieldName   string
-		DBFieldName string
-		XAxis       string // this is the column
+		Header    string
+		FieldName string
+		//DBFieldName string
+		Handler ExportHandler
+		XAxis   string // this is the column
 	}
 
 	//firstRow := e.items[0]
 	// TODO: later on if no columns defined, we can set to get from the DB or model/table
 
 	var _err error
-	var mFields = make(map[string]string)
-	if e.Model != nil {
-		mFields, _err = dbHelper.GetModelMapWithDBColumns(e.Model, true)
-		if _err != nil {
-			e.excelError = _err
-			return false
-		}
-	}
+	//var mFields = make(map[string]string)
+	//if e.Model != nil {
+	//	mFields, _err = dbHelper.GetModelMapWithDBColumns(e.Model, true)
+	//	if _err != nil {
+	//		e.excelError = _err
+	//		return false
+	//	}
+	//}
 
 	var headerFields []HeaderField
 	for columnNr, columnDetails := range e.Columns {
 		clNr := columnNr + 1
 
 		headerName := columnDetails.HeaderName
-		dbColumn := ""
+		//dbColumn := ""
 		fieldName := ""
 
 		var _err error
 		if columnDetails.FieldName != "" {
 			fieldName = columnDetails.FieldName
-			dbColumn, _err = e.Filter.getDBFieldName(columnDetails.FieldName)
-			if _err != nil {
-				e.excelError = _err
-				return false
-			}
-		} else if columnDetails.DBFieldName != "" {
-			dbColumn = columnDetails.DBFieldName
-			if fName, ok := mFields[dbColumn]; ok {
-				fieldName = fName
-			} else {
-				e.excelError = define.Err(0, "structure field not found from database field name -> ", dbColumn)
-				return false
-			}
+			//dbColumn, _err = e.Filter.getDBFieldName(columnDetails.FieldName)
+			//if _err != nil {
+			//	e.excelError = _err
+			//	return false
+			//}
+		} else if function.IsCallable(columnDetails.Handler) {
+			// if there is a callback
 		} else {
 			continue
 		}
+		//else if columnDetails.DBFieldName != "" {
+		//	dbColumn = columnDetails.DBFieldName
+		//	if fName, ok := mFields[dbColumn]; ok {
+		//		fieldName = fName
+		//	} else {
+		//		e.excelError = define.Err(0, "structure field not found from database field name -> ", dbColumn)
+		//		return false
+		//	}
+		//}
 
 		if headerName == "" {
 			if columnDetails.FieldName != "" {
 				headerName = columnDetails.FieldName
-			} else {
-				headerName = columnDetails.DBFieldName
 			}
+			//else {
+			//	headerName = columnDetails.DBFieldName
+			//}
 		}
 
 		xAxis, _err := excelize.ColumnNumberToName(clNr)
@@ -149,10 +156,11 @@ func (e *Export) GenerateExcel() bool {
 		}
 
 		headerFields = append(headerFields, HeaderField{
-			Header:      headerName,
-			FieldName:   fieldName,
-			DBFieldName: dbColumn,
-			XAxis:       xAxis,
+			Header:    headerName,
+			FieldName: fieldName,
+			//DBFieldName: dbColumn,
+			Handler: columnDetails.Handler,
+			XAxis:   xAxis,
 		})
 	}
 
@@ -197,7 +205,21 @@ func (e *Export) GenerateExcel() bool {
 			excelRowNr := rowNr + 2
 			// row contains the db field names!
 
-			fieldValue := _struct.GetFieldValue(row, headerField.FieldName)
+			var fieldValue interface{}
+			if headerField.FieldName != "" {
+				if strings.Contains(headerField.FieldName, ".") {
+					//fields := strings.Split(headerField.FieldName, ".")
+					fieldValue = nil
+				} else {
+					fieldValue = _struct.GetFieldValue(row, headerField.FieldName)
+				}
+			} else if headerField.Handler != nil {
+				// Execute handler
+				fieldValue = headerField.Handler(row)
+			} else {
+				continue
+			}
+
 			//if fieldValue, ok := row[headerField.FieldName]; ok {
 			XYAxis := headerField.XAxis + conv.IntToStr(excelRowNr)
 			//log.Println("XYAxis", XYAxis, fieldValue)
