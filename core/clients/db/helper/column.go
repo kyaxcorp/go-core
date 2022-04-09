@@ -21,7 +21,7 @@ func GetModelDBColumns(db *gorm.DB, model interface{}) []string {
 	return columns
 }
 
-func GetModelMapWithDBColumns(model interface{}) (map[string]string, error) {
+func GetModelMapWithDBColumns(model interface{}, reverse ...bool) (map[string]string, error) {
 	s, _err := schema.Parse(model, &sync.Map{}, schema.NamingStrategy{})
 	if _err != nil {
 		//panic("failed to create schema")
@@ -32,7 +32,11 @@ func GetModelMapWithDBColumns(model interface{}) (map[string]string, error) {
 	for _, field := range s.Fields {
 		dbFieldName := field.DBName
 		modelFieldName := field.Name
-		m[modelFieldName] = dbFieldName
+		if len(reverse) > 0 && !reverse[0] {
+			m[dbFieldName] = modelFieldName
+		} else {
+			m[modelFieldName] = dbFieldName
+		}
 	}
 	return m, nil
 }

@@ -17,7 +17,11 @@ type Export struct {
 	// if 0, then it will not be deleted!
 	SelfDeleteAfterSeconds int64
 	// items -> here we will receive the queried items
-	items []map[string]interface{}
+
+	//items []map[string]interface{}
+	//items []interface{}
+	items interface{}
+
 	// if items are set
 	itemsSet bool
 
