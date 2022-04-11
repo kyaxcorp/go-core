@@ -219,7 +219,7 @@ func (e *Export) GenerateExcel() bool {
 			if headerField.FieldName != "" {
 				if strings.Contains(headerField.FieldName, ".") {
 					//fields := strings.Split(headerField.FieldName, ".")
-					fieldValue = nil
+					fieldValue = _struct.GetNestedFieldReflectValue(row, headerField.FieldName).Interface()
 				} else {
 					fieldValue = row.FieldByName(headerField.FieldName).Interface()
 				}
