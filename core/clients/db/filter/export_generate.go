@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm"
 	"reflect"
 
-	//"log"
+	"log"
 	"time"
 )
 
@@ -331,9 +331,11 @@ func (e *Export) QueryItems() error {
 		e.items = make(map[string]interface{})
 		_db = e.Filter.DB().Table(e.TableName)
 	} else if e.Model != nil {
+		log.Println("aaaaaaaa")
 		typeOf := reflect.TypeOf(reflect.Indirect(reflect.ValueOf(e.Model)).Interface())
 		e.items = reflect.SliceOf(typeOf)
-		_db = e.Filter.DB().Model(e.Model)
+		//_db = e.Filter.DB().Model(e.Model)
+		_db = e.Filter.DB()
 	} else {
 		_db = e.Filter.DB()
 	}
@@ -346,15 +348,20 @@ func (e *Export) QueryItems() error {
 		}
 	}
 
-	dbResult := _db.Find(&e.items)
+	log.Println(e.items)
+
+	dbResult := _db.Find(e.items)
 
 	if dbResult.Error != nil {
 		return dbResult.Error
 	}
 
+	log.Println(e.items)
+	log.Println(&e.items)
+
 	// TODO: we should see what we have here!
 	//e.nrOfRows = int64(len(e.items))
-	e.nrOfRows = int64(reflect.ValueOf(e.items).Len())
+	e.nrOfRows = int64(reflect.Indirect(reflect.ValueOf(e.items)).Len())
 	e.itemsSet = true
 	return nil
 }
