@@ -12,7 +12,7 @@ func (h *Helper) FillMap(out map[string]interface{}) {
 		return
 	}
 
-	fields := h.structFields()
+	fields := h.StructFields()
 
 	for _, field := range fields {
 		name := field.Name

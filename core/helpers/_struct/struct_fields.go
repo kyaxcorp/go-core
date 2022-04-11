@@ -6,10 +6,10 @@ const (
 	DefaultTagName = "structs"
 )
 
-// structFields returns the exported struct fields for a given s struct. This
+// StructFields returns the exported struct fields for a given s struct. This
 // is a convenient helper method to avoid duplicate code in some of the
 // functions.
-func (h *Helper) structFields() []reflect.StructField {
+func (h *Helper) StructFields() []reflect.StructField {
 	t := h.valueOf.Type()
 
 	var f []reflect.StructField

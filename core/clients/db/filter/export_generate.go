@@ -1,7 +1,7 @@
 package filter
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
@@ -120,6 +120,14 @@ func (e *Export) GenerateExcel() bool {
 		var _err error
 		if columnDetails.FieldName != "" {
 			fieldName = columnDetails.FieldName
+
+			// Check if this field exists!
+
+			if !_struct.FieldExists(e.Model, fieldName) {
+				log.Println("field doesn't exist!!!", fieldName)
+				continue
+			}
+
 			//dbColumn, _err = e.Filter.getDBFieldName(columnDetails.FieldName)
 			//if _err != nil {
 			//	e.excelError = _err
@@ -178,7 +186,9 @@ func (e *Export) GenerateExcel() bool {
 				}`,
 		)
 		if err != nil {
-			fmt.Println(err)
+			//fmt.Println(err)
+			e.excelError = _err
+			return false
 		}
 
 		XYAxis := headerField.XAxis + conv.IntToStr(excelRowNr)
@@ -211,7 +221,20 @@ func (e *Export) GenerateExcel() bool {
 					//fields := strings.Split(headerField.FieldName, ".")
 					fieldValue = nil
 				} else {
-					fieldValue = _struct.GetFieldValue(row, headerField.FieldName)
+					log.Println("field name ->", headerField.FieldName)
+					//log.Println(row)
+					v := reflect.Indirect(reflect.ValueOf(row))
+					//fieldValue = v.FieldByName(headerField.FieldName).Interface()
+
+					fieldValue = v.FieldByName(headerField.FieldName)
+					log.Println(fieldValue)
+
+					//if _struct.FieldExists(row, headerField.FieldName) {
+					//	fieldValue = _struct.GetFieldValue(row, headerField.FieldName)
+					//} else {
+					//	log.Println("FIELD DOESN't EXIST!")
+					//}
+					//fieldValue = "aaaa"
 				}
 			} else if headerField.Handler != nil {
 				// Execute handler
@@ -326,14 +349,14 @@ func (e *Export) QueryItems() error {
 	// based on the input Filter, we should query and generate
 
 	var _db *gorm.DB
+
 	if e.TableName != "" {
 		// TODO: should be deprecated or should be analyzed how to be used...?!...
 		e.items = make(map[string]interface{})
 		_db = e.Filter.DB().Table(e.TableName)
 	} else if e.Model != nil {
-		log.Println("aaaaaaaa")
 		typeOf := reflect.TypeOf(reflect.Indirect(reflect.ValueOf(e.Model)).Interface())
-		e.items = reflect.SliceOf(typeOf)
+		e.items = reflect.Indirect(reflect.New(reflect.SliceOf(typeOf))).Interface()
 		//_db = e.Filter.DB().Model(e.Model)
 		_db = e.Filter.DB()
 	} else {
@@ -348,17 +371,20 @@ func (e *Export) QueryItems() error {
 		}
 	}
 
-	log.Println(e.items)
+	//log.Println("Items2", e.Items2)
+	//log.Println("Items2 len",reflect.Indirect(reflect.ValueOf(e.Items2)).Len())
+	//log.Println("items", items)
+	//log.Println("items len", reflect.Indirect(reflect.ValueOf(items)).Len())
 
-	dbResult := _db.Find(e.items)
+	dbResult := _db.Find(&e.items)
+	//log.Println("find finished...")
 
 	if dbResult.Error != nil {
+		//log.Println(dbResult.Error.Error())
 		return dbResult.Error
 	}
 
-	log.Println(e.items)
-	log.Println(&e.items)
-
+	//log.Println(e.items)
 	// TODO: we should see what we have here!
 	//e.nrOfRows = int64(len(e.items))
 	e.nrOfRows = int64(reflect.Indirect(reflect.ValueOf(e.items)).Len())
