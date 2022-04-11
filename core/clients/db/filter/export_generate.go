@@ -221,20 +221,7 @@ func (e *Export) GenerateExcel() bool {
 					//fields := strings.Split(headerField.FieldName, ".")
 					fieldValue = nil
 				} else {
-					log.Println("field name ->", headerField.FieldName)
-					//log.Println(row)
-					v := reflect.Indirect(reflect.ValueOf(row))
-					//fieldValue = v.FieldByName(headerField.FieldName).Interface()
-
-					fieldValue = v.FieldByName(headerField.FieldName)
-					log.Println(fieldValue)
-
-					//if _struct.FieldExists(row, headerField.FieldName) {
-					//	fieldValue = _struct.GetFieldValue(row, headerField.FieldName)
-					//} else {
-					//	log.Println("FIELD DOESN't EXIST!")
-					//}
-					//fieldValue = "aaaa"
+					fieldValue = row.FieldByName(headerField.FieldName).Interface()
 				}
 			} else if headerField.Handler != nil {
 				// Execute handler

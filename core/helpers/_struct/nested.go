@@ -1,6 +1,58 @@
 package _struct
 
-import "reflect"
+import (
+	"github.com/kyaxcorp/go-core/core/helpers/_int"
+	"reflect"
+	"strings"
+)
+
+func GetNestedFieldReflectValue(val reflect.Value, path string) reflect.Value {
+	if path == "" {
+		panic("path is empty")
+	}
+	keys := strings.Split(path, ".")
+	nrOfKeys := len(keys)
+
+	//log.Println("nr of keys", nrOfKeys)
+	//log.Println("keys", keys)
+
+	if nrOfKeys == 0 {
+		panic("nr of keys is 0")
+	}
+
+	i := reflect.Indirect(val)
+	firstKey := keys[0]
+	nrOfRemainingKeys := nrOfKeys - 1
+	//log.Println("nr of remaining keys", nrOfRemainingKeys)
+	//log.Println("first key", firstKey)
+
+	// Check if key is a number, string
+	// check if string is key for map... maybe we should write this in other way!
+
+	if _int.IsNumber(firstKey) {
+		// TODO:
+		return reflect.Value{}
+	} else {
+
+		objVal := i.FieldByName(firstKey)
+		if objVal == (reflect.Value{}) {
+			panic("field " + firstKey + " doesn't exist")
+		}
+
+		if nrOfRemainingKeys <= 0 {
+			// it's the last one!
+			return objVal
+		} else {
+			var remainKeys = make([]string, nrOfRemainingKeys)
+			copy(remainKeys[0:nrOfRemainingKeys], keys[1:nrOfRemainingKeys+1])
+			newPath := strings.Join(remainKeys, ".")
+			//log.Println("copy these:", keys[1:nrOfRemainingKeys])
+			//log.Println("copy these:", keys[1:nrOfRemainingKeys+1])
+			//log.Println("remain keys", remainKeys)
+			return GetNestedFieldReflectValue(objVal, newPath)
+		}
+	}
+}
 
 // nested retrieves recursively all types for the given value and returns the
 // nested value.
