@@ -16,7 +16,6 @@ import (
 	"gorm.io/gorm"
 	"reflect"
 
-	"log"
 	"time"
 )
 
@@ -123,10 +122,10 @@ func (e *Export) GenerateExcel() bool {
 
 			// Check if this field exists!
 
-			if !_struct.FieldExists(e.Model, fieldName) {
-				log.Println("field doesn't exist!!!", fieldName)
-				continue
-			}
+			//if !_struct.FieldExists(e.Model, fieldName) {
+			//	log.Println("field doesn't exist!!!", fieldName)
+			//	continue
+			//}
 
 			//dbColumn, _err = e.Filter.getDBFieldName(columnDetails.FieldName)
 			//if _err != nil {
