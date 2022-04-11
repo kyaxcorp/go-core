@@ -2,13 +2,15 @@ package _struct
 
 import (
 	"github.com/kyaxcorp/go-core/core/helpers/_int"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"reflect"
 	"strings"
 )
 
-func GetNestedFieldReflectValue(val reflect.Value, path string) reflect.Value {
+func GetNestedFieldReflectValue(val reflect.Value, path string) (reflect.Value, error) {
 	if path == "" {
-		panic("path is empty")
+		//panic("path is empty")
+		return reflect.Value{}, define.Err(0, "path is empty")
 	}
 	keys := strings.Split(path, ".")
 	nrOfKeys := len(keys)
@@ -17,10 +19,16 @@ func GetNestedFieldReflectValue(val reflect.Value, path string) reflect.Value {
 	//log.Println("keys", keys)
 
 	if nrOfKeys == 0 {
-		panic("nr of keys is 0")
+		//panic("nr of keys is 0")
+		return reflect.Value{}, define.Err(0, "nr of keys is 0")
 	}
 
 	i := reflect.Indirect(val)
+	if i == (reflect.Value{}) {
+		//log.Println("IT'S ZERO VALUE")
+		return reflect.Value{}, define.Err(0, "i is zero value")
+	}
+
 	firstKey := keys[0]
 	nrOfRemainingKeys := nrOfKeys - 1
 	//log.Println("nr of remaining keys", nrOfRemainingKeys)
@@ -31,7 +39,7 @@ func GetNestedFieldReflectValue(val reflect.Value, path string) reflect.Value {
 
 	if _int.IsNumber(firstKey) {
 		// TODO:
-		return reflect.Value{}
+		return reflect.Value{}, nil
 	} else {
 
 		objVal := i.FieldByName(firstKey)
@@ -41,7 +49,7 @@ func GetNestedFieldReflectValue(val reflect.Value, path string) reflect.Value {
 
 		if nrOfRemainingKeys <= 0 {
 			// it's the last one!
-			return objVal
+			return objVal, nil
 		} else {
 			var remainKeys = make([]string, nrOfRemainingKeys)
 			copy(remainKeys[0:nrOfRemainingKeys], keys[1:nrOfRemainingKeys+1])

@@ -8,7 +8,7 @@ import (
 
 type Color struct {
 	Name     string
-	Category ColorCategory
+	Category *ColorCategory
 }
 
 type ColorCategory struct {
@@ -20,14 +20,15 @@ type str1 struct {
 }
 
 func main() {
-	cat := ColorCategory{CatName: "shiny"}
+	//cat := &ColorCategory{CatName: "shiny"}
 
-	c := Color{Name: "red", Category: cat}
+	//c := Color{Name: "red", Category: cat}
+	c := Color{Name: "red", Category: nil}
 	v1 := str1{
 		Color: c,
 	}
 
 	//v := _struct.GetNestedFieldReflectValue(reflect.ValueOf(v1), "Color.Name")
-	v := _struct.GetNestedFieldReflectValue(reflect.ValueOf(v1), "Color.Category.CatName")
-	log.Println(v)
+	v, _err := _struct.GetNestedFieldReflectValue(reflect.ValueOf(v1), "Color.Category.CatName")
+	log.Println(v, _err)
 }
