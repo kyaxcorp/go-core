@@ -236,12 +236,19 @@ func (e *Export) GenerateExcel() bool {
 
 	for rowNr := 0; rowNr < sliceLen; rowNr++ {
 		row := slice.Index(rowNr)
+		rowMap := _struct.New(row).Map()
+		exportRow := &ExportRow{
+			ReflectVal: row,
+			Row:        row.Interface(),
+			RowMap:     rowMap,
+		}
 
 		for _, headerField := range headerFields {
 			excelRowNr := rowNr + 2
 			// row contains the db field names!
 
 			var fieldValue interface{}
+
 			if headerField.FieldName != "" {
 				if strings.Contains(headerField.FieldName, ".") {
 					//fields := strings.Split(headerField.FieldName, ".")
@@ -254,9 +261,18 @@ func (e *Export) GenerateExcel() bool {
 				} else {
 					fieldValue = row.FieldByName(headerField.FieldName).Interface()
 				}
+			}
+
+			if headerField.FieldName != "" && headerField.Handler == nil {
+
 			} else if headerField.Handler != nil {
+				// Check if there is a field name... and get it!
+				if headerField.FieldName != "" {
+					// Set the value
+					exportRow.FieldValue = fieldValue
+				}
 				// Execute handler
-				fieldValue = headerField.Handler(row)
+				fieldValue = headerField.Handler(exportRow)
 			} else {
 				continue
 			}

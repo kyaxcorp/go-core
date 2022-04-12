@@ -2,6 +2,7 @@ package filter
 
 import (
 	"github.com/google/uuid"
+	"reflect"
 	"time"
 )
 
@@ -53,7 +54,21 @@ type ExportColumn struct {
 	ColWidth   float64
 }
 
-type ExportHandler func(row ExportRow) ExportValue
+type ExportHandler func(row *ExportRow) ExportValue
 
 type ExportValue interface{}
-type ExportRow interface{}
+type ExportRow struct {
+	ReflectVal reflect.Value
+	RowMap     map[string]interface{}
+	Row        interface{}
+	FieldValue interface{}
+	// Add additional functions to this structure... like GetField
+}
+
+func (e *ExportRow) GetStructValue(fieldName string) interface{} {
+	if fValue, ok := e.RowMap[fieldName]; ok {
+		return fValue
+	}
+	// TODO: should we return nil?
+	return nil
+}
