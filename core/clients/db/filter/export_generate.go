@@ -93,6 +93,9 @@ func (e *Export) GenerateExcel() bool {
 		//DBFieldName string
 		Handler ExportHandler
 		XAxis   string // this is the column
+		// A,B,C etc...
+		Column   string
+		ColWidth float64
 	}
 
 	//firstRow := e.items[0]
@@ -166,23 +169,38 @@ func (e *Export) GenerateExcel() bool {
 			Header:    headerName,
 			FieldName: fieldName,
 			//DBFieldName: dbColumn,
-			Handler: columnDetails.Handler,
-			XAxis:   xAxis,
+			Handler:  columnDetails.Handler,
+			XAxis:    xAxis,
+			Column:   xAxis,
+			ColWidth: columnDetails.ColWidth,
 		})
 	}
 
 	for _, headerField := range headerFields {
 		excelRowNr := 1
 
-		style, err := f.NewStyle(
+		/*style, err := f.NewStyle(
 			`{
 					"alignment":{
-						"horizontal":"center"
+						"horizontal":"center",
+						"WrapText":true
 					},
 					"font":{
 						"bold":true
 					}
 				}`,
+		)*/
+		style, err := f.NewStyle(&excelize.Style{
+			Alignment: &excelize.Alignment{
+				Horizontal: "center",
+
+				//ShrinkToFit: false,
+				//WrapText:    false,
+			},
+			Font: &excelize.Font{
+				Bold: true,
+			},
+		},
 		)
 		if err != nil {
 			//fmt.Println(err)
@@ -197,6 +215,15 @@ func (e *Export) GenerateExcel() bool {
 			e.excelError = _err
 			return false
 		}
+
+		if headerField.ColWidth > 0 {
+			_err = f.SetColWidth(sheetName, headerField.XAxis, headerField.XAxis, headerField.ColWidth)
+			if _err != nil {
+				e.excelError = _err
+				return false
+			}
+		}
+
 		_err = f.SetCellValue(sheetName, XYAxis, headerField.Header)
 		if _err != nil {
 			e.excelError = _err

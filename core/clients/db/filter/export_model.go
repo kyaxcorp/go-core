@@ -50,6 +50,7 @@ type ExportColumn struct {
 	// This is the name of the column in the header
 	HeaderName string
 	Handler    ExportHandler
+	ColWidth   float64
 }
 
 type ExportHandler func(row ExportRow) ExportValue
