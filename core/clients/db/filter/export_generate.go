@@ -236,10 +236,11 @@ func (e *Export) GenerateExcel() bool {
 
 	for rowNr := 0; rowNr < sliceLen; rowNr++ {
 		row := slice.Index(rowNr)
-		rowMap := _struct.New(row).Map()
+		rowInterface := row.Interface()
+		rowMap := _struct.New(rowInterface).Map()
 		exportRow := &ExportRow{
 			ReflectVal: row,
-			Row:        row.Interface(),
+			Row:        rowInterface,
 			RowMap:     rowMap,
 		}
 
