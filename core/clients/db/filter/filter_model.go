@@ -32,11 +32,13 @@ type cachedModel struct {
 }
 
 type Input struct {
-	PageNr         *int            `json:"PageNr"`
-	NrOfItems      *int            `json:"NrOfItems"`
-	Order          []*Order        `json:"Order"`
-	Search         *string         `json:"Search"`
-	RootConditions *GroupCondition `json:"RootConditions"`
+	PageNr    *int `json:"PageNr"`
+	NrOfItems *int `json:"NrOfItems"`
+	// it allows to go higher than 1000 limit!
+	OverrideNrOfItemsLimit bool
+	Order                  []*Order        `json:"Order"`
+	Search                 *string         `json:"Search"`
+	RootConditions         *GroupCondition `json:"RootConditions"`
 
 	// here we store the main model name...
 	primaryModelName string
