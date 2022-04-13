@@ -23,25 +23,25 @@ func NewVal(v int) *Int {
 }
 
 func (v *Int) Inc(value int) {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	v.value = v.value + value
 }
 
 func (v *Int) Dec(value int) {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	v.value = v.value - value
 }
 
 func (v *Int) Set(value int) {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	v.value = value
 }
 
 func (v *Int) Get() int {
-	defer v.lock.RUnlock()
 	v.lock.RLock()
+	defer v.lock.RUnlock()
 	return v.value
 }

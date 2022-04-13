@@ -5,8 +5,8 @@ import (
 )
 
 func (v *Bool) Set(value bool) {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	if value != v.value {
 		v.value = value
 		// Trigger Change
@@ -76,22 +76,22 @@ func (v *Bool) False() {
 }
 
 func (v *Bool) Get() bool {
-	defer v.lock.RUnlock()
 	v.lock.RLock()
+	defer v.lock.RUnlock()
 	return v.value
 }
 
 func (v *Bool) GetAndToggle() bool {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	current := v.value
 	v.value = !v.value
 	return current
 }
 
 func (v *Bool) IfTrueSetFalse() bool {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	current := v.value
 	if v.value {
 		v.value = false
@@ -100,8 +100,8 @@ func (v *Bool) IfTrueSetFalse() bool {
 }
 
 func (v *Bool) IfFalseSetTrue() bool {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	current := v.value
 	if !v.value {
 		v.value = true
@@ -109,6 +109,7 @@ func (v *Bool) IfFalseSetTrue() bool {
 	return current
 }
 
+// TODO: something is wrong here?!!
 func (v *Bool) RWGet(callback func(v *Bool)) bool {
 	defer v.lock.Unlock()
 	if function.IsCallable(callback) {

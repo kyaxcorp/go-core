@@ -24,22 +24,22 @@ func New() *MapStringInterface {
 }
 
 func (v *MapStringInterface) Set(key string, value interface{}) {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	v.value[key] = value
 }
 
 func (v *MapStringInterface) Del(key string) {
-	defer v.lock.Unlock()
 	v.lock.Lock()
+	defer v.lock.Unlock()
 	if _, ok := v.value[key]; ok {
 		delete(v.value, key)
 	}
 }
 
 func (v *MapStringInterface) Has(key string) bool {
-	defer v.lock.RUnlock()
 	v.lock.RLock()
+	defer v.lock.RUnlock()
 	if _, ok := v.value[key]; ok {
 		return true
 	}
@@ -47,8 +47,8 @@ func (v *MapStringInterface) Has(key string) bool {
 }
 
 func (v *MapStringInterface) Get(key string) interface{} {
-	defer v.lock.RUnlock()
 	v.lock.RLock()
+	defer v.lock.RUnlock()
 	if vv, ok := v.value[key]; ok {
 		return vv
 	}
@@ -56,8 +56,8 @@ func (v *MapStringInterface) Get(key string) interface{} {
 }
 
 func (v *MapStringInterface) Len() int {
-	defer v.lock.RUnlock()
 	v.lock.RLock()
+	defer v.lock.RUnlock()
 	return len(v.value)
 }
 
@@ -69,6 +69,7 @@ func (v *MapStringInterface) Scan(callback Scan) {
 	if !function.IsCallable(callback) {
 		return
 	}
+	v.lock.RLock()
 	defer func() {
 		v.lock.RUnlock()
 		// Recover here from panicks!
@@ -76,7 +77,6 @@ func (v *MapStringInterface) Scan(callback Scan) {
 			appLog.Warn().Interface("recover_stack", r).Msg("Scan -> Recovered from panic")
 		}
 	}()
-	v.lock.RLock()
 	for k, vv := range v.value {
 		// Callbacks can have panicks, so we added recover!
 		callback(k, vv)
