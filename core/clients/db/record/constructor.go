@@ -118,19 +118,19 @@ func New(r *Record) *Record {
 		}
 
 		// Copy the incoming data (json formatted) to r.dataCopied which is a clone of the Model!
-		//_err = json.Decode(r.dataMapJson, r.dataCopied)
-		//if _err != nil {
-		//	panic("failed to convert r.dataMapJson r.dataCopied -> " + _err.Error())
-		//}
+		_err = json.Decode(r.dataMapJson, r.dataCopied)
+		if _err != nil {
+			panic("failed to convert r.dataMapJson r.dataCopied -> " + _err.Error())
+		}
 
 		// Now let's Get a map of the copied model data structure
-		//tmpDataMap := _struct.New(r.dataCopied).Map()
+		tmpDataMap := _struct.New(r.dataCopied).Map()
 
 		// Let's now copy the incoming data (that is formatted) to r.inputData
-		//for fieldName, _ := range r.dataMap {
-		//	r.inputFieldNames[fieldName] = ""
-		//	r.inputData[fieldName] = tmpDataMap[fieldName]
-		//}
+		for fieldName, _ := range r.dataMap {
+			r.inputFieldNames[fieldName] = ""
+			r.inputData[fieldName] = tmpDataMap[fieldName]
+		}
 
 		//_err := copier.Copy(r.dataCopied, r.dataMap)
 		//if _err != nil {

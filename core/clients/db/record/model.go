@@ -56,7 +56,8 @@ type Record struct {
 	// ================== DATABASE DATA ==================== \\
 	// this is the same model/data but loaded with existing data from the DB if exists...
 	// it will be loaded only if an ID is present (it should be checked on todo: all primary keys) but anyway...
-	dbData interface{}
+	dbData            interface{}
+	loadDataForUpdate bool
 	// If it was once loaded
 	isDbDataLoaded *_bool.Bool
 	// what's the status of the last load

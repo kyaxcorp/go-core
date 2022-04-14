@@ -113,6 +113,7 @@ func (r *Record) Save() bool {
 
 		//saveDataModel := r.generateSaveDataModel()
 		result = _db.Omit(r.getOmitFields()...).Create(r.saveData)
+		r.loadDataForUpdate = false
 		r.dbData = r.saveData
 		// TODO: later on we should do a reload like on save?!
 
@@ -184,6 +185,8 @@ func (r *Record) prepareSaveData() bool {
 		// if it's save mode then we should get the loaded data from r.dbData
 		// and after that put over it the inputData
 
+		r.loadDataForUpdate = true
+		r.ReloadData()
 		r.saveData = _interface.CloneInterfaceItem(r.dbData)
 		//dbDataMap := _struct.New(r.dbData).Map()
 		//r.dataMap

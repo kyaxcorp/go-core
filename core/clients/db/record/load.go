@@ -3,6 +3,7 @@ package record
 import (
 	"errors"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"strings"
 )
 
@@ -69,9 +70,18 @@ func (r *Record) LoadData() (status bool) {
 
 	// Set the query and its params and query
 	//dbResult := _db.Where(query, queryItemsValues...).Scopes(r.getDefaultScopes).First(&r.dbData)
-	dbResult := _db.
-		Where(r.primaryKeysQuery, r.primaryKeysItemsValues...).
-		Scopes(r.getDefaultScopes).
+
+	// TODO:
+	// TODO: use r.loadDataForUpdate for LOAD FOR UPDATE in SQL
+
+	_db = _db.
+		Where(r.primaryKeysQuery, r.primaryKeysItemsValues...)
+
+	if r.loadDataForUpdate {
+		_db = _db.Clauses(clause.Locking{Strength: "UPDATE"})
+	}
+
+	dbResult := _db.Scopes(r.getDefaultScopes).
 		Take(r.dbData)
 	//dbResult.RowsAffected // returns count of records found
 	//dbResult.Error        // returns error or nil
