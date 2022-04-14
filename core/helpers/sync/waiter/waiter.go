@@ -3,7 +3,6 @@ package waiter
 import (
 	"context"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
-	"github.com/kyaxcorp/go-core/core/helpers/sync/_uint64"
 	"sync"
 )
 
@@ -22,14 +21,18 @@ This can be done with cancelContext!
 */
 
 type Waiter struct {
-	currentID *_uint64.Uint64
-	lock      sync.RWMutex
+	//currentID *_uint64.Uint64
+	currentID uint64
+
+	//lock sync.RWMutex
+	lock sync.Mutex
 	// Cancel functions from WithCancel Context
-	cancelFuncs map[uint64]context.CancelFunc
+	cancelFunctions map[uint64]context.CancelFunc
 	// This are the contexts from WithCancel
 	channels map[uint64]context.Context
 	// Nr of waiters -> counting... when it will be 0, it will be deleted
-	nrOfWaiters map[uint64]*_uint64.Uint64
+	//nrOfWaiters map[uint64]*_uint64.Uint64
+	nrOfWaiters map[uint64]uint64
 	ctx         context.Context
 }
 
@@ -38,11 +41,14 @@ func New(ctx context.Context) *Waiter {
 		ctx = _context.GetDefaultContext()
 	}
 	w := &Waiter{
-		currentID:   _uint64.NewVal(0),
-		lock:        sync.RWMutex{},
-		cancelFuncs: make(map[uint64]context.CancelFunc),
-		channels:    make(map[uint64]context.Context),
-		nrOfWaiters: make(map[uint64]*_uint64.Uint64),
+		//currentID:       _uint64.NewVal(0),
+		currentID: 0,
+		//lock:            sync.RWMutex{},
+		lock:            sync.Mutex{},
+		cancelFunctions: make(map[uint64]context.CancelFunc),
+		channels:        make(map[uint64]context.Context),
+		//nrOfWaiters:     make(map[uint64]*_uint64.Uint64),
+		nrOfWaiters: make(map[uint64]uint64),
 		ctx:         ctx,
 	}
 	w.inc()
@@ -59,68 +65,90 @@ func (w *Waiter) Signal() {
 	// Also we can set as to be deleted...
 
 	go func() {
+		w.lock.Lock()
 		id := w.getCurrentID()
 		// Call the cancel function...
-		w.lock.RLock()
 		// Call cancel function
-		w.cancelFuncs[id]()
-		w.lock.RUnlock()
-		// Increment last!
+		w.cancelFunctions[id]()
 		w.inc()
+		w.lock.Unlock()
+		// Increment last!
 	}()
 }
 
 func (w *Waiter) getCurrentID() uint64 {
-	return w.currentID.Get()
+	//return w.currentID.Get()
+	return w.currentID
 }
 
 // It will change the current id!
 // This should be called from the outside!
 // It should we called only when signalling has being done!
 func (w *Waiter) inc() uint64 {
-	defer w.lock.Unlock()
-	w.lock.Lock()
+	//w.lock.Lock()
+	//defer w.lock.Unlock()
 	// Check if higher for reset...
-	if w.currentID.Get() >= 709551615 {
+	/*if w.currentID.Get() >= 709551615 {
 		// Reset the counter
 		w.currentID.Set(0)
 	}
-	id := w.currentID.Inc(1)
+	id := w.currentID.Inc(1)*/
+	if w.currentID >= 709551615 {
+		// Reset the counter
+		w.currentID = 0
+	}
+	w.currentID += 1
+	id := w.currentID
+
 	// Create new channel!
 
+	// Create the with cancel, receive the cancel function and context
 	ctx, cancelFunc := context.WithCancel(_context.GetDefaultContext())
-	w.cancelFuncs[id] = cancelFunc
+	// save the cancel function
+	w.cancelFunctions[id] = cancelFunc
+	// save the context
 	w.channels[id] = ctx
-	w.nrOfWaiters[id] = _uint64.New()
+	// create the nr. of waiters var
+	//w.nrOfWaiters[id] = _uint64.New()
+	w.nrOfWaiters[id] = 0
 
+	// return the current id
 	return id
 }
 
 func (w *Waiter) Wait() {
-	// Send the signal...
 
+	// Acquire the lock...
+	w.lock.Lock()
 	// Get the current id!
-	w.lock.RLock()
 	id := w.getCurrentID()
 	// Add +1 waiter
-	w.nrOfWaiters[id].Inc(1)
+	//w.nrOfWaiters[id].Inc(1)
+	w.nrOfWaiters[id] += 1
 	waitChannel := w.channels[id]
-	w.lock.RUnlock()
+	w.lock.Unlock()
 
 	// The channel can be still alive for a couple of seconds... until the
 	// garbage collector will not destroy it!
 
 	defer func() {
 		go func() {
-			w.nrOfWaiters[id].Dec(1)
-			if w.nrOfWaiters[id].Get() == 0 {
+			// say that this goroutine is out... -1
+
+			w.lock.Lock()
+			//w.nrOfWaiters[id].Dec(1)
+			w.nrOfWaiters[id] -= 1
+			// now let's check if there are any more waiters... if not
+			// then let's clean the stack
+			//if w.nrOfWaiters[id].Get() == 0 {
+			// Lower it can't be, but anyway...
+			if w.nrOfWaiters[id] <= 0 {
 				// Destroy it...
-				w.lock.Lock()
 				delete(w.nrOfWaiters, id)
 				delete(w.channels, id)
-				delete(w.cancelFuncs, id)
-				w.lock.Unlock()
+				delete(w.cancelFunctions, id)
 			}
+			w.lock.Unlock()
 		}()
 	}()
 

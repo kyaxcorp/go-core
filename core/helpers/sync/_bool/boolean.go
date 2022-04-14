@@ -51,6 +51,7 @@ func (v *Bool) WaitForFalse() *Bool {
 // If it's true already, it will go futher without waiting!
 func (v *Bool) WaitUntilTrue() *Bool {
 	// Create the channel
+	// if it's not true (it's false) then let's access the wait
 	if !v.Get() {
 		v.onTrueWaiter.Wait()
 	}
