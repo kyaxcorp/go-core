@@ -126,7 +126,7 @@ func (r *Record) Save() bool {
 		// 5. launch reload to load the entire data!
 
 		//saveDataModel := r.generateSaveDataModel()
-		result = _db.Omit(r.getOmitFields()...).Create(r.saveData)
+		result = _db.Omit(r.omitFields...).Create(r.saveData)
 		r.loadDataForUpdate = false
 		r.dbData = r.saveData
 		// TODO: later on we should do a reload like on save?!
@@ -135,7 +135,7 @@ func (r *Record) Save() bool {
 	} else {
 		r.callOnBeforeUpdate()
 		//saveDataModel := r.generateSaveDataModel()
-		result = _db.Omit(r.getOmitFields()...).Save(r.saveData)
+		result = _db.Omit(r.omitFields...).Save(r.saveData)
 		r.dbData = r.saveData
 		r.ReloadData()
 
