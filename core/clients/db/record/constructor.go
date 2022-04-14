@@ -103,10 +103,12 @@ func New(r *Record) *Record {
 
 		var _err error
 		// Now we should convert the incoming values to the model's format!
-		//r.dataMap, _err = Map.ConvertMapValuesBasedOnModel(r.dataMap, r.modelStruct, nil)
-		//if _err != nil {
-		//	panic("failed to convert map values based on model -> r.dataMap, r.modelStruct -> " + _err.Error())
-		//}
+		// But we should select only the values that have been set!
+		dataMap2, _err := Map.ConvertMapValuesBasedOnModel(r.dataMap, r.modelStruct, nil)
+		if _err != nil {
+			panic("failed to convert map values based on model -> r.dataMap, r.modelStruct -> " + _err.Error())
+		}
+		r.dataMap = Map.RecursiveCopyToExistent(dataMap2, r.dataMap)
 
 		// TODO: copier right now can't copy map[string]interface{} to Structure...
 		// Maybe someday later it may have this functionality!
