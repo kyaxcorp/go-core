@@ -68,6 +68,7 @@ type Record struct {
 
 	// ================== SAVED DB DATA ==================== \\
 	//saveData map[string]interface{}
+	// the saveData variable can have or can be supplied with other additional information!
 	saveData map[string]interface{}
 	// ================== SAVED DB DATA ==================== \\
 

@@ -24,6 +24,8 @@ Only if we create a function which sets the reference to the parent... in this c
 func (r *Record) getOmitFields() []string {
 	_strMap := _struct.New(r.modelStruct).Map()
 	var omitFields []string
+
+	// TODO: should we also omit for nested structures that have not been set?!
 	for fieldName, _ := range _strMap {
 		if _, fieldFound := r.saveData[fieldName]; !fieldFound {
 			// if something is not present, then omit it
@@ -163,6 +165,8 @@ func (r *Record) prepareSaveData() bool {
 		r.callOnSaveError()
 	}
 
+	// let's copy the inputData to save data, why? because we don't want to flood the inputData with other information
+	// the saveData variable can have or can be supplied with other additional information!
 	r.saveData = Map.CloneStringInterface(r.inputData)
 
 	if r.IsSaveMode() {

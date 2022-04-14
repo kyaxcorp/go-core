@@ -102,6 +102,7 @@ func New(r *Record) *Record {
 		// let's copy each value from map to Struct!
 
 		var _err error
+		// Now we should convert the incoming values to the model's format!
 		r.dataMap, _err = Map.ConvertMapValuesBasedOnModel(r.dataMap, r.modelStruct, nil)
 		if _err != nil {
 			panic("failed to convert map values based on model -> r.dataMap, r.modelStruct -> " + _err.Error())
@@ -116,13 +117,16 @@ func New(r *Record) *Record {
 			panic("failed to convert r.dataMap to json -> " + _err.Error())
 		}
 
+		// Copy the incoming data (json formatted) to r.dataCopied which is a clone of the Model!
 		_err = json.Decode(_json, r.dataCopied)
 		if _err != nil {
 			panic("failed to convert json to r.dataCopied -> " + _err.Error())
 		}
 
+		// Now let's Get a map of the copied model data structure
 		tmpDataMap := _struct.New(r.dataCopied).Map()
 
+		// Let's now copy the incoming data (that is formatted) to r.inputData
 		for fieldName, _ := range r.dataMap {
 			r.inputFieldNames[fieldName] = ""
 			r.inputData[fieldName] = tmpDataMap[fieldName]
