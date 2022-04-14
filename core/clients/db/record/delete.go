@@ -28,15 +28,15 @@ func (r *Record) Delete() bool {
 		// TODO: should we get the record before making changes?!...
 		if _struct.FieldExists(r.modelStruct, "IsDeleted") {
 			//r.saveData["IsDeleted"] = true
-			_struct.New(r.saveData).SetInterface("IsDeleted", true)
+			r.SetSaveFieldValue("IsDeleted", true)
 
 			if _struct.FieldExists(r.modelStruct, "DeletedAt") {
 				//r.saveData["DeletedAt"] = time.Now()
-				_struct.New(r.saveData).SetInterface("DeletedAt", time.Now())
+				r.SetSaveFieldValue("DeletedAt", time.Now())
 			}
 			if !uIDisNil && _struct.FieldExists(r.modelStruct, "DeletedBy") {
 				//r.saveData["DeletedBy"] = uID
-				_struct.New(r.saveData).SetInterface("DeletedBy", uID)
+				r.SetSaveFieldValue("DeletedBy", uID)
 			}
 
 			r.callOnBeforeUpdate()

@@ -52,6 +52,19 @@ func (r *Record) SetSaveData(saveData interface{}) *Record {
 	return r
 }
 
+func (r *Record) SetOmitField(fieldName string) {
+	//  TODO: Check if field already present!!!
+	r.omitFields = append(r.omitFields, fieldName)
+}
+
+func (r *Record) SetSaveFieldValue(fieldName string, value interface{}) {
+	// Check if there is a set field already
+	// SetOmitField
+	r.SetOmitField(fieldName)
+	_struct.New(r.saveData).SetInterface(fieldName, value)
+	//reflect.ValueOf(r.saveData).Elem().FieldByName(fieldName).Set(reflect.ValueOf(value))
+}
+
 func (r *Record) generateSaveDataModel() interface{} {
 	_model := _interface.CloneInterfaceItem(r.modelStruct)
 	_json, _err := json.Encode(r.saveData)
@@ -84,12 +97,13 @@ func (r *Record) Save() bool {
 	// Updated should be always present!
 	if !uIDisNil && _struct.FieldExists(r.modelStruct, "UpdatedBy") {
 		//r.saveData["UpdatedBy"] = uID
-		_struct.New(r.saveData).SetInterface("UpdatedBy", uID)
+		r.SetSaveFieldValue("UpdatedBy", uID)
+
 	}
 	//
 	if _struct.FieldExists(r.modelStruct, "UpdatedAt") {
 		//r.saveData["UpdatedAt"] = time.Now()
-		_struct.New(r.saveData).SetInterface("UpdatedAt", time.Now())
+		r.SetSaveFieldValue("UpdatedAt", time.Now())
 	}
 
 	if r.IsCreateMode() {
@@ -97,12 +111,12 @@ func (r *Record) Save() bool {
 		if !uIDisNil && _struct.FieldExists(r.modelStruct, "CreatedBy") {
 			// check which type is user id -> uuid or other type
 			//r.saveData["CreatedBy"] = uID
-			_struct.New(r.saveData).SetInterface("CreatedBy", uID)
+			r.SetSaveFieldValue("CreatedBy", uID)
 		}
 		//
 		if _struct.FieldExists(r.modelStruct, "CreatedAt") {
 			//r.saveData["CreatedAt"] = time.Now()
-			_struct.New(r.saveData).SetInterface("CreatedAt", time.Now())
+			r.SetSaveFieldValue("CreatedAt", time.Now())
 		}
 
 		// 1. copy the data to the real structure
@@ -200,6 +214,8 @@ func (r *Record) prepareSaveData() bool {
 	if _err != nil {
 		panic("failed to convert r.dataMapJson r.saveData -> " + _err.Error())
 	}
+
+	r.omitFields = r.getOmitFields()
 
 	// let's copy the inputData to save data, why? because we don't want to flood the inputData with other information
 	// the saveData variable can have or can be supplied with other additional information!

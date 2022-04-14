@@ -72,7 +72,8 @@ type Record struct {
 	//saveData map[string]interface{}
 	// the saveData variable can have or can be supplied with other additional information!
 	//saveData map[string]interface{}
-	saveData interface{}
+	saveData   interface{}
+	omitFields []string
 	// ================== SAVED DB DATA ==================== \\
 
 	//
