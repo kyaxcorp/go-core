@@ -103,24 +103,24 @@ func New(r *Record) *Record {
 
 		var _err error
 		// Now we should convert the incoming values to the model's format!
-		r.dataMap, _err = Map.ConvertMapValuesBasedOnModel(r.dataMap, r.modelStruct, nil)
-		if _err != nil {
-			panic("failed to convert map values based on model -> r.dataMap, r.modelStruct -> " + _err.Error())
-		}
+		//r.dataMap, _err = Map.ConvertMapValuesBasedOnModel(r.dataMap, r.modelStruct, nil)
+		//if _err != nil {
+		//	panic("failed to convert map values based on model -> r.dataMap, r.modelStruct -> " + _err.Error())
+		//}
 
 		// TODO: copier right now can't copy map[string]interface{} to Structure...
 		// Maybe someday later it may have this functionality!
 		// That's why we will be using json encode/decode
 
-		_json, _err := json.Encode(r.dataMap)
+		r.dataMapJson, _err = json.Encode(r.dataMap)
 		if _err != nil {
-			panic("failed to convert r.dataMap to json -> " + _err.Error())
+			panic("failed to convert r.dataMap to r.dataMapJson -> " + _err.Error())
 		}
 
 		// Copy the incoming data (json formatted) to r.dataCopied which is a clone of the Model!
-		_err = json.Decode(_json, r.dataCopied)
+		_err = json.Decode(r.dataMapJson, r.dataCopied)
 		if _err != nil {
-			panic("failed to convert json to r.dataCopied -> " + _err.Error())
+			panic("failed to convert r.dataMapJson r.dataCopied -> " + _err.Error())
 		}
 
 		// Now let's Get a map of the copied model data structure

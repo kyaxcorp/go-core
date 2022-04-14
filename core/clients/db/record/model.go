@@ -22,7 +22,8 @@ type Record struct {
 	// Data -> can be a map[string]interface{} or a real any Struct from where we will copy the data!
 	Data interface{}
 	// this case is used when the data is a map[string]interface{}
-	dataMap map[string]interface{}
+	dataMap     map[string]interface{}
+	dataMapJson string
 	// this case is used when the data is structure! but it should be saved as plain structure, because we don't
 	// want to modify the input data that came in! So it should be created a copy!
 	dataStr interface{}
@@ -69,7 +70,8 @@ type Record struct {
 	// ================== SAVED DB DATA ==================== \\
 	//saveData map[string]interface{}
 	// the saveData variable can have or can be supplied with other additional information!
-	saveData map[string]interface{}
+	//saveData map[string]interface{}
+	saveData interface{}
 	// ================== SAVED DB DATA ==================== \\
 
 	//

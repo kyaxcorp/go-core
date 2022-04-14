@@ -2,7 +2,6 @@ package record
 
 import (
 	"github.com/google/uuid"
-	"github.com/kyaxcorp/go-core/core/helpers/Map"
 	"github.com/kyaxcorp/go-core/core/helpers/_interface"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/err/define"
@@ -29,8 +28,10 @@ func (r *Record) getOmitFields() []string {
 	// TODO: or we should simply load their data and add to it...
 
 	// gorm allows to omit sub fields! they should be declared with . (dots)
+
 	for fieldName, _ := range _strMap {
-		if _, fieldFound := r.saveData[fieldName]; !fieldFound {
+		//if _, fieldFound := r.saveData[fieldName]; !fieldFound {
+		if _, fieldFound := r.dataMap[fieldName]; !fieldFound {
 			// if something is not present, then omit it
 			omitFields = append(omitFields, fieldName)
 		}
@@ -38,13 +39,15 @@ func (r *Record) getOmitFields() []string {
 	return omitFields
 }
 
-func (r *Record) GetSaveData() map[string]interface{} {
+//func (r *Record) GetSaveData() map[string]interface{} {
+func (r *Record) GetSaveData() interface{} {
 	return r.saveData
 }
 
 // TODO: get save data field and set save data field!
 
-func (r *Record) SetSaveData(saveData map[string]interface{}) *Record {
+//func (r *Record) SetSaveData(saveData map[string]interface{}) *Record {
+func (r *Record) SetSaveData(saveData interface{}) *Record {
 	r.saveData = saveData
 	return r
 }
@@ -80,22 +83,26 @@ func (r *Record) Save() bool {
 
 	// Updated should be always present!
 	if !uIDisNil && _struct.FieldExists(r.modelStruct, "UpdatedBy") {
-		r.saveData["UpdatedBy"] = uID
+		//r.saveData["UpdatedBy"] = uID
+		_struct.New(r.saveData).SetInterface("UpdatedBy", r.modelStruct)
 	}
 	//
 	if _struct.FieldExists(r.modelStruct, "UpdatedAt") {
-		r.saveData["UpdatedAt"] = time.Now()
+		//r.saveData["UpdatedAt"] = time.Now()
+		_struct.New(r.saveData).SetInterface("UpdatedAt", time.Now())
 	}
 
 	if r.IsCreateMode() {
 		// If it's nil, then we should create it!
 		if !uIDisNil && _struct.FieldExists(r.modelStruct, "CreatedBy") {
 			// check which type is user id -> uuid or other type
-			r.saveData["CreatedBy"] = uID
+			//r.saveData["CreatedBy"] = uID
+			_struct.New(r.saveData).SetInterface("CreatedBy", uID)
 		}
 		//
 		if _struct.FieldExists(r.modelStruct, "CreatedAt") {
-			r.saveData["CreatedAt"] = time.Now()
+			//r.saveData["CreatedAt"] = time.Now()
+			_struct.New(r.saveData).SetInterface("CreatedAt", time.Now())
 		}
 
 		// 1. copy the data to the real structure
@@ -104,17 +111,17 @@ func (r *Record) Save() bool {
 		// 4. Now let's read the data only by list and set it to dbData!
 		// 5. launch reload to load the entire data!
 
-		saveDataModel := r.generateSaveDataModel()
-		result = _db.Omit(r.getOmitFields()...).Create(saveDataModel)
-		r.dbData = saveDataModel
+		//saveDataModel := r.generateSaveDataModel()
+		result = _db.Omit(r.getOmitFields()...).Create(r.saveData)
+		r.dbData = r.saveData
 		// TODO: later on we should do a reload like on save?!
 
 		r.callOnAfterInsert()
 	} else {
 		r.callOnBeforeUpdate()
-		saveDataModel := r.generateSaveDataModel()
-		result = _db.Omit(r.getOmitFields()...).Save(saveDataModel)
-		r.dbData = saveDataModel
+		//saveDataModel := r.generateSaveDataModel()
+		result = _db.Omit(r.getOmitFields()...).Save(r.saveData)
+		r.dbData = r.saveData
 		r.ReloadData()
 
 		// We should update it!
@@ -169,22 +176,31 @@ func (r *Record) prepareSaveData() bool {
 	}
 
 	// let's recreate the map with no keys...
-	r.saveData = make(map[string]interface{})
+	//r.saveData = make(map[string]interface{})
+
+	//var dbData interface{}
 
 	if r.IsSaveMode() {
 		// if it's save mode then we should get the loaded data from r.dbData
 		// and after that put over it the inputData
 
-		dbDataMap := _struct.New(r.dbData).Map()
+		r.saveData = _interface.CloneInterfaceItem(r.dbData)
+		//dbDataMap := _struct.New(r.dbData).Map()
 		//r.dataMap
 		// copy first the current db data to saveData
-		Map.CopyStringInterface(dbDataMap, r.saveData)
+		//Map.CopyStringInterface(dbDataMap, r.saveData)
+	} else {
+		r.saveData = _interface.CloneInterfaceItem(r.modelStruct)
+	}
+	_err := json.Decode(r.dataMapJson, r.saveData)
+	if _err != nil {
+		panic("failed to convert r.dataMapJson r.saveData -> " + _err.Error())
 	}
 
 	// let's copy the inputData to save data, why? because we don't want to flood the inputData with other information
 	// the saveData variable can have or can be supplied with other additional information!
 	//Map.CopyStringInterface(r.inputData, r.saveData)
-	Map.CopyStringInterface(r.dataMap, r.saveData)
+	//Map.CopyStringInterface(r.dataMap, r.saveData)
 
 	// step 3 - copy the data from the input
 	switch r.inputDataType {
