@@ -20,6 +20,12 @@ func CloneStringInterface(m map[string]interface{}) map[string]interface{} {
 	return nmap
 }
 
+func CopyStringInterface(from map[string]interface{}, to map[string]interface{}) {
+	for k, v := range from {
+		to[k] = v
+	}
+}
+
 func IsMap(v interface{}) bool {
 	if reflect.ValueOf(v).Kind() == reflect.Map {
 		return true

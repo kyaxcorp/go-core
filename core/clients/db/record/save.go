@@ -26,6 +26,9 @@ func (r *Record) getOmitFields() []string {
 	var omitFields []string
 
 	// TODO: should we also omit for nested structures that have not been set?!
+	// TODO: or we should simply load their data and add to it...
+
+	// gorm allows to omit sub fields! they should be declared with . (dots)
 	for fieldName, _ := range _strMap {
 		if _, fieldFound := r.saveData[fieldName]; !fieldFound {
 			// if something is not present, then omit it
@@ -165,13 +168,24 @@ func (r *Record) prepareSaveData() bool {
 		r.callOnSaveError()
 	}
 
-	// let's copy the inputData to save data, why? because we don't want to flood the inputData with other information
-	// the saveData variable can have or can be supplied with other additional information!
-	r.saveData = Map.CloneStringInterface(r.inputData)
+	// let's recreate the map with no keys...
+	r.saveData = make(map[string]interface{})
 
 	if r.IsSaveMode() {
+		// if it's save mode then we should get the loaded data from r.dbData
+		// and after that put over it the inputData
 
+		dbDataMap := _struct.New(r.dbData).Map()
+		//r.dataMap
+		// copy first the current db data to saveData
+		Map.CopyStringInterface(dbDataMap, r.saveData)
 	}
+
+	// let's copy the inputData to save data, why? because we don't want to flood the inputData with other information
+	// the saveData variable can have or can be supplied with other additional information!
+	//Map.CopyStringInterface(r.inputData, r.saveData)
+	Map.CopyStringInterface(r.dataMap, r.saveData)
+
 	// step 3 - copy the data from the input
 	switch r.inputDataType {
 	case inputDataMapInterface:
