@@ -41,7 +41,7 @@ func (r *Record) Delete() bool {
 
 			r.callOnBeforeUpdate()
 			//saveDataModel := r.generateSaveDataModel()
-			result = _db.Omit(r.omitFields...).Save(r.saveData)
+			result = _db.Omit(r.GetOmitFields()...).Save(r.saveData)
 			r.loadDataForUpdate = false
 			r.dbData = r.saveData
 

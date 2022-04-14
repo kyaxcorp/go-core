@@ -20,7 +20,7 @@ Only if we create a function which sets the reference to the parent... in this c
 
 // TODO: we can set global hooks for this structure...
 
-func (r *Record) getOmitFields() []string {
+func (r *Record) getInputOmitFields() []string {
 	_strMap := _struct.New(r.modelStruct).Map()
 	var omitFields []string
 
@@ -54,13 +54,30 @@ func (r *Record) SetSaveData(saveData interface{}) *Record {
 
 func (r *Record) SetOmitField(fieldName string) {
 	//  TODO: Check if field already present!!!
-	r.omitFields = append(r.omitFields, fieldName)
+	//r.omitFields = append(r.omitFields, fieldName)
+	r.omitFields[fieldName] = nil
+}
+
+func (r *Record) RemoveOmitField(fieldName string) {
+	//  TODO: Check if field already present!!!
+	//r.omitFields = append(r.omitFields, fieldName)
+	if _, ok := r.omitFields[fieldName]; ok {
+		delete(r.omitFields, fieldName)
+	}
+}
+
+func (r *Record) GetOmitFields() []string {
+	var f []string
+	for fieldName, _ := range r.omitFields {
+		f = append(f, fieldName)
+	}
+	return f
 }
 
 func (r *Record) SetSaveFieldValue(fieldName string, value interface{}) {
 	// Check if there is a set field already
 	// SetOmitField
-	r.SetOmitField(fieldName)
+	r.RemoveOmitField(fieldName)
 	_struct.New(r.saveData).SetInterface(fieldName, value)
 	//reflect.ValueOf(r.saveData).Elem().FieldByName(fieldName).Set(reflect.ValueOf(value))
 }
@@ -126,7 +143,7 @@ func (r *Record) Save() bool {
 		// 5. launch reload to load the entire data!
 
 		//saveDataModel := r.generateSaveDataModel()
-		result = _db.Omit(r.omitFields...).Create(r.saveData)
+		result = _db.Omit(r.GetOmitFields()...).Create(r.saveData)
 		r.loadDataForUpdate = false
 		r.dbData = r.saveData
 		// TODO: later on we should do a reload like on save?!
@@ -135,7 +152,7 @@ func (r *Record) Save() bool {
 	} else {
 		r.callOnBeforeUpdate()
 		//saveDataModel := r.generateSaveDataModel()
-		result = _db.Omit(r.omitFields...).Save(r.saveData)
+		result = _db.Omit(r.GetOmitFields()...).Save(r.saveData)
 		r.dbData = r.saveData
 		r.ReloadData()
 
@@ -215,7 +232,11 @@ func (r *Record) prepareSaveData() bool {
 		panic("failed to convert r.dataMapJson r.saveData -> " + _err.Error())
 	}
 
-	r.omitFields = r.getOmitFields()
+	r.omitFields = make(map[string]*bool)
+	omitFields := r.getInputOmitFields()
+	for _, fieldName := range omitFields {
+		r.SetOmitField(fieldName)
+	}
 
 	// let's copy the inputData to save data, why? because we don't want to flood the inputData with other information
 	// the saveData variable can have or can be supplied with other additional information!
