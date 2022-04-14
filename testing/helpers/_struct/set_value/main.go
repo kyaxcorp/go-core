@@ -38,11 +38,13 @@ func main() {
 
 	t := &Terminal{}
 	tStr := Terminal{}
+	var t2 interface{}
+	t2 = t
 
-	if _struct.FieldExists(tStr, "CreatedBy") && d.UserID != nil && _struct.New(t).SetAny("CreatedBy", d.UserID) {
-		log.Println("success", t)
+	if _struct.FieldExists(tStr, "CreatedBy") && d.UserID != nil && _struct.New(t2).SetAny("CreatedBy", d.UserID) {
+		log.Println("success", t2)
 	} else {
-		log.Println("failed", t)
+		log.Println("failed", t2)
 	}
 
 }

@@ -91,6 +91,8 @@ func (r *Record) LoadData() (status bool) {
 			return false
 		}
 	}
+
+	r.callOnAfterDbDataLoaded()
 	r.isRecordExists.True()
 	return true
 }

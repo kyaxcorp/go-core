@@ -84,7 +84,7 @@ func (r *Record) Save() bool {
 	// Updated should be always present!
 	if !uIDisNil && _struct.FieldExists(r.modelStruct, "UpdatedBy") {
 		//r.saveData["UpdatedBy"] = uID
-		_struct.New(r.saveData).SetInterface("UpdatedBy", r.modelStruct)
+		_struct.New(r.saveData).SetInterface("UpdatedBy", uID)
 	}
 	//
 	if _struct.FieldExists(r.modelStruct, "UpdatedAt") {
@@ -192,6 +192,7 @@ func (r *Record) prepareSaveData() bool {
 	} else {
 		r.saveData = _interface.CloneInterfaceItem(r.modelStruct)
 	}
+
 	_err := json.Decode(r.dataMapJson, r.saveData)
 	if _err != nil {
 		panic("failed to convert r.dataMapJson r.saveData -> " + _err.Error())

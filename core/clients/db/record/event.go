@@ -72,6 +72,14 @@ func (r *Record) callOnBeforeSave() {
 	// TODO: call other methods from record...
 }
 
+func (r *Record) callOnAfterDbDataLoaded() {
+	if _model, ok := r.modelStruct.(interface{ RecordAfterDBDataLoaded(r *Record) }); ok {
+		_model.RecordAfterDBDataLoaded(r)
+	}
+
+	// TODO: call other methods from record...
+}
+
 func (r *Record) callOnAfterSave() {
 	if _model, ok := r.modelStruct.(interface{ RecordAfterSave(r *Record) }); ok {
 		_model.RecordAfterSave(r)
