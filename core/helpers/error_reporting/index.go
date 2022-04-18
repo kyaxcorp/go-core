@@ -48,7 +48,7 @@ func Recover() *sentry.EventID {
 func BeforeShutdown() {
 	//Recover()
 	if err := recover(); err != nil {
-		log.Println("------ERROR------")
+		log.Println("------ERROR/PANIC------")
 		log.Println(err)
 
 		// If you want to print stack trace try using:

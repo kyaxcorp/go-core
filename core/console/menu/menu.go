@@ -8,6 +8,7 @@ import (
 	brokerClientService "github.com/kyaxcorp/go-core/core/clients/broker/services"
 	"github.com/kyaxcorp/go-core/core/console/command"
 	"github.com/kyaxcorp/go-core/core/console/commands/version"
+	"github.com/kyaxcorp/go-core/core/console/working_stage"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
@@ -21,6 +22,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 type Menu struct {
@@ -142,6 +144,17 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 		Run: func(cmd *cobra.Command, args []string) {
 			// Adding here the ref -> but it should  already have because we have added it before!
 			//c.Command = cmd
+
+			isDev := true
+			if strings.Contains(c.Cmd, "--prod") {
+				isDev = false
+			}
+			if strings.Contains(c.Cmd, "--dev") {
+				isDev = true
+			}
+
+			// set the global stage
+			working_stage.SetStage(isDev)
 
 			// Set the arguments to the command
 			c.Args = args
