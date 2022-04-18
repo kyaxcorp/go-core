@@ -2,6 +2,7 @@ package inotify
 
 import (
 	"encoding/json"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/fsnotify"
 	"github.com/kyaxcorp/go-core/core/helpers/str"
@@ -67,7 +68,7 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 					matches, err := filepath.Glob(scanDir + filesystem.DirSeparator() + listeningPath.FileRegex)
 					if err == nil {
 						for _, match := range matches {
-							filesystem.Unlink(match)
+							file.Unlink(match)
 						}
 					}
 				}
@@ -78,12 +79,12 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 				Callback: func(e fsnotify.EventData) {
 
 					// Check if it's a file!
-					if !filesystem.IsFile(e.Path) {
+					if !file.IsFile(e.Path) {
 						log.Println("not a file..")
 						return
 					}
 
-					data, err := filesystem.FileGetContents(e.Path)
+					data, err := file.GetContents(e.Path)
 
 					// check if it's a json!
 
@@ -126,8 +127,8 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 					// DO not delete instantly...because sometimes write can take some time?!
 					time.AfterFunc(time.Second*10, func() {
 						// log.Println("deleting file...", e.Path)
-						if filesystem.Exists(e.Path) {
-							filesystem.Unlink(e.Path)
+						if file.Exists(e.Path) {
+							file.Unlink(e.Path)
 						}
 					})
 				},
