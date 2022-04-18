@@ -1,11 +1,15 @@
 package working_stage
 
-var IsDev bool
+var isDev bool
 
-func GetStage() bool {
-	return IsDev
+func IsDev() bool {
+	return isDev
+}
+
+func IsProd() bool {
+	return !isDev
 }
 
 func SetStage(isDev bool) {
-	IsDev = isDev
+	isDev = isDev
 }

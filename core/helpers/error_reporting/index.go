@@ -2,6 +2,7 @@ package error_reporting
 
 import (
 	"github.com/getsentry/sentry-go"
+	"github.com/kyaxcorp/go-core/core/console/working_stage"
 	"github.com/kyaxcorp/go-core/core/helpers/version"
 	"log"
 	"time"
@@ -9,8 +10,33 @@ import (
 
 var isInitialized = false
 
-func New(dsn string, debug bool) {
+type Options struct {
+	DevDSN  string
+	ProdDSN string
+	Debug   bool
+}
+
+func New(options Options) {
 	v := version.GetAppVersion()
+
+	var dsn string
+
+	if working_stage.IsDev() {
+		dsn = options.DevDSN
+		if dsn == "" {
+			dsn = options.ProdDSN
+		}
+	} else {
+		dsn = options.ProdDSN
+		if dsn == "" {
+			dsn = options.DevDSN
+		}
+	}
+
+	if dsn == "" {
+		panic("no DSN defined for sentry")
+	}
+
 	e := sentry.Init(sentry.ClientOptions{
 		// Specify a fixed sample rate:
 		TracesSampleRate: 0.2,
@@ -27,7 +53,7 @@ func New(dsn string, debug bool) {
 		Release: v.ProjectName + "@" + v.Version,
 		// Enable printing of SDK debug messages.
 		// Useful when getting started or trying to figure something out.
-		Debug: debug,
+		Debug: options.Debug,
 	})
 	if e != nil {
 		log.Fatalf("sentry.Init: %s", e)
