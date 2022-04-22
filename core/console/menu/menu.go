@@ -73,10 +73,11 @@ func (m *Menu) Execute() error {
 	return m.RootCmd.ExecuteContext(m.ctx.Context())
 }
 
-func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
+//func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
+func (m *Menu) RunInternalCommand(options InternalCommandOptions) (*exec.Cmd, error) {
 	currentApp, _ := os.Executable()
 	//command := exec.Command(currentApp, arg...)
-	command := exec.CommandContext(_context.GetDefaultContext(), currentApp, arg...)
+	command := exec.CommandContext(_context.GetDefaultContext(), currentApp, options.Args...)
 	// TODO: start as detached child?!...
 	_err := command.Start()
 	// TODO: how to call release to detach ?!
@@ -85,7 +86,10 @@ func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
 	}
 
 	// TODO: -> https://stackoverflow.com/questions/23031752/start-a-process-in-go-and-detach-from-it
-	command.Process.Release()
+
+	if options.Release {
+		command.Process.Release()
+	}
 	return command, nil
 }
 
@@ -142,6 +146,11 @@ func (m *Menu) AddCommands(c []*command.AddCmd) *Menu {
 	return m
 }
 
+type InternalCommandOptions struct {
+	Args    []string
+	Release bool
+}
+
 // AddCommand -> Adding commands
 func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 
@@ -189,7 +198,10 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 
 				appLog.Info().Msg("running in background")
 				//log.Println("Running in background")
-				_command, _err := m.RunInternalCommand(c.Cmd)
+				_command, _err := m.RunInternalCommand(InternalCommandOptions{
+					Args:    []string{c.Cmd},
+					Release: true,
+				})
 				if _err != nil {
 					// TODO: we should handle if we can't start!
 					appLog.Error().Err(_err).Msg("failed to start command... ")
