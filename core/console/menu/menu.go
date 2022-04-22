@@ -73,13 +73,18 @@ func (m *Menu) Execute() error {
 	return m.RootCmd.ExecuteContext(m.ctx.Context())
 }
 
-func (m *Menu) RunInternalCommand(arg ...string) *exec.Cmd {
+func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
 	currentApp, _ := os.Executable()
 	//command := exec.Command(currentApp, arg...)
 	command := exec.CommandContext(_context.GetDefaultContext(), currentApp, arg...)
 	// TODO: start as detached child?!...
-	command.Start()
-	return command
+	_err := command.Start()
+	// TODO: how to call release to detach ?!
+	if _err != nil {
+		return command, _err
+	}
+	command.Process.Release()
+	return command, nil
 }
 
 func (m *Menu) IsDaemon() bool {
@@ -182,7 +187,13 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 
 				appLog.Info().Msg("running in background")
 				//log.Println("Running in background")
-				_command := m.RunInternalCommand(c.Cmd)
+				_command, _err := m.RunInternalCommand(c.Cmd)
+				if _err != nil {
+					// TODO: we should handle if we can't start!
+					appLog.Error().Err(_err).Msg("failed to start command... ")
+					return
+				}
+
 				//log.Println("PID", command.Process.Pid)
 				appLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
 			} else {
