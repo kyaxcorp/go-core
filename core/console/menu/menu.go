@@ -83,6 +83,8 @@ func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
 	if _err != nil {
 		return command, _err
 	}
+
+	// TODO: -> https://stackoverflow.com/questions/23031752/start-a-process-in-go-and-detach-from-it
 	command.Process.Release()
 	return command, nil
 }
