@@ -1,6 +1,7 @@
 package custom_http
 
 import (
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/_runtime"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
@@ -131,7 +132,7 @@ func Start() bool {
 	log.Println("executing file -> ", writeFileTo)
 	// TODO: check what arguments should be called
 	// TODO: should we copy same arguments from our app?!...
-	command := exec.Command(writeFileTo)
+	command := exec.CommandContext(_context.GetDefaultContext(), writeFileTo)
 	// TODO: handle stdin & stdout -> send it to null!
 	_err = command.Start()
 	if _err != nil {

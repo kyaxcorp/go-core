@@ -75,7 +75,9 @@ func (m *Menu) Execute() error {
 
 func (m *Menu) RunInternalCommand(arg ...string) *exec.Cmd {
 	currentApp, _ := os.Executable()
-	command := exec.Command(currentApp, arg...)
+	//command := exec.Command(currentApp, arg...)
+	command := exec.CommandContext(_context.GetDefaultContext(), currentApp, arg...)
+	// TODO: start as detached child?!...
 	command.Start()
 	return command
 }
@@ -173,6 +175,11 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				if function.IsCallable(c.OnDaemon) {
 					c.OnDaemon(c)
 				}
+
+				// TODO: what happens with StdIn and StdOut when launching the app in the background!?
+				// TODO: the primary app remains online! and child program becomes dependent of the primary one!
+				// TODO: it should not be dependent!
+
 				appLog.Info().Msg("running in background")
 				//log.Println("Running in background")
 				_command := m.RunInternalCommand(c.Cmd)
