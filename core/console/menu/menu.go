@@ -76,21 +76,25 @@ func (m *Menu) Execute() error {
 //func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
 func (m *Menu) RunInternalCommand(options InternalCommandOptions) (*exec.Cmd, error) {
 	currentApp, _ := os.Executable()
-	//command := exec.Command(currentApp, arg...)
-	command := exec.CommandContext(_context.GetDefaultContext(), currentApp, options.Args...)
+	var _cmd *exec.Cmd
+	if options.Release {
+		_cmd = exec.Command(currentApp, options.Args...)
+	} else {
+		_cmd = exec.CommandContext(_context.GetDefaultContext(), currentApp, options.Args...)
+	}
 	// TODO: start as detached child?!...
-	_err := command.Start()
+	_err := _cmd.Start()
 	// TODO: how to call release to detach ?!
 	if _err != nil {
-		return command, _err
+		return _cmd, _err
 	}
 
 	// TODO: -> https://stackoverflow.com/questions/23031752/start-a-process-in-go-and-detach-from-it
 
 	if options.Release {
-		command.Process.Release()
+		_cmd.Process.Release()
 	}
-	return command, nil
+	return _cmd, nil
 }
 
 func (m *Menu) IsDaemon() bool {
