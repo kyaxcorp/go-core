@@ -97,7 +97,7 @@ func Start() bool {
 
 	writeFileTo = dirPath + readFileName
 
-	log.Println("creating file")
+	log.Println("creating file -> ", writeFileTo)
 
 	// TODO: get app's directory path
 	fs, _err := os.Create(writeFileTo) // TODO: get app's name
@@ -109,11 +109,13 @@ func Start() bool {
 	log.Println("writing data to file")
 	fileSize := len(fsData)
 	sizeWritten, _err := fs.Write(fsData)
+
 	if _err != nil {
 		log.Println("failed to write data to file -> ", _err.Error())
 		// TODO: handle this error!?...
 		return false
 	}
+
 	if fileSize != sizeWritten {
 		log.Println("size doesn't match ", fileSize, sizeWritten)
 		// TODO: handle this error!?...
@@ -125,12 +127,13 @@ func Start() bool {
 	// TODO: should we copy same arguments from our app?!...
 	command := exec.Command(writeFileTo)
 	// TODO: handle stdin & stdout -> send it to null!
-	_err := command.Start()
+	_err = command.Start()
 	if _err != nil {
 		// TODO: handle this error!?...
+		log.Println("failed to start the app -> ", _err.Error())
 		return false
 	}
-	command.Process.Pid
+	log.Println("the app has started with pid -> ", command.Process.Pid)
 
 	return true
 }
