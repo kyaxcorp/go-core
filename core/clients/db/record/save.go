@@ -112,10 +112,9 @@ func (r *Record) Save() bool {
 	// TODO: la noi ID e uuid.UUID insa in input el vine ca string
 
 	// Updated should be always present!
-	if !uIDisNil && _struct.FieldExists(r.modelStruct, "UpdatedBy") {
+	if !uIDisNil && _struct.FieldExists(r.modelStruct, "UpdatedByID") {
 		//r.saveData["UpdatedBy"] = uID
-		r.SetSaveFieldValue("UpdatedBy", uID)
-
+		r.SetSaveFieldValue("UpdatedByID", uID)
 	}
 	//
 	if _struct.FieldExists(r.modelStruct, "UpdatedAt") {
@@ -125,10 +124,10 @@ func (r *Record) Save() bool {
 
 	if r.IsCreateMode() {
 		// If it's nil, then we should create it!
-		if !uIDisNil && _struct.FieldExists(r.modelStruct, "CreatedBy") {
+		if !uIDisNil && _struct.FieldExists(r.modelStruct, "CreatedByID") {
 			// check which type is user id -> uuid or other type
 			//r.saveData["CreatedBy"] = uID
-			r.SetSaveFieldValue("CreatedBy", uID)
+			r.SetSaveFieldValue("CreatedByID", uID)
 		}
 		//
 		if _struct.FieldExists(r.modelStruct, "CreatedAt") {

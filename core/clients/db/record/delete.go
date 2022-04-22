@@ -34,9 +34,9 @@ func (r *Record) Delete() bool {
 				//r.saveData["DeletedAt"] = time.Now()
 				r.SetSaveFieldValue("DeletedAt", time.Now())
 			}
-			if !uIDisNil && _struct.FieldExists(r.modelStruct, "DeletedBy") {
+			if !uIDisNil && _struct.FieldExists(r.modelStruct, "DeletedByID") {
 				//r.saveData["DeletedBy"] = uID
-				r.SetSaveFieldValue("DeletedBy", uID)
+				r.SetSaveFieldValue("DeletedByID", uID)
 			}
 
 			r.callOnBeforeUpdate()
