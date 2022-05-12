@@ -1,10 +1,10 @@
 package record
 
-func (r *Record) callOnBeforeDelete() {
-	if _model, ok := r.modelStruct.(interface{ RecordBeforeDelete(r *Record) }); ok {
-		_model.RecordBeforeDelete(r)
+func (r *Record) callOnBeforeDelete() error {
+	if _model, ok := r.modelStruct.(interface{ RecordBeforeDelete(r *Record) error }); ok {
+		return _model.RecordBeforeDelete(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
@@ -36,39 +36,38 @@ func (r *Record) callOnDeleteError() {
 	if _model, ok := r.modelStruct.(interface{ RecordDeleteError(r *Record) }); ok {
 		_model.RecordDeleteError(r)
 	}
-
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnAfterDelete() {
-	if _model, ok := r.modelStruct.(interface{ RecordAfterDelete(r *Record) }); ok {
-		_model.RecordAfterDelete(r)
+func (r *Record) callOnAfterDelete() error {
+	if _model, ok := r.modelStruct.(interface{ RecordAfterDelete(r *Record) error }); ok {
+		return _model.RecordAfterDelete(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnBeforeForceDelete() {
-	if _model, ok := r.modelStruct.(interface{ RecordBeforeForceDelete(r *Record) }); ok {
-		_model.RecordBeforeForceDelete(r)
+func (r *Record) callOnBeforeForceDelete() error {
+	if _model, ok := r.modelStruct.(interface{ RecordBeforeForceDelete(r *Record) error }); ok {
+		return _model.RecordBeforeForceDelete(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnAfterForceDelete() {
-	if _model, ok := r.modelStruct.(interface{ RecordAfterForceDelete(r *Record) }); ok {
-		_model.RecordAfterForceDelete(r)
+func (r *Record) callOnAfterForceDelete() error {
+	if _model, ok := r.modelStruct.(interface{ RecordAfterForceDelete(r *Record) error }); ok {
+		return _model.RecordAfterForceDelete(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnBeforeSave() {
-	if _model, ok := r.modelStruct.(interface{ RecordBeforeSave(r *Record) }); ok {
-		_model.RecordBeforeSave(r)
+func (r *Record) callOnBeforeSave() error {
+	if _model, ok := r.modelStruct.(interface{ RecordBeforeSave(r *Record) error }); ok {
+		return _model.RecordBeforeSave(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
@@ -80,42 +79,42 @@ func (r *Record) callOnAfterDbDataLoaded() {
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnAfterSave() {
-	if _model, ok := r.modelStruct.(interface{ RecordAfterSave(r *Record) }); ok {
-		_model.RecordAfterSave(r)
+func (r *Record) callOnAfterSave() error {
+	if _model, ok := r.modelStruct.(interface{ RecordAfterSave(r *Record) error }); ok {
+		return _model.RecordAfterSave(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnBeforeInsert() {
-	if _model, ok := r.modelStruct.(interface{ RecordBeforeInsert(r *Record) }); ok {
-		_model.RecordBeforeInsert(r)
+func (r *Record) callOnBeforeInsert() error {
+	if _model, ok := r.modelStruct.(interface{ RecordBeforeInsert(r *Record) error }); ok {
+		return _model.RecordBeforeInsert(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnAfterInsert() {
-	if _model, ok := r.modelStruct.(interface{ RecordAfterInsert(r *Record) }); ok {
-		_model.RecordAfterInsert(r)
+func (r *Record) callOnAfterInsert() error {
+	if _model, ok := r.modelStruct.(interface{ RecordAfterInsert(r *Record) error }); ok {
+		return _model.RecordAfterInsert(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnBeforeUpdate() {
-	if _model, ok := r.modelStruct.(interface{ RecordBeforeUpdate(r *Record) }); ok {
-		_model.RecordBeforeUpdate(r)
+func (r *Record) callOnBeforeUpdate() error {
+	if _model, ok := r.modelStruct.(interface{ RecordBeforeUpdate(r *Record) error }); ok {
+		return _model.RecordBeforeUpdate(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }
 
-func (r *Record) callOnAfterUpdate() {
-	if _model, ok := r.modelStruct.(interface{ RecordAfterUpdate(r *Record) }); ok {
-		_model.RecordAfterUpdate(r)
+func (r *Record) callOnAfterUpdate() error {
+	if _model, ok := r.modelStruct.(interface{ RecordAfterUpdate(r *Record) error }); ok {
+		return _model.RecordAfterUpdate(r)
 	}
-
+	return nil
 	// TODO: call other methods from record...
 }

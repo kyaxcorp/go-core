@@ -14,10 +14,18 @@ func (r *Record) Delete() bool {
 		return false
 	}
 
+	var _err error
 	uID := r.GetUserID()
 	uIDisNil := r.isUserIDNil()
 
-	r.callOnBeforeDelete()
+	_err = r.callOnBeforeDelete()
+	if _err != nil {
+		r.setError(_err)
+		r.callOnError()
+		r.callOnSaveError()
+		return false
+	}
+
 	var result *gorm.DB
 	if r.IsCreateMode() {
 		_err := err.New(0, "record doesn't exist or id not set")
@@ -39,20 +47,38 @@ func (r *Record) Delete() bool {
 				r.SetSaveFieldValue("DeletedByID", uID)
 			}
 
-			r.callOnBeforeUpdate()
+			_err = r.callOnBeforeUpdate()
+			if _err != nil {
+				r.setError(_err)
+				r.callOnError()
+				r.callOnSaveError()
+				return false
+			}
 			//saveDataModel := r.generateSaveDataModel()
 			result = _db.Omit(r.GetOmitFields()...).Save(r.saveData)
 			r.loadDataForUpdate = false
 			r.dbData = r.saveData
 
 			//r.ReloadData()
-			r.callOnAfterUpdate()
+			_err = r.callOnAfterUpdate()
+			if _err != nil {
+				r.setError(_err)
+				r.callOnError()
+				r.callOnSaveError()
+				return false
+			}
 
 			if result.Error != nil {
 				r.setDBError(result.Error)
 				return false
 			}
-			r.callOnAfterDelete()
+			_err = r.callOnAfterDelete()
+			if _err != nil {
+				r.setError(_err)
+				r.callOnError()
+				r.callOnSaveError()
+				return false
+			}
 			return true
 		} else {
 			return r.ForceDelete()
@@ -66,7 +92,14 @@ func (r *Record) ForceDelete() bool {
 	// TODO: should we get the record before making changes?!...
 	// TODO: should we check if exists in the DB?!...or gorm does it...
 
-	r.callOnBeforeForceDelete()
+	var _err error
+	_err = r.callOnBeforeForceDelete()
+	if _err != nil {
+		r.setError(_err)
+		r.callOnError()
+		r.callOnSaveError()
+		return false
+	}
 
 	var result *gorm.DB
 	if r.IsCreateMode() {
@@ -86,7 +119,13 @@ func (r *Record) ForceDelete() bool {
 			r.callOnDeleteError()
 			return false
 		}
-		r.callOnAfterForceDelete()
+		_err = r.callOnAfterForceDelete()
+		if _err != nil {
+			r.setError(_err)
+			r.callOnError()
+			r.callOnSaveError()
+			return false
+		}
 		return true
 	}
 	// TODO: add hooks

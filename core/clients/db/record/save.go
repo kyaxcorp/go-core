@@ -99,12 +99,19 @@ func (r *Record) Save() bool {
 	_db := r.getDB()
 
 	var result *gorm.DB
+	var _err error
 
 	if !r.prepareSaveData() {
 		return false
 	}
 
-	r.callOnBeforeSave()
+	_err = r.callOnBeforeSave()
+	if _err != nil {
+		r.setError(_err)
+		r.callOnError()
+		r.callOnSaveError()
+		return false
+	}
 
 	uID := r.GetUserID()
 	uIDisNil := r.isUserIDNil()
@@ -147,9 +154,21 @@ func (r *Record) Save() bool {
 		r.dbData = r.saveData
 		// TODO: later on we should do a reload like on save?!
 
-		r.callOnAfterInsert()
+		_err = r.callOnAfterInsert()
+		if _err != nil {
+			r.setError(_err)
+			r.callOnError()
+			r.callOnSaveError()
+			return false
+		}
 	} else {
-		r.callOnBeforeUpdate()
+		_err = r.callOnBeforeUpdate()
+		if _err != nil {
+			r.setError(_err)
+			r.callOnError()
+			r.callOnSaveError()
+			return false
+		}
 		//saveDataModel := r.generateSaveDataModel()
 		result = _db.Omit(r.GetOmitFields()...).Save(r.saveData)
 		r.dbData = r.saveData
@@ -157,9 +176,21 @@ func (r *Record) Save() bool {
 
 		// We should update it!
 		//result = _db.Save(r.saveData)
-		r.callOnAfterUpdate()
+		_err = r.callOnAfterUpdate()
+		if _err != nil {
+			r.setError(_err)
+			r.callOnError()
+			r.callOnSaveError()
+			return false
+		}
 	}
-	r.callOnAfterSave()
+	_err = r.callOnAfterSave()
+	if _err != nil {
+		r.setError(_err)
+		r.callOnError()
+		r.callOnSaveError()
+		return false
+	}
 
 	// We can return BOOL and save the error somewhere in the record as the last error!
 
