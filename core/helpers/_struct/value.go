@@ -3,6 +3,7 @@ package _struct
 import (
 	"github.com/google/uuid"
 	"reflect"
+	"time"
 )
 
 // GetFieldValue -> return a structure field value
@@ -47,6 +48,7 @@ func (h *Helper) SetInterface(fieldName string, val interface{}) bool {
 	valFieldType := v.Type().String()
 
 	if f.CanSet() {
+
 		if objFieldType == "uuid.UUID" && valFieldType == "*uuid.UUID" {
 			realVal := val.(*uuid.UUID)
 			v = reflect.ValueOf(*realVal)
@@ -54,6 +56,16 @@ func (h *Helper) SetInterface(fieldName string, val interface{}) bool {
 			return true
 		} else if objFieldType == "*uuid.UUID" && valFieldType == "uuid.UUID" {
 			realVal := val.(uuid.UUID)
+			v = reflect.ValueOf(&realVal)
+			f.Set(v)
+			return true
+		} else if objFieldType == "time.Time" && valFieldType == "*time.Time" {
+			realVal := val.(*time.Time)
+			v = reflect.ValueOf(*realVal)
+			f.Set(v)
+			return true
+		} else if objFieldType == "*time.Time" && valFieldType == "time.Time" {
+			realVal := val.(time.Time)
 			v = reflect.ValueOf(&realVal)
 			f.Set(v)
 			return true
