@@ -26,7 +26,9 @@ func (f *Input) getDefaultScope(db *gorm.DB) *gorm.DB {
 	// TODO: should we cache here anything?!
 
 	if _, _err := f.getDBFieldName("IsDeleted"); _err == nil {
-		db.Scopes(scope.IsNotDeleted)
+		//db.Scopes(scope.IsNotDeleted)
+		// TODO: how we should do here?!
+		db.Scopes(scope.IsNotDeletedT(f.primaryModel.dbTableName))
 	}
 
 	return db

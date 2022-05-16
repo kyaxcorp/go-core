@@ -42,6 +42,9 @@ type Input struct {
 
 	// here we store the main model name...
 	primaryModelName string
+
+	primaryModel cachedModel
+
 	// Here we store the models for knowing the names of the files and to know how to Filter the input...
 	models map[string]cachedModel
 	// Here we store the map of the models and db fields

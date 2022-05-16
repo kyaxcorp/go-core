@@ -14,6 +14,8 @@ func (r *Record) getDefaultScopes(db *gorm.DB) *gorm.DB {
 	// Set the default scopes...
 	if r.IsStructFieldExists("IsDeleted") {
 		db = db.Scopes(scope.IsNotDeleted)
+		// TODO: use table name!
+		//db = db.Scopes(scope.IsNotDeletedT(""))
 	}
 
 	return db

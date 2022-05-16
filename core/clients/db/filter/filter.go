@@ -73,7 +73,9 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 
 	// Parse the model table name
 
+	modelNr := 0
 	for _, inputModel := range models {
+		modelNr++
 		// Get the model native Type/Name
 
 		model := inputModel.Model
@@ -92,11 +94,17 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 			f.primaryModelName = inputModelName
 		}
 
-		f.models[inputModelName] = cachedModel{
+		modelCache := cachedModel{
 			modelName:   modelName,
 			model:       model,
 			dbColumns:   make(map[string]string),
 			dbTableName: tableName,
+		}
+
+		f.models[inputModelName] = modelCache
+
+		if modelNr == 1 {
+			f.primaryModel = modelCache
 		}
 
 		// Let's also parse model Columns!
