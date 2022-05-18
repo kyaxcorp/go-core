@@ -265,6 +265,7 @@ func (f *Input) processGroupCondition(input *GroupConditionInput) *gorm.DB {
 			// Group conditions
 			if group.Or != nil && *group.Or && groupIndex != 0 {
 				// If it's OR operator
+				// TODO: is it working as expected?! i think no... because it's not always adding parentheses
 				db = db.Or(groupDb)
 			} else {
 				// it's AND Operator
