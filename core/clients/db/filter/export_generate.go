@@ -260,22 +260,7 @@ func (e *Export) GenerateExcel() bool {
 						fieldValue = fieldValueRef.Interface()
 					}
 				} else {
-					v := row.FieldByName(headerField.FieldName)
-					vi := reflect.Indirect(v)
-					// if it's zero value, then there is no value!?
-					// should we return a zero value of this field type?!
-					// or should we simply return nil interface?!
-					if vi == (reflect.Value{}) {
-						// is zero!
-						fieldValue = reflect.Zero(row.FieldByName(headerField.FieldName).Type())
-					}
-
-					if !row.FieldByName(headerField.FieldName).IsZero() {
-						tmpVal := reflect.Indirect(row.FieldByName(headerField.FieldName))
-						if !tmpVal.IsZero() {
-							fieldValue = tmpVal.Interface()
-						}
-					}
+					fieldValue = row.FieldByName(headerField.FieldName).Interface()
 				}
 			}
 
