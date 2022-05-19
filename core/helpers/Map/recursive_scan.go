@@ -7,17 +7,21 @@ func RecursiveCopyToExistent(from map[string]interface{}, to map[string]interfac
 	for fieldName, fieldValue := range to {
 		// Check if from has this field!
 		if fromFieldValue, ok := from[fieldName]; ok {
-			toMapType := reflect.TypeOf(fieldValue).String()
-			fromMapType := reflect.TypeOf(fromFieldValue).String()
-			if toMapType == "map[string]interface{}" || toMapType == "map[string]interface {}" {
-				// Check if from also has the same field!
-				if fromMapType == "map[string]interface{}" || fromMapType == "map[string]interface {}" {
-					// it is! copy further!
-					to[fieldName] = RecursiveCopyToExistent(fromFieldValue.(map[string]interface{}), fieldValue.(map[string]interface{}))
-				}
+			if fieldValue == nil {
+				to[fieldName] = nil
 			} else {
-				// it's a value
-				to[fieldName] = fromFieldValue
+				toMapType := reflect.TypeOf(fieldValue).String()
+				fromMapType := reflect.TypeOf(fromFieldValue).String()
+				if toMapType == "map[string]interface{}" || toMapType == "map[string]interface {}" {
+					// Check if from also has the same field!
+					if fromMapType == "map[string]interface{}" || fromMapType == "map[string]interface {}" {
+						// it is! copy further!
+						to[fieldName] = RecursiveCopyToExistent(fromFieldValue.(map[string]interface{}), fieldValue.(map[string]interface{}))
+					}
+				} else {
+					// it's a value
+					to[fieldName] = fromFieldValue
+				}
 			}
 		}
 	}
