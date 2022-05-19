@@ -13,7 +13,8 @@ func main() {
 	vasea := "hellow wolrd"
 	v1 := &Car{Name: &vasea}
 
-	myVar := v1.Name
+	var myVar interface{}
+	myVar = v1.Name
 	refType := reflect.TypeOf(myVar)
 	refTypeNative := refType
 	refKind := refType.Kind()

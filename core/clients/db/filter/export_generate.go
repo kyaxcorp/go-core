@@ -250,12 +250,21 @@ func (e *Export) GenerateExcel() bool {
 
 			var fieldValue interface{}
 
+			// we can have fields with ptr and without
+			// if we see pointer value, and it's zero, should create it to Zero Value or should we set to nil!?
+			// the thing is that there can be a Handler that process the value... and it can give an error because the
+			// value is simply nil
+			// so lets by default get the value or create a zero value in case of a pointer!
+
 			if headerField.FieldName != "" {
 				if strings.Contains(headerField.FieldName, ".") {
 					//fields := strings.Split(headerField.FieldName, ".")
 					fieldValueRef, _err := _struct.GetNestedFieldReflectValue(row, headerField.FieldName)
 					if _err != nil {
-						fieldValue = nil
+						//fieldValue = nil
+						// it's better for us to set as empty string than nil, because nil gives an error:
+						// panic: runtime error: invalid memory address or nil pointer dereference
+						fieldValue = ""
 					} else {
 						fieldValue = fieldValueRef.Interface()
 					}
@@ -263,6 +272,36 @@ func (e *Export) GenerateExcel() bool {
 					fieldValue = row.FieldByName(headerField.FieldName).Interface()
 				}
 			}
+
+			// ============== transformations from pointer ==============\\
+
+			if fieldValue == nil {
+
+			}
+			refType := reflect.TypeOf(fieldValue)
+			refTypeNative := refType
+			refKind := refType.Kind()
+			refVal := reflect.ValueOf(fieldValue)
+			refValNative := refVal
+			refIsPtr := false
+
+			if refKind == reflect.Ptr {
+				refIsPtr = true
+			}
+
+			if refIsPtr {
+				refTypeNative = refType.Elem()
+				if refVal.IsZero() {
+					// if it's zero, we should create an empty zero value
+					refValNative = reflect.Zero(refTypeNative)
+				} else {
+					// We should take the real indirect type value
+					refValNative = reflect.Indirect(refVal)
+				}
+			}
+
+			fieldValue = refValNative.Interface()
+			// ============== transformations from pointer ==============\\
 
 			if headerField.FieldName != "" && headerField.Handler == nil {
 
