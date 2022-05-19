@@ -265,8 +265,11 @@ func (e *Export) GenerateExcel() bool {
 						// it's better for us to set as empty string than nil, because nil gives an error:
 						// panic: runtime error: invalid memory address or nil pointer dereference
 						fieldValue = ""
+						//log.Println(headerField.FieldName, _err)
+
 					} else {
 						fieldValue = fieldValueRef.Interface()
+						//log.Println(headerField.FieldName, fieldValue)
 					}
 				} else {
 					fieldValue = row.FieldByName(headerField.FieldName).Interface()
