@@ -5,13 +5,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
+	"github.com/kyaxcorp/go-core/core/helpers/export"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"strings"
 
 	//"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
-	"github.com/kyaxcorp/go-core/core/helpers/filesystem/tmp"
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"reflect"
@@ -23,53 +23,24 @@ func (e *Export) GeneratePdf() {
 
 }
 
-func (e *Export) GetExportPath(paths ...string) (string, error) {
-	_paths := append([]string{"exporter"}, paths...)
-	tmpPath, _err := tmp.GetAppTmpPath(_paths...)
-	if _err != nil {
-		return "", _err
-	}
-	return tmpPath, nil
-}
-
 func (e *Export) GetExcelExportPath() (string, error) {
-	tmpPath, _err := e.GetExportPath("excel")
-	if _err != nil {
-		return "", _err
-	}
-	return tmpPath, nil
+	return export.GetExcelFileExportPath()
 }
 
 func (e *Export) GetPdfExportPath() (string, error) {
-	tmpPath, _err := e.GetExportPath("pdf")
-	if _err != nil {
-		return "", _err
-	}
-	return tmpPath, nil
+	return export.GetPdfFileExportPath()
 }
 
 func (e *Export) GetHtmlExportPath() (string, error) {
-	tmpPath, _err := e.GetExportPath("html")
-	if _err != nil {
-		return "", _err
-	}
-	return tmpPath, nil
+	return export.GetHtmlFileExportPath()
 }
 
 func (e *Export) GetJsonExportPath() (string, error) {
-	tmpPath, _err := e.GetExportPath("json")
-	if _err != nil {
-		return "", _err
-	}
-	return tmpPath, nil
+	return export.GetJsonFileExportPath()
 }
 
 func (e *Export) GetWordExportPath() (string, error) {
-	tmpPath, _err := e.GetExportPath("word")
-	if _err != nil {
-		return "", _err
-	}
-	return tmpPath, nil
+	return export.GetWordFileExportPath()
 }
 
 func (e *Export) GenerateExcel() bool {
