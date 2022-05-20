@@ -229,24 +229,30 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 			return "", define.Err(2, "this field doesn't exist -> "+fName)
 		}
 
-		return f.models[modelName].dbColumns[fName], nil
+		//return f.models[modelName].dbColumns[fName], nil
+		// 20.05.2022 - am modificat pentru cashpot la stations (acesta are join cu inventory)
+		// dadea eroare in filtre pentru coloana location_id -> is ambiguous
+		// si aici ca solutie e sa adaug table name inainte de field, pentru ca sa concretizez acesta....
+		return f.models[modelName].dbTableName + "." + f.models[modelName].dbColumns[fName], nil
 	} else {
 		// Case 2
 
 		found := false
 		dbFieldName := ""
+		dbTableName := ""
 		for _, model := range f.models {
 			//log.Println("model", model.dbColumns)
 			if dbField, ok := model.dbColumns[lowerFieldName]; ok {
 				found = true
 				dbFieldName = dbField
+				dbTableName = model.dbTableName
 				break
 			}
 		}
 		if !found {
 			return "", define.Err(3, "this field doesn't exist -> "+lowerFieldName)
 		}
-		return dbFieldName, nil
+		return dbTableName + "." + dbFieldName, nil
 	}
 }
 
