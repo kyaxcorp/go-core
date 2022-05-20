@@ -48,7 +48,7 @@ type Input struct {
 	// Here we store the models for knowing the names of the files and to know how to Filter the input...
 	models map[string]cachedModel
 	// Here we store the map of the models and db fields
-	cachedDBFields map[string]string
+	cachedDBFields map[string]DBField
 
 	enableDBFieldsCaching bool
 
@@ -63,4 +63,11 @@ type Input struct {
 	totalNrOfPages int
 
 	ctx context.Context
+}
+
+type DBField struct {
+	// only field name
+	FieldName string
+	// field name with table name prefixed
+	TableNameFieldName string
 }

@@ -57,7 +57,7 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 		f.models = make(map[string]cachedModel)
 	}
 	if f.cachedDBFields == nil {
-		f.cachedDBFields = make(map[string]string)
+		f.cachedDBFields = make(map[string]DBField)
 	}
 
 	//f.db
@@ -131,11 +131,19 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 			// We will lowercase the field name from the structure/model!
 			f.models[inputModelName].dbColumns[filteredDbFieldName] = dbFieldName
 
+			tableNameFieldName := tableName + "." + dbFieldName
+
 			if f.enableDBFieldsCaching {
 				// Save as it is
-				f.cachedDBFields[filteredDbFieldName] = dbFieldName
+				f.cachedDBFields[filteredDbFieldName] = DBField{
+					FieldName:          dbFieldName,
+					TableNameFieldName: tableNameFieldName,
+				}
 				// Save with model name and field name
-				f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = dbFieldName
+				f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = DBField{
+					FieldName:          dbFieldName,
+					TableNameFieldName: tableNameFieldName,
+				}
 			}
 
 			found[modelFieldName] = true
@@ -214,7 +222,7 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 
 	//  Check cache here...
 	if dbField, ok := f.cachedDBFields[lowerFieldName]; ok {
-		return dbField, nil
+		return dbField.TableNameFieldName, nil
 	}
 
 	if strings.Contains(fieldName, ".") {
