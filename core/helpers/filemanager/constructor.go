@@ -1,0 +1,5 @@
+package company
+
+func NewFile() {
+
+}
