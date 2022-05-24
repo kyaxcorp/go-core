@@ -13,7 +13,8 @@ type GeneralError struct {
 
 func (e *GeneralError) Error() string {
 	// https://golang.org/pkg/fmt/
-	defaultFormat := "code -> %v | message -> %v"
+	//defaultFormat := "code -> %v | message -> %v"
+	defaultFormat := "code: %v, message: %v"
 	if e.AdditionalErrMsg != "" {
 		return fmt.Sprintf(defaultFormat+" | additional: %v", e.Code, e.Err, e.AdditionalErrMsg)
 	} else {
