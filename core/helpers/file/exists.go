@@ -1,6 +1,9 @@
 package file
 
-import "os"
+import (
+	"errors"
+	"os"
+)
 
 func Exists(filename string) bool {
 	if _, _err := os.Stat(filename); _err == nil {
@@ -11,9 +14,12 @@ func Exists(filename string) bool {
 }
 
 func ExistsErr(filename string) (bool, error) {
-	if _, _err := os.Stat(filename); _err == nil {
+	_, err := os.Stat(filename)
+	if err == nil {
 		return true, nil
-	} else {
-		return false, _err
 	}
+	if errors.Is(err, os.ErrNotExist) {
+		return false, nil
+	}
+	return false, err
 }
