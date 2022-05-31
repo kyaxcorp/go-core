@@ -2,6 +2,7 @@ package _struct
 
 import (
 	"github.com/google/uuid"
+	"github.com/kyaxcorp/gofm"
 	"reflect"
 	"time"
 )
@@ -56,6 +57,17 @@ func (h *Helper) SetInterface(fieldName string, val interface{}) bool {
 			return true
 		} else if objFieldType == "*uuid.UUID" && valFieldType == "uuid.UUID" {
 			realVal := val.(uuid.UUID)
+			v = reflect.ValueOf(&realVal)
+			f.Set(v)
+			return true
+
+		} else if objFieldType == "gofm.UUID" && valFieldType == "*gofm.UUID" {
+			realVal := val.(*gofm.UUID)
+			v = reflect.ValueOf(*realVal)
+			f.Set(v)
+			return true
+		} else if objFieldType == "*gofm.UUID" && valFieldType == "gofm.UUID" {
+			realVal := val.(gofm.UUID)
 			v = reflect.ValueOf(&realVal)
 			f.Set(v)
 			return true
