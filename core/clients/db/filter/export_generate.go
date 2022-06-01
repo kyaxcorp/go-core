@@ -7,12 +7,12 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/export"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
+	"github.com/xuri/excelize/v2"
 	"strings"
 
 	//"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
-	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"reflect"
 
@@ -253,6 +253,12 @@ func (e *Export) GenerateExcel() bool {
 
 			}
 			refType := reflect.TypeOf(fieldValue)
+			if refType == nil {
+				// it can be nil if it's a pointer and it doesn't have any value!
+				// so in this case we simply continue...
+				continue
+			}
+
 			refTypeNative := refType
 			refKind := refType.Kind()
 			refVal := reflect.ValueOf(fieldValue)
