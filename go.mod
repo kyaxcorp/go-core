@@ -20,7 +20,6 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/copier v0.3.5
 	github.com/klauspost/cpuid/v2 v2.0.9
-	github.com/kyaxcorp/gofm v0.0.1-20220531-0001
 	github.com/mattn/go-colorable v0.1.12
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/robfig/cron/v3 v3.0.0
@@ -35,8 +34,8 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.2.3
-	gorm.io/driver/postgres v1.3.6
-	gorm.io/gorm v1.23.5
+	gorm.io/driver/postgres v1.2.3
+	gorm.io/gorm v1.22.4
 )
 
 require (
@@ -61,7 +60,6 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
-	github.com/kyaxcorp/gofile v0.0.1-20220531-0002 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
