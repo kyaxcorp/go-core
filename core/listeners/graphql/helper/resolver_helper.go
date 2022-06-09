@@ -11,11 +11,12 @@ import (
 )
 
 type ResolverHelper struct {
-	Ctx             context.Context
-	httpCtx         *gin.Context
-	connDetails     *connection.ConnDetails
-	authDetails     *authentication.AuthDetails
-	requestedFields []string
+	Ctx                       context.Context
+	DisableGetRequestedFields bool
+	httpCtx                   *gin.Context
+	connDetails               *connection.ConnDetails
+	authDetails               *authentication.AuthDetails
+	requestedFields           []string
 }
 
 func NewResolverHelper(rh *ResolverHelper) *ResolverHelper {
@@ -32,7 +33,9 @@ func NewResolverHelper(rh *ResolverHelper) *ResolverHelper {
 	rh.GetGinContext()
 	rh.GetAuthDetails()
 	rh.GetConnectionDetails()
-	rh.GetRequestedFields()
+	if !rh.DisableGetRequestedFields {
+		rh.GetRequestedFields()
+	}
 	return rh
 }
 
