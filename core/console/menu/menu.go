@@ -6,6 +6,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/bootstrap/register_service"
 	brokerClientService "github.com/kyaxcorp/go-core/core/clients/broker/services"
+	configLoader "github.com/kyaxcorp/go-core/core/config/autoloader"
 	"github.com/kyaxcorp/go-core/core/console/command"
 	"github.com/kyaxcorp/go-core/core/console/commands/version"
 	"github.com/kyaxcorp/go-core/core/console/working_stage"
@@ -21,7 +22,6 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 )
 
@@ -40,7 +40,7 @@ type Menu struct {
 func New(ctx context.Context) *Menu {
 	// This is the executable checksum, it will help the user to know which config and appdata folder
 	// the app owns
-	execChecksum := hash.MD5(filepath.Base(os.Args[0]))
+	execChecksum := hash.MD5(configLoader.GetCleanAppFileName())
 
 	return &Menu{
 		cfgFile:     "",
