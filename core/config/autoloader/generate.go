@@ -30,6 +30,8 @@ import (
 	"path/filepath"
 )
 
+var cachedCleanAppName string
+
 func SaveConfigFromMemory(cfg Config) error {
 	c := viper.New()
 
@@ -583,6 +585,14 @@ func GetConfigFilePath() string {
 // We should have the same config name if the app name is not changed (doesn't matter if it's on windows or Linux)
 // we should remove the file extension!
 func GetConfigFileName() string {
+	return model.ConfigFileName + "_" + hash.MD5(GetCleanAppFileName())
+}
+
+func GetCleanAppFileName() string {
+	if cachedCleanAppName != "" {
+		return cachedCleanAppName
+	}
+
 	appFullName := filepath.Base(os.Args[0])
 	appName := ""
 	extensionSep := "."
@@ -592,7 +602,8 @@ func GetConfigFileName() string {
 	} else {
 		appName = appFullName
 	}
-	return model.ConfigFileName + "_" + hash.MD5(appName)
+	cachedCleanAppName = appName
+	return appName
 }
 
 func GetConfigFileType() string {
@@ -604,7 +615,7 @@ func GetConfigFullFileName() string {
 }
 
 func GetTmpConfigFileName() string {
-	return model.ConfigTmpFileName + "_" + hash.MD5(filepath.Base(os.Args[0])) + "." + model.ConfigFileType
+	return model.ConfigTmpFileName + "_" + hash.MD5(GetCleanAppFileName()) + "." + model.ConfigFileType
 }
 
 // GetConfigTmpFilePath -> this is the temporary file path of the config... it's only for comparation purpose
