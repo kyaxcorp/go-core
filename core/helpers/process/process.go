@@ -91,8 +91,3 @@ func GetCurrentProcessFolder() (string, error) {
 	}
 	return dir, nil
 }
-
-// GetCurrentProcessExecName -> it will return executable name of the current process
-func GetCurrentProcessExecName() string {
-	return filepath.Base(os.Args[0])
-}

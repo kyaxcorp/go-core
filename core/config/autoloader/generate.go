@@ -1,13 +1,12 @@
 package autoloader
 
 import (
-	"github.com/kyaxcorp/go-core/core/helpers/file"
-	"github.com/kyaxcorp/go-core/core/helpers/slice"
-	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
-	"strings"
-
 	brokerClientConfig "github.com/kyaxcorp/go-core/core/clients/broker/config"
 	brokerClientConnection "github.com/kyaxcorp/go-core/core/clients/broker/connection"
+	"github.com/kyaxcorp/go-core/core/helpers/file"
+	"github.com/kyaxcorp/go-core/core/helpers/process/name"
+	"github.com/kyaxcorp/go-core/core/helpers/slice"
+	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 	// cassandraConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cassandra/config"
 
 	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
@@ -26,11 +25,8 @@ import (
 	loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
 	//brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 	"github.com/spf13/viper"
-	"os"
 	"path/filepath"
 )
-
-var cachedCleanAppName string
 
 func SaveConfigFromMemory(cfg Config) error {
 	c := viper.New()
@@ -589,21 +585,7 @@ func GetConfigFileName() string {
 }
 
 func GetCleanAppFileName() string {
-	if cachedCleanAppName != "" {
-		return cachedCleanAppName
-	}
-
-	appFullName := filepath.Base(os.Args[0])
-	appName := ""
-	extensionSep := "."
-	if strings.Contains(appFullName, extensionSep) {
-		appNameSplit := strings.Split(appFullName, extensionSep)
-		appName = strings.Join(appNameSplit[:len(appNameSplit)-1], extensionSep)
-	} else {
-		appName = appFullName
-	}
-	cachedCleanAppName = appName
-	return appName
+	return name.GetCurrentProcessCleanExecName()
 }
 
 func GetConfigFileType() string {

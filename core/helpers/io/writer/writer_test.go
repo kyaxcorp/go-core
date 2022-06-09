@@ -5,7 +5,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	configLoader "github.com/kyaxcorp/go-core/core/config/autoloader"
+	"github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -116,7 +116,7 @@ func TestMakeLogDir(t *testing.T) {
 func TestDefaultFilename(t *testing.T) {
 	currentTime = fakeTime
 	dir := os.TempDir()
-	filename := filepath.Join(dir, configLoader.GetCleanAppFileName()+"-lumberjack.log")
+	filename := filepath.Join(dir, name.GetCurrentProcessCleanExecName()+"-lumberjack.log")
 	defer os.Remove(filename)
 	l := &Logger{}
 	defer l.Close()

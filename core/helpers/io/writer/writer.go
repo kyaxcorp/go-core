@@ -4,8 +4,8 @@ import (
 	"compress/gzip"
 	"errors"
 	"fmt"
-	configLoader "github.com/kyaxcorp/go-core/core/config/autoloader"
 	"github.com/kyaxcorp/go-core/core/helpers/cmap"
+	name2 "github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"io"
 	"io/ioutil"
 	"os"
@@ -288,7 +288,7 @@ func (l *Logger) filename() string {
 	if l.Filename != "" {
 		return l.Filename
 	}
-	name := configLoader.GetCleanAppFileName() + "-lumberjack.log"
+	name := name2.GetCurrentProcessCleanExecName() + "-lumberjack.log"
 	return filepath.Join(os.TempDir(), name)
 }
 
