@@ -106,7 +106,8 @@ func (c *AddCmd) GetCmdLongName() string {
 }
 
 func (c *AddCmd) GetProcessLockName() string {
-	return c.Cmd
+	// Shouldn't we somehow add more info here for the lock?
+	return "console_command_" + c.Cmd
 }
 
 func (c *AddCmd) PIDDestroy() (bool, error) {
