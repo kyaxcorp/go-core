@@ -12,7 +12,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
-	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"github.com/kyaxcorp/go-core/core/helpers/process/shutdown"
 	"github.com/kyaxcorp/go-core/core/logger/appLog"
@@ -40,7 +39,7 @@ type Menu struct {
 func New(ctx context.Context) *Menu {
 	// This is the executable checksum, it will help the user to know which config and appdata folder
 	// the app owns
-	execChecksum := hash.MD5(name.GetCurrentProcessCleanExecName())
+	execChecksum := name.GetCurrentProcessCleanMD5ExecName()
 
 	return &Menu{
 		cfgFile:     "",

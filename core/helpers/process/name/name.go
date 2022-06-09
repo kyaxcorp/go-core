@@ -1,6 +1,7 @@
 package name
 
 import (
+	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"os"
 	"path/filepath"
 	"strings"
@@ -29,4 +30,8 @@ func GetCurrentProcessCleanExecName() string {
 	}
 	cachedCleanAppName = appName
 	return appName
+}
+
+func GetCurrentProcessCleanMD5ExecName() string {
+	return hash.MD5(GetCurrentProcessCleanExecName())
 }
