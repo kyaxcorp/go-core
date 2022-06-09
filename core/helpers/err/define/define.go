@@ -42,6 +42,22 @@ func Code(err error) int {
 	}
 }
 
+// Msg Return the Error message
+func Msg(err error) string {
+	if err == nil {
+		// No error
+		return ""
+	}
+	var generalError *GeneralError
+	if errors.As(err, &generalError) {
+		return generalError.Err.Error()
+	} else {
+		// It may be a different error?
+		// or simply it's not one...
+		return ""
+	}
+}
+
 func Is(err error) bool {
 	if err == nil {
 		// No error
