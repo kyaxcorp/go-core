@@ -4,6 +4,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/slice"
 	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
+	"strings"
 
 	brokerClientConfig "github.com/kyaxcorp/go-core/core/clients/broker/config"
 	brokerClientConnection "github.com/kyaxcorp/go-core/core/clients/broker/connection"
@@ -578,8 +579,20 @@ func GetConfigFilePath() string {
 	return path
 }
 
+//GetConfigFileName
+// We should have the same config name if the app name is not changed (doesn't matter if it's on windows or Linux)
+// we should remove the file extension!
 func GetConfigFileName() string {
-	return model.ConfigFileName + "_" + hash.MD5(filepath.Base(os.Args[0]))
+	appFullName := filepath.Base(os.Args[0])
+	appName := ""
+	extensionSep := "."
+	if strings.Contains(appFullName, extensionSep) {
+		appNameSplit := strings.Split(appFullName, extensionSep)
+		appName = strings.Join(appNameSplit[:len(appNameSplit)-1], extensionSep)
+	} else {
+		appName = appFullName
+	}
+	return model.ConfigFileName + "_" + hash.MD5(appName)
 }
 
 func GetConfigFileType() string {
