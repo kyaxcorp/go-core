@@ -47,6 +47,8 @@ const ConfigFileType = "yaml"
 type Model struct {
 	// Application params (Which are custom defined by the user
 	Application struct {
+		// Stage -> prod, dev, beta, testing etc...
+		Stage string `yaml:"stage" mapstructure:"stage" default:"dev"`
 		// App Data Path (all other subfolders will be stored there...)
 		AppDataPath string `yaml:"app_data_path" mapstructure:"app_data_path" default:".appdata"`
 		// Where the PIDs are saved!
