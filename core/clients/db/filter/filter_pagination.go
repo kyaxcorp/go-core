@@ -12,16 +12,18 @@ func (f *Input) ApplyPagination() *Input {
 
 func (f *Input) applyPagination(db *gorm.DB) *gorm.DB {
 	db = db.Scopes(
-		scope.Paginate(*f.PageNr, *f.NrOfItems, f.OverrideNrOfItemsLimit),
+		scope.Paginate(*f.PageNr, *f.NrOfItems, *f.maxNrOfItems),
 	)
 	return db
 }
 
-func (f *Input) SetNrOfItems(nrOfItems int, overrideLimit ...bool) *Input {
-	if len(overrideLimit) > 0 {
-		f.OverrideNrOfItemsLimit = overrideLimit[0]
-	}
+func (f *Input) SetNrOfItems(nrOfItems int) *Input {
 	f.NrOfItems = &nrOfItems
+	return f
+}
+
+func (f *Input) SetMaxNrOfItems(maxNrOfItems int) *Input {
+	f.maxNrOfItems = &maxNrOfItems
 	return f
 }
 

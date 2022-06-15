@@ -1,6 +1,7 @@
 package filter
 
 const (
-	DefaultPageNr    = 1
-	DefaultNrOfItems = 50
+	DefaultPageNr       = 1
+	DefaultNrOfItems    = 50
+	DefaultMaxNrOfItems = 1000
 )

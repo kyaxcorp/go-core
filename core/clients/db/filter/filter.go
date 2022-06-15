@@ -29,19 +29,23 @@ func (f *Input) check() {
 	// Check and set default values!
 	if f.PageNr == nil {
 		f.PageNr = new(int)
-		*f.PageNr = 1
-	}
-	if f.NrOfItems == nil {
-		f.NrOfItems = new(int)
-		*f.NrOfItems = 10
-	}
-
-	if *f.PageNr <= 0 {
+		*f.PageNr = DefaultPageNr
+	} else if *f.PageNr <= 0 {
 		*f.PageNr = DefaultPageNr
 	}
 
-	if *f.NrOfItems <= 0 {
+	if f.NrOfItems == nil {
+		f.NrOfItems = new(int)
 		*f.NrOfItems = DefaultNrOfItems
+	} else if *f.NrOfItems <= 0 {
+		*f.NrOfItems = DefaultNrOfItems
+	}
+
+	if f.maxNrOfItems == nil {
+		f.maxNrOfItems = new(int)
+		*f.maxNrOfItems = DefaultMaxNrOfItems
+	} else if *f.maxNrOfItems <= 0 {
+		*f.maxNrOfItems = DefaultMaxNrOfItems
 	}
 
 	f.checkContext()
