@@ -34,11 +34,17 @@ func (r *Record) Delete() bool {
 	} else {
 		// We should update it!
 		// TODO: should we get the record before making changes?!...
-		if _struct.FieldExists(r.modelStruct, "IsDeleted") {
-			//r.saveData["IsDeleted"] = true
-			r.SetSaveFieldValue("IsDeleted", true)
 
-			if _struct.FieldExists(r.modelStruct, "DeletedAt") {
+		isDeletedExists := _struct.FieldExists(r.modelStruct, "IsDeleted")
+		deletedAtExists := _struct.FieldExists(r.modelStruct, "DeletedAt")
+
+		if isDeletedExists || deletedAtExists {
+			//r.saveData["IsDeleted"] = true
+			if isDeletedExists {
+				r.SetSaveFieldValue("IsDeleted", true)
+			}
+
+			if deletedAtExists {
 				//r.saveData["DeletedAt"] = time.Now()
 				r.SetSaveFieldValue("DeletedAt", time.Now())
 			}
@@ -111,7 +117,7 @@ func (r *Record) ForceDelete() bool {
 	} else {
 		// We should delete it!
 		// Does gorm know the primary keys?! when there are multiple
-		result = _db.Delete(&r.saveData)
+		result = _db.Delete(r.saveData)
 		if result.Error != nil {
 			r.setDBError(result.Error)
 			r.callOnError()
