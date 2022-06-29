@@ -25,3 +25,7 @@ func ItemExists(slice interface{}, item interface{}) (bool, error) {
 func Includes(slice interface{}, item interface{}) (bool, error) {
 	return ItemExists(slice, item)
 }
+
+func Contains(slice interface{}, item interface{}) (bool, error) {
+	return ItemExists(slice, item)
+}
