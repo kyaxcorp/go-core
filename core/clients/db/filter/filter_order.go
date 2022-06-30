@@ -10,11 +10,13 @@ func (f *Input) ApplyOrdering() *Input {
 	return f
 }
 
-func (f *Input) applyOrdering(db *gorm.DB) *gorm.DB {
+func (f *Input) applyOrdering(db *gorm.DB) (rdb *gorm.DB) {
 	// Loop through ordering...
 
+	rdb = db.Scopes()
+
 	if f.Order == nil || len(f.Order) == 0 {
-		return db
+		return
 	}
 
 	for _, o := range f.Order {
@@ -40,12 +42,12 @@ func (f *Input) applyOrdering(db *gorm.DB) *gorm.DB {
 
 			transformedOrd += " " + direction
 		}
-		db = db.Order(transformedOrd)
+		rdb = rdb.Order(transformedOrd)
 	}
 
 	// TODO: maybe set a default order...
 	//f.db.Scopes(
 	//	scope.OrderByCreatedAtDesc,
 	//)
-	return db
+	return
 }
