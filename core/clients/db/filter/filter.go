@@ -6,6 +6,8 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"strconv"
+
 	//"log"
 	"strings"
 	"sync"
@@ -249,10 +251,16 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 		}
 
 		//return f.models[modelName].dbColumns[fName], nil
+		//
 		// 20.05.2022 - am modificat pentru cashpot la stations (acesta are join cu inventory)
 		// dadea eroare in filtre pentru coloana location_id -> is ambiguous
 		// si aici ca solutie e sa adaug table name inainte de field, pentru ca sa concretizez acesta....
-		return f.models[modelName].dbTableName + "." + f.models[modelName].dbColumns[fName], nil
+		//
+		// 30.06.2022 -> am adaugat Double Quoting... "" pentru ca cind faci Joins("CreatedBy") si faci Search CreatedBy.first_name
+		// dar eroare : ERROR: no data source matches prefix: updatedby in this context (SQLSTATE 42P01)
+		// Gorm by default adauga doudble quotes
+
+		return strconv.Quote(f.models[modelName].dbTableName) + "." + strconv.Quote(f.models[modelName].dbColumns[fName]), nil
 	} else {
 		// Case 2
 
@@ -271,7 +279,10 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 		if !found {
 			return "", define.Err(3, "this field doesn't exist -> "+lowerFieldName)
 		}
-		return dbTableName + "." + dbFieldName, nil
+		// 30.06.2022 -> am adaugat Double Quoting... "" pentru ca cind faci Joins("CreatedBy") si faci Search CreatedBy.first_name
+		// dar eroare : ERROR: no data source matches prefix: updatedby in this context (SQLSTATE 42P01)
+		// Gorm by default adauga doudble quotes
+		return strconv.Quote(dbTableName) + "." + strconv.Quote(dbFieldName), nil
 	}
 }
 
