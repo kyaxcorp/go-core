@@ -24,13 +24,16 @@ func (f *Input) GetNrOfItems() (*Counters, error) {
 	if result != nil {
 		db = result
 	}
-	db = f.applyOrdering(db)
+	// It's important to know that GORM removes ORDER BY for counter!
+	//db = f.applyOrdering(db)
 
 	if f.enableDefaultScope {
 		db = db.Scopes(f.getDefaultScope)
 	}
 
 	//Scopes(f.applyConditions).
+
+	// It's important to know that GORM removes ORDER BY for counter!
 	result = db.Count(&totalNrOfItems)
 	// Let's set the primary model name?!
 	//row := f.dbCounters.Select("count(1)").Row()
