@@ -69,6 +69,10 @@ type Input struct {
 type DBField struct {
 	// only field name
 	FieldName string
+	// QuotedFieldName -> with ""
+	QuotedFieldName string
 	// field name with table name prefixed
 	TableNameFieldName string
+	// QuotedTableNameFieldName -> with ""
+	QuotedTableNameFieldName string
 }

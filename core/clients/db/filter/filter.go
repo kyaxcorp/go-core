@@ -136,6 +136,7 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 		found := make(map[string]bool)
 		for _, field := range s.Fields {
 			dbFieldName := field.DBName
+			quotedDbFieldName := strconv.Quote(field.DBName)
 			modelFieldName := field.Name
 			//m[modelFieldName] = dbFieldName
 
@@ -145,18 +146,20 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 			f.models[inputModelName].dbColumns[filteredDbFieldName] = dbFieldName
 
 			tableNameFieldName := tableName + "." + dbFieldName
+			quotedTableNameFieldName := strconv.Quote(tableName) + "." + strconv.Quote(dbFieldName)
+
+			dbField := DBField{
+				FieldName:                dbFieldName,
+				QuotedFieldName:          quotedDbFieldName,
+				TableNameFieldName:       tableNameFieldName,
+				QuotedTableNameFieldName: quotedTableNameFieldName,
+			}
 
 			if f.enableDBFieldsCaching {
 				// Save as it is
-				f.cachedDBFields[filteredDbFieldName] = DBField{
-					FieldName:          dbFieldName,
-					TableNameFieldName: tableNameFieldName,
-				}
+				f.cachedDBFields[filteredDbFieldName] = dbField
 				// Save with model name and field name
-				f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = DBField{
-					FieldName:          dbFieldName,
-					TableNameFieldName: tableNameFieldName,
-				}
+				f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = dbField
 			}
 
 			found[modelFieldName] = true
