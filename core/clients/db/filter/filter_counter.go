@@ -20,7 +20,8 @@ func (f *Input) GetNrOfItems() (*Counters, error) {
 	db := f.dbCounters.
 		Model(f.models[f.primaryModelName].model)
 
-	result := f.applyConditions(db)
+	result := f.applyOrdering(db)
+	result = f.applyConditions(db)
 	if result != nil {
 		db = result
 	}
