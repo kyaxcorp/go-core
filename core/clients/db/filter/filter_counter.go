@@ -20,11 +20,11 @@ func (f *Input) GetNrOfItems() (*Counters, error) {
 	db := f.dbCounters.
 		Model(f.models[f.primaryModelName].model)
 
-	result := f.applyOrdering(db)
-	result = f.applyConditions(db)
+	result := f.applyConditions(db)
 	if result != nil {
 		db = result
 	}
+	db = f.applyOrdering(db)
 
 	if f.enableDefaultScope {
 		db = db.Scopes(f.getDefaultScope)
