@@ -238,7 +238,8 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 
 	//  Check cache here...
 	if dbField, ok := f.cachedDBFields[lowerFieldName]; ok {
-		return dbField.TableNameFieldName, nil
+		//return dbField.TableNameFieldName, nil
+		return dbField.QuotedTableNameFieldName, nil
 	}
 
 	if strings.Contains(fieldName, ".") {
