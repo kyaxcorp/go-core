@@ -14,6 +14,9 @@ import (
 type InputModel struct {
 	Name  string
 	Model interface{}
+
+	// TableName -> used when using Joins, which automatically makes a relation to a custom table name!
+	TableName string
 }
 
 func (f *Input) Apply() *Input {
@@ -91,6 +94,10 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 			panic("failed to parse model table name")
 		}
 		// Save the model as it is
+
+		if inputModel.TableName != "" {
+			tableName = inputModel.TableName
+		}
 
 		inputModelName := strings.ToLower(inputModel.Name)
 
