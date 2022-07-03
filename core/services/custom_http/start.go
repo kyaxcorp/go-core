@@ -71,13 +71,14 @@ func Start() bool {
 		return false
 	}
 
-	log.Println("reading file")
-	fsData, _err = CustomHttpStorage.ReadFile(readFileFrom)
-	if _err != nil {
-		log.Println("failed to read file -> ", _err.Error())
-		// TODO: handle this error!?...
-		return false
-	}
+	// TODO: request from the server!
+	log.Println("reading file", readFileFrom)
+	//fsData, _err = CustomHttpStorage.ReadFile(readFileFrom)
+	//if _err != nil {
+	//	log.Println("failed to read file -> ", _err.Error())
+	//	TODO: handle this error!?...
+	//return false
+	//}
 
 	log.Println("get app's dir path")
 
