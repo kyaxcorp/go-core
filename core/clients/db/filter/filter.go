@@ -157,7 +157,11 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 
 			if f.enableDBFieldsCaching {
 				// Save as it is
-				f.cachedDBFields[filteredDbFieldName] = dbField
+				// Here, we can have multiple models, so, we should set only the first ones that we find!
+				// Multiple models can have same fields, so let's do a check if the field already exists!
+				if _, ok := f.cachedDBFields[filteredDbFieldName]; !ok {
+					f.cachedDBFields[filteredDbFieldName] = dbField
+				}
 				// Save with model name and field name
 				f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = dbField
 			}
