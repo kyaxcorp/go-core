@@ -11,7 +11,7 @@ func main() {
 
 	domainName := "http://localhost:30080/"
 	graphQLReqPath := "api/worker/private/v1/"
-	client := graphql.NewClient(domainName+graphQLReqPath, nil)
+	client := graphql.NewClient(domainName + graphQLReqPath)
 	req := graphql.NewRequest(`
 		{
 			   schedulers{
