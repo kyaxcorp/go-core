@@ -13,6 +13,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
+	"github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
 	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"github.com/kyaxcorp/go-core/core/helpers/json"
@@ -23,6 +24,7 @@ import (
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"log"
+	"os"
 	"time"
 )
 
@@ -293,6 +295,28 @@ func StartAutoLoader(c Config) error {
 	// Let's call other additional functions
 	if !conv.ParseBool(config.GetConfig().Application.DisableTimezoneOverride) {
 		timezone.OverrideLocalTimezone(config.GetConfig().Application.TimeZone)
+	}
+
+	cwd := config.GetConfig().Application.CurrentWorkingDirectory
+	if cwd == "" {
+		if conv.ParseBool(config.GetConfig().Application.IfEmptyCWDSetToExecPath) {
+			_err := os.Chdir(path.Root())
+			if _err != nil {
+				panic(_err)
+			}
+		} else {
+			// it will remain as it is!
+		}
+	} else {
+		// set to this path!
+		// but first, we should check if this path really exists!
+		if folder.Exists(cwd) {
+			// let's set it!
+			_err := os.Chdir(cwd)
+			if _err != nil {
+				panic(_err)
+			}
+		}
 	}
 
 	return nil
