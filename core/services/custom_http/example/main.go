@@ -7,6 +7,18 @@ import (
 	"log"
 )
 
+type Counters struct {
+	TotalItems         int64
+	TotalPages         int64
+	RequestedNrOfItems int64
+	RequestedPageNr    int64
+	ReceivedNrOfItems  int64
+}
+
+type Schedulers struct {
+	Counters Counters
+}
+
 func main() {
 
 	domainName := "http://localhost:30080/"
@@ -102,6 +114,8 @@ func main() {
 
 	// run it and capture the response
 	//var respData ResponseStruct
+	//var respData schedulers
+	//var respData Schedulers
 	var respData interface{}
 	if err := client.Run(ctx, req, &respData); err != nil {
 		log.Fatal(err)
