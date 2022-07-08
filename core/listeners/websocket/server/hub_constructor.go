@@ -46,10 +46,13 @@ func newHub(WSServer *Server) *Hub {
 }
 
 // It creates a special custom hub with specific functionality for handling c
-func (s *Server) NewHub(getter HubGetter) *Hub {
+func (s *Server) NewHub(getter ...HubGetter) *Hub {
 	hub := newHub(s)
-	if function.IsCallable(getter) {
-		hub.SetGetter(getter)
+	if len(getter) > 0 {
+		if function.IsCallable(getter[0]) {
+			hub.SetGetter(getter[0])
+		}
 	}
+
 	return hub
 }
