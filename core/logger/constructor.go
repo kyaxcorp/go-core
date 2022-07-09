@@ -96,14 +96,16 @@ func New(config config.Config) *model.Logger {
 	}
 
 	// If it's not the master app
-	if conv.ParseBool(config.IsEnabled) && !conv.ParseBool(config.IsApplication) {
+	// Check also if the master app logger is available!
+	var mainAppLogger = GetAppLogger()
+	if conv.ParseBool(config.IsEnabled) && !conv.ParseBool(config.IsApplication) && mainAppLogger != nil {
 		// Add additional writer to master, take the ApplicationLogger Config
 		// We should get an existent instance of Application writer
 		// Don't know what will happen if multiple processes of the same application will work, but don't see
 		// any problems here!
 
 		if applicationWriter == nil {
-			appWriter := getFileHandler(GetAppLogger().Config)
+			appWriter := getFileHandler(mainAppLogger.Config)
 			applicationWriter = &appWriter
 		}
 
