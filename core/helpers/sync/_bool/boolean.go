@@ -17,10 +17,13 @@ func (v *Bool) Set(value bool) {
 			v.onFalseWaiter.Signal()
 		}
 
+		// TODO: if we want all events to be non blocking we should
+		// set an option here for that!
+
 		// Launch async
 		go func(value bool) {
 			v.onChangeAsync.Scan(func(k string, vv interface{}) {
-				vv.(OnChange)(v, value)
+				go vv.(OnChange)(v, value)
 			})
 		}(value)
 
@@ -28,6 +31,30 @@ func (v *Bool) Set(value bool) {
 		v.onChange.Scan(func(k string, vv interface{}) {
 			vv.(OnChange)(v, value)
 		})
+
+		if value {
+			// if true
+			go func(value bool) {
+				v.onTrueAsync.Scan(func(k string, vv interface{}) {
+					go vv.(OnTrue)(v)
+				})
+			}(value)
+
+			v.onTrue.Scan(func(k string, vv interface{}) {
+				vv.(OnTrue)(v)
+			})
+		} else {
+			// if false
+			go func(value bool) {
+				v.onFalseAsync.Scan(func(k string, vv interface{}) {
+					go vv.(OnFalse)(v)
+				})
+			}(value)
+
+			v.onFalse.Scan(func(k string, vv interface{}) {
+				vv.(OnFalse)(v)
+			})
+		}
 	}
 }
 

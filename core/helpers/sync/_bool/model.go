@@ -22,6 +22,12 @@ type Bool struct {
 	onChange      *_map_string_interface.MapStringInterface
 	onChangeAsync *_map_string_interface.MapStringInterface
 
+	onTrue      *_map_string_interface.MapStringInterface
+	onTrueAsync *_map_string_interface.MapStringInterface
+
+	onFalse      *_map_string_interface.MapStringInterface
+	onFalseAsync *_map_string_interface.MapStringInterface
+
 	onTrueWaiter  *waiter.Waiter
 	onFalseWaiter *waiter.Waiter
 }

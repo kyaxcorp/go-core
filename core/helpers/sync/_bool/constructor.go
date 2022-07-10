@@ -43,7 +43,15 @@ func getDefaultConstructor(b *Bool) *Bool {
 	b.onTrueWaiter = waiter.New(b.ctx)
 	b.onFalseWaiter = waiter.New(b.ctx)
 	b.lock = sync.RWMutex{}
+	//
 	b.onChange = _map_string_interface.New()
 	b.onChangeAsync = _map_string_interface.New()
+
+	b.onTrue = _map_string_interface.New()
+	b.onTrueAsync = _map_string_interface.New()
+
+	b.onFalse = _map_string_interface.New()
+	b.onFalseAsync = _map_string_interface.New()
+
 	return b
 }
