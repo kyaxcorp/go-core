@@ -68,21 +68,27 @@ type Connection struct {
 	AuthOptions AuthOptions `yaml:"auth_options" mapstructure:"auth_options"`
 }
 
-func DefaultConfig(connObj *Connection) (Connection, error) {
-	if connObj == nil {
-		connObj = &Connection{}
-	}
-	var _err error
-	// Set the default values for the object!
-	_err = _struct.SetDefaultValues(connObj)
-	if _err != nil {
-		return *connObj, _err
-	}
-	// Setting logger defaults
-	_err = _struct.SetDefaultValues(&connObj.AuthOptions)
-	if _err != nil {
-		return *connObj, _err
+func DefaultConfig(connObj ...*Connection) (Connection, error) {
+	var c *Connection
+	if len(connObj) > 0 {
+		c = connObj[0]
 	}
 
-	return *connObj, _err
+	if c == nil {
+		c = &Connection{}
+	}
+
+	var _err error
+	// Set the default values for the object!
+	_err = _struct.SetDefaultValues(c)
+	if _err != nil {
+		return *c, _err
+	}
+	// Setting logger defaults
+	_err = _struct.SetDefaultValues(&c.AuthOptions)
+	if _err != nil {
+		return *c, _err
+	}
+
+	return *c, _err
 }
