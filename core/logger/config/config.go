@@ -84,6 +84,6 @@ func DefaultConfig(configObj ...*Config) (Config, error) {
 		c = &Config{}
 	}
 	// Set the default values for the object!
-	_err := _struct.SetDefaultValues(configObj)
+	_err := _struct.SetDefaultValues(c)
 	return *c, _err
 }
