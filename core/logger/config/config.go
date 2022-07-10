@@ -74,11 +74,16 @@ type Config struct {
 }
 
 // DefaultConfig -> it will return the default config with default values
-func DefaultConfig(configObj *Config) (Config, error) {
-	if configObj == nil {
-		configObj = &Config{}
+func DefaultConfig(configObj ...*Config) (Config, error) {
+	var c *Config
+	if len(configObj) > 0 {
+		c = configObj[0]
+	}
+
+	if c == nil {
+		c = &Config{}
 	}
 	// Set the default values for the object!
 	_err := _struct.SetDefaultValues(configObj)
-	return *configObj, _err
+	return *c, _err
 }
