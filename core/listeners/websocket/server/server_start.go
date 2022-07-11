@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"flag"
 	"github.com/gookit/color"
-	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/network/port"
 	"github.com/rs/zerolog"
@@ -60,7 +59,7 @@ func (s *Server) Start() error {
 
 	s.LInfo().Msg("creating withCancel context")
 	// We create each time when we start the server!
-	s.ctx = _context.WithCancel(s.parentCtx)
+	s.NewCancelContext()
 
 	// Create WS Upgrader
 	s.createWSUpgrader()

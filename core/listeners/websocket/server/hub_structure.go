@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
 	"github.com/kyaxcorp/go-core/core/helpers/sync/_map_string_interface"
 	"github.com/kyaxcorp/go-core/core/helpers/sync/_time"
@@ -27,11 +28,11 @@ type Hub struct {
 	// This is the channel which handles specific c!
 	broadcastTo chan hubBroadcastTo
 	// This is the command to stop the broadcaster which sends the data!
-	stopBroadcaster chan bool
+	//stopBroadcaster chan bool
 	// This is the command to stop the getter
-	stopGetter chan bool
+	//stopGetter chan bool
 	// This is the command to stop the controller
-	stopController chan bool
+	//stopController chan bool
 
 	// If the stop has being called!
 	StopCalled *_bool.Bool
@@ -40,7 +41,10 @@ type Hub struct {
 	isRunning *_bool.Bool
 
 	// TODO: see how to use the context here!
-	stopContext context.CancelFunc
+	//stopContext context.CancelFunc
+
+	parentCtx context.Context
+	ctx       *_context.CancelCtx
 
 	// Data HubGetter
 	getter HubGetter

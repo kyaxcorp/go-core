@@ -13,6 +13,9 @@ func (h *Hub) Start() *Hub {
 	// We add this hub to the server stack in this moment!
 	h.server.Hubs[h] = true
 
+	// create each time
+	h.NewCancelContext()
+
 	// Start first the broadcast
 	go h.run()
 	// Start after that the reader!

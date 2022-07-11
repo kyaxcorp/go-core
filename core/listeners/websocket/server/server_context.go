@@ -10,4 +10,11 @@ func (s *Server) SetContext(ctx context.Context) {
 		ctx = _context.GetDefaultContext()
 	}
 	s.parentCtx = ctx
+
+	s.NewCancelContext()
+}
+
+func (s *Server) NewCancelContext() *Server {
+	s.ctx = _context.WithCancel(s.parentCtx)
+	return s
 }

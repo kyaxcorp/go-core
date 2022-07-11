@@ -78,7 +78,9 @@ func (h *Hub) run() {
 			break
 		}
 		select {
-		case <-h.stopBroadcaster:
+		//case <-h.stopBroadcaster:
+		//	break
+		case <-h.ctx.Done():
 			break
 		case message := <-h.broadcast:
 			// TODO: if we have multiple c, we should split the sending by creating additional

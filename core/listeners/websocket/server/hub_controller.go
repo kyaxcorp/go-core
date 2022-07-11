@@ -6,7 +6,9 @@ func (h *Hub) runController() {
 			break
 		}
 		select {
-		case <-h.stopController:
+		//case <-h.stopController: // TODO: deprecated, remove it!
+		//	break
+		case <-h.ctx.Done():
 			break
 		case client := <-h.UnregisterClientChannel:
 			h.UnRegisterClient(client)

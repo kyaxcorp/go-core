@@ -24,9 +24,9 @@ func newHub(WSServer *Server) *Hub {
 		// Create (to) the Sending data Channel
 		broadcastTo: make(chan hubBroadcastTo),
 		// Create the stop call channel
-		stopBroadcaster: make(chan bool),
-		stopGetter:      make(chan bool),
-		stopController:  make(chan bool),
+		//stopBroadcaster: make(chan bool),
+		//stopGetter:      make(chan bool),
+		//stopController:  make(chan bool),
 		// Is it running!
 		isRunning: _bool.NewVal(false),
 
@@ -41,6 +41,8 @@ func newHub(WSServer *Server) *Hub {
 		// Unregister channel!
 		UnregisterClientChannel: make(chan *Client),
 	}
+
+	hub.SetContext(WSServer.ctx.Context())
 
 	return hub
 }
