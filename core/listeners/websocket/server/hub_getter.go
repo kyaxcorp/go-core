@@ -13,12 +13,18 @@ func (h *Hub) runGetter() {
 		if h.StopCalled.Get() {
 			break
 		}
+
+		select {
+		case <-h.ctx.Done():
+			break
+		default:
+			if function.IsCallable(h.getter) {
+				h.getter(h)
+			}
+		}
 		//select {
 		//case <-h.stopGetter:
 		//	break
 		//}
-		if function.IsCallable(h.getter) {
-			h.getter(h)
-		}
 	}
 }
