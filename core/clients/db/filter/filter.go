@@ -42,6 +42,9 @@ func (f *Input) check() {
 	if f.NrOfItems == nil {
 		f.NrOfItems = new(int)
 		*f.NrOfItems = DefaultNrOfItems
+		//} else if *f.NrOfItems <= 0 {
+	} else if *f.NrOfItems == -1 {
+		// Don't do anything... -1 it's unlimited
 	} else if *f.NrOfItems <= 0 {
 		*f.NrOfItems = DefaultNrOfItems
 	}
@@ -49,8 +52,16 @@ func (f *Input) check() {
 	if f.maxNrOfItems == nil {
 		f.maxNrOfItems = new(int)
 		*f.maxNrOfItems = DefaultMaxNrOfItems
+	} else if *f.maxNrOfItems == -1 {
+		// Don't do anything... -1 it's unlimited
 	} else if *f.maxNrOfItems <= 0 {
 		*f.maxNrOfItems = DefaultMaxNrOfItems
+	}
+
+	// Check if Max allows unlimited!
+	if *f.NrOfItems == -1 && *f.maxNrOfItems != -1 {
+		// reset the nr of items to default value because it's not allowed
+		*f.NrOfItems = DefaultNrOfItems
 	}
 
 	f.checkContext()
