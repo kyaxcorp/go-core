@@ -45,7 +45,7 @@ func newHub(WSServer *Server) *Hub {
 	return hub
 }
 
-// It creates a special custom hub with specific functionality for handling c
+// NewHub -> It creates a special custom hub with specific functionality for handling c
 func (s *Server) NewHub(getter ...HubGetter) *Hub {
 	hub := newHub(s)
 	if len(getter) > 0 {

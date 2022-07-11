@@ -79,6 +79,7 @@ func (h *Hub) run() {
 		}
 		select {
 		case <-h.stopBroadcaster:
+			break
 		case message := <-h.broadcast:
 			// TODO: if we have multiple c, we should split the sending by creating additional
 			// Goroutines for faster sending!

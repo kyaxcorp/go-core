@@ -14,8 +14,11 @@ func (h *Hub) Stop() *Hub {
 	}
 
 	// Call through Channel the Stop command!
-	h.stopBroadcaster <- true
-	h.stopController <- true
-	//h.stopGetter <- true
+	go func() {
+		h.stopBroadcaster <- true
+		h.stopController <- true
+		h.stopGetter <- true
+	}()
+
 	return h
 }

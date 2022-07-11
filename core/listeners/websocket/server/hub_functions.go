@@ -35,7 +35,7 @@ func (h *Hub) GetClientsByFilter(filter FindClientsFilter) map[uint64]*Client {
 	return h.c.getClientsByFilter(filter)
 }
 
-// This is the function which gets the info and sends to the broadcaster!
+// SetGetter  -> This is the function which gets the info and sends to the broadcaster!
 func (h *Hub) SetGetter(getter HubGetter) bool {
 	if !function.IsCallable(getter) {
 		return false

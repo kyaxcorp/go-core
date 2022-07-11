@@ -1,6 +1,8 @@
 package server
 
-// You can start the Hub before the websocket server has being started!
+import "github.com/kyaxcorp/go-core/core/helpers/function"
+
+// Start -> You can start the Hub before the websocket server has being started!
 // This is the function which starts the hub!
 func (h *Hub) Start() *Hub {
 	if h.isRunning.Get() {
@@ -14,7 +16,9 @@ func (h *Hub) Start() *Hub {
 	// Start first the broadcast
 	go h.run()
 	// Start after that the reader!
-	go h.runGetter()
+	if function.IsCallable(h.getter) {
+		go h.runGetter()
+	}
 	// Start Controller
 	go h.runController()
 
