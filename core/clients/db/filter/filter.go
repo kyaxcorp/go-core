@@ -33,14 +33,14 @@ func (f *Input) Apply() *Input {
 func (f *Input) check() {
 	// Check and set default values!
 	if f.PageNr == nil {
-		f.PageNr = new(int)
+		f.PageNr = new(int64)
 		*f.PageNr = DefaultPageNr
 	} else if *f.PageNr <= 0 {
 		*f.PageNr = DefaultPageNr
 	}
 
 	if f.NrOfItems == nil {
-		f.NrOfItems = new(int)
+		f.NrOfItems = new(int64)
 		*f.NrOfItems = DefaultNrOfItems
 		//} else if *f.NrOfItems <= 0 {
 	} else if *f.NrOfItems == -1 {
@@ -50,7 +50,7 @@ func (f *Input) check() {
 	}
 
 	if f.maxNrOfItems == nil {
-		f.maxNrOfItems = new(int)
+		f.maxNrOfItems = new(int64)
 		*f.maxNrOfItems = DefaultMaxNrOfItems
 	} else if *f.maxNrOfItems == -1 {
 		// Don't do anything... -1 it's unlimited

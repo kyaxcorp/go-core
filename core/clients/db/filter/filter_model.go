@@ -11,11 +11,11 @@ type Counters struct {
 	// how many pages there are based on the requested nr of items
 	TotalPages int64
 	// How many items have been requested
-	RequestedNrOfItems int
+	RequestedNrOfItems int64
 	// what is the requested page nr
-	RequestedPageNr int
+	RequestedPageNr int64
 	// how many items have been received from the server
-	ReceivedNrOfItems int
+	ReceivedNrOfItems int64
 }
 
 type Details struct {
@@ -32,10 +32,10 @@ type cachedModel struct {
 }
 
 type Input struct {
-	PageNr    *int `json:"PageNr"`
-	NrOfItems *int `json:"NrOfItems"`
+	PageNr    *int64 `json:"PageNr"`
+	NrOfItems *int64 `json:"NrOfItems"`
 	// maxNrOfItems -> don't allow this param to be controlled by the front end part... it's a security measure!
-	maxNrOfItems *int
+	maxNrOfItems *int64
 	// it allows to go higher than 1000 limit!
 	Order          []*Order        `json:"Order"`
 	Search         *string         `json:"Search"`
@@ -60,8 +60,8 @@ type Input struct {
 	dbCounters *gorm.DB
 	// getNrOfItems -> defines if it should count the nr of records based on the current filtration statement
 	//getNrOfItems   bool
-	totalNrOfItems int
-	totalNrOfPages int
+	totalNrOfItems int64
+	totalNrOfPages int64
 
 	ctx context.Context
 }
