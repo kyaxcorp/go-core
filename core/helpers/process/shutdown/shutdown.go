@@ -44,7 +44,7 @@ func GracefullShutdown(
 
 // MonitorSigMessages -> receives the signal of termination, and reacts based on this
 // It should call the Cancel Context, and the entire app should terminate gracefully
-func MonitorSigMessages(onShutdown func()) {
+func MonitorSigMessages(onShutdown ...func()) {
 	term := make(chan os.Signal) // OS termination signal
 	// fail := make(chan error)     // Teardown failure signal
 
@@ -61,8 +61,8 @@ func MonitorSigMessages(onShutdown func()) {
 		// context with 30s timeout
 		_context.Cancel()
 		// Running shutdown in a separate routine
-		if function.IsCallable(onShutdown) {
-			go onShutdown()
+		if len(onShutdown) > 0 && function.IsCallable(onShutdown[0]) {
+			go onShutdown[0]()
 		}
 
 		waitTime := config.GetConfig().Application.OnShutdownWaitSeconds
