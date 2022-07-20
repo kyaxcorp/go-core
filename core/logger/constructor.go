@@ -190,6 +190,11 @@ func getFileHandler(config config.Config) io.Writer {
 
 func newRollingFile(config config.Config) io.Writer {
 	// TODO: maybe this creation is useless because the logger auto creates...
+
+	if config.DirLogPath == "" {
+		// TODO: should we return an error?!
+	}
+
 	if _err := os.MkdirAll(config.DirLogPath, 0744); _err != nil {
 		log.Error().Err(_err).Str("path", config.DirLogPath).Msg("can't create log directory")
 		return nil

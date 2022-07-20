@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/kyaxcorp/go-core/core/config"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/logger"
 	"net/http"
 	"os"
@@ -59,7 +60,9 @@ func MonitorSigMessages(onShutdown func()) {
 		// context with 30s timeout
 		_context.Cancel()
 		// Running shutdown in a separate routine
-		go onShutdown()
+		if function.IsCallable(onShutdown) {
+			go onShutdown()
+		}
 
 		waitTime := config.GetConfig().Application.OnShutdownWaitSeconds
 		logger.GetAppLogger().Info().Int("shutdown_wait_time", waitTime).Msg("waiting processes to finish")
