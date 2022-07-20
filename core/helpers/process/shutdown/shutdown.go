@@ -14,6 +14,8 @@ import (
 	"time"
 )
 
+var WaitFinished = make(chan bool)
+
 func GracefullShutdown(
 	callback func() error,
 	teardown func(context.Context) error,
@@ -73,7 +75,8 @@ func MonitorSigMessages(onShutdown ...func()) {
 		if vars.ApplicationLogger != nil {
 			logger.GetAppLogger().Info().Msg("shutting down...")
 		}
+		WaitFinished <- true
 		// Exiting the application!
-		os.Exit(0)
+		//os.Exit(0)
 	}()
 }
