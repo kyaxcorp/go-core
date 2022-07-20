@@ -6,6 +6,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/logger"
+	"github.com/kyaxcorp/go-core/core/logger/application/vars"
 	"net/http"
 	"os"
 	"os/signal"
@@ -65,9 +66,13 @@ func MonitorSigMessages(onShutdown func()) {
 		}
 
 		waitTime := config.GetConfig().Application.OnShutdownWaitSeconds
-		logger.GetAppLogger().Info().Int("shutdown_wait_time", waitTime).Msg("waiting processes to finish")
+		if vars.ApplicationLogger != nil {
+			logger.GetAppLogger().Info().Int("shutdown_wait_time", waitTime).Msg("waiting processes to finish")
+		}
 		time.Sleep(time.Second * time.Duration(waitTime))
-		logger.GetAppLogger().Info().Msg("shutting down...")
+		if vars.ApplicationLogger != nil {
+			logger.GetAppLogger().Info().Msg("shutting down...")
+		}
 		// Exiting the application!
 		os.Exit(0)
 	}()
