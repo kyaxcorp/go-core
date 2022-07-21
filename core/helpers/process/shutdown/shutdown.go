@@ -14,7 +14,9 @@ import (
 	"time"
 )
 
-var WaitFinished = make(chan bool)
+//var WaitFinished = make(chan bool)
+// TODO: should be set here the default context instead of the background?!
+var WaitFinished, WaitCancel = context.WithCancel(context.Background())
 
 func GracefullShutdown(
 	callback func() error,
@@ -75,7 +77,8 @@ func MonitorSigMessages(onShutdown ...func()) {
 		if vars.ApplicationLogger != nil {
 			logger.GetAppLogger().Info().Msg("shutting down...")
 		}
-		WaitFinished <- true
+		//WaitFinished <- true
+		WaitCancel()
 		// Exiting the application!
 		//os.Exit(0)
 	}()
