@@ -65,10 +65,17 @@ func (dr *DBResolver) startResolversMonitoring() error {
 					Int("nr_of_inactive_masters", dr.nrOfInactiveMasters.Get()).
 					Msg(color.LightYellow.Render("available masters"))
 
-				if instance.IsTerminating() {
+				//if instance.IsTerminating() {
+				//	break
+				//}
+
+				select {
+				// Context
+				case <-instance.GetContext().Done():
 					break
+				case <-time.After(time.Second):
 				}
-				time.Sleep(time.Second)
+				//time.Sleep(time.Second)
 			}
 		},
 	})

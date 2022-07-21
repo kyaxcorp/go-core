@@ -121,7 +121,13 @@ retry:
 			debug().Msg("sleeping, and after that retrying...")
 			// Retry again...
 			retryTime++
-			time.Sleep(time.Duration(int(pingRetryDelaySeconds)) * time.Nanosecond)
+
+			select {
+			case <-connOptions.ConnResolver.GetContext().Done():
+				// TODO: we should return in this case!!!
+			case <-time.After(time.Duration(int(pingRetryDelaySeconds)) * time.Nanosecond):
+			}
+			//time.Sleep(time.Duration(int(pingRetryDelaySeconds)) * time.Nanosecond)
 			debug().Msg("running retry...")
 			goto retry
 		}

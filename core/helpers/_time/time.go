@@ -12,6 +12,8 @@ type SleepStatus struct {
 	Break    bool // If you want to break from sleep
 }
 
+// Sleep -> this function should be deprecated...
+// we should use select + time.After instead + context.Done() instaed!
 func Sleep(
 	// How much time a cycle should sleep
 	duration time.Duration,

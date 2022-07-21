@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/kyaxcorp/go-core/core/clients/websocket/connection"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
-	"github.com/kyaxcorp/go-core/core/helpers/_time"
 	"github.com/kyaxcorp/go-core/core/helpers/base64"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/err/define"
@@ -353,7 +352,18 @@ func (c *Client) connect() error {
 						Dur("sleep_duration_ms", sleepTime).
 						Msg("sleeping...")
 
-					_time.Sleep(
+					select {
+					case <-c.ctx.Done(): // When it's stopped, or the main process or others have signaled to cancel
+						// Stop the connection process!
+						terminate = true
+					case <-c.ctxConnect.Done(): // When StopConnect has being called
+						// Stop the connection process!
+						terminate = true
+					case <-time.After(time.Second * time.Duration(conn.RetryTimeout)):
+						// DO nothing...
+					}
+
+					/*_time.Sleep(
 						sleepTime,
 						uint64(conn.RetryTimeout*10),
 						// Totally 100 ms * 50 = 5000 ms = 5 seconds
@@ -371,7 +381,7 @@ func (c *Client) connect() error {
 								// DO nothing...
 							}
 						},
-					)
+					)*/
 					if terminate {
 						warnRetry().Msg("terminating (2)...")
 						break

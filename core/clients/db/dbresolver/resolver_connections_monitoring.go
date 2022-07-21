@@ -154,10 +154,15 @@ func (r *resolver) startConnectionsMonitoring() error {
 					Int("nr_of_inactive_replicas", r.nrOfInActiveReplicas.Get()).
 					Msg(statusColor.Render(statusMessage))
 
-				if instance.IsTerminating() {
+				//if instance.IsTerminating() {
+				//	break
+				//}
+				select {
+				case <-instance.GetContext().Done():
 					break
+				case <-time.After(time.Second):
 				}
-				time.Sleep(time.Second)
+				//time.Sleep(time.Second)
 			}
 		},
 	})

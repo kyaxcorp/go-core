@@ -65,7 +65,13 @@ func (r *resolver) resolve(
 				Int("max_retry", maxRetries).
 				Msg(color.LightYellow.Render("retrying..."))
 			currentNrOfRetries++
-			time.Sleep(time.Millisecond * time.Duration(retryDelayMs))
+
+			select {
+			case <-r.ctx.Done():
+			case <-time.After(time.Millisecond * time.Duration(retryDelayMs)):
+			}
+
+			//time.Sleep(time.Millisecond * time.Duration(retryDelayMs))
 			return true
 		}
 	}

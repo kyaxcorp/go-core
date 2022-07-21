@@ -178,7 +178,12 @@ retryConnect:
 
 				// Sleep a bit till next conn...
 				if onConnectOptions.GetOnFailedDelayDurationBetweenConnections() != 0 && !isLastSource {
-					time.Sleep(onConnectOptions.GetOnFailedDelayDurationBetweenConnections())
+					select {
+					case <-ctx.Done():
+					case <-time.After(onConnectOptions.GetOnFailedDelayDurationBetweenConnections()):
+					}
+					//time.Sleep(onConnectOptions.GetOnFailedDelayDurationBetweenConnections())
+
 				}
 				continue
 			} else {
