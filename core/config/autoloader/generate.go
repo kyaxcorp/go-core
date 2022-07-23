@@ -558,7 +558,7 @@ func GetConfigPath() string {
 	// Get the config full path
 	configFilePath := GetConfigFilePath()
 	// Get only the base dir without file
-	return filepath.Dir(configFilePath)
+	return filepath.Dir(configFilePath) + filepath.FromSlash("/")
 }
 
 func GetConfigFilePath() string {
