@@ -23,5 +23,6 @@ func Dir(path string) string {
 }
 
 func DirSeparator() string {
-	return filepath.FromSlash("/")
+	//return filepath.FromSlash("/")
+	return filepath.Separator
 }
