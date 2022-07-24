@@ -14,6 +14,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"github.com/kyaxcorp/go-core/core/helpers/process/shutdown"
+	"github.com/kyaxcorp/go-core/core/logger"
 	"github.com/kyaxcorp/go-core/core/logger/appLog"
 	"github.com/kyaxcorp/go-core/core/services/broker/console"
 	homedir "github.com/mitchellh/go-homedir"
@@ -199,7 +200,9 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				// TODO: the primary app remains online! and child program becomes dependent of the primary one!
 				// TODO: it should not be dependent!
 
-				appLog.Info().Msg("running in background")
+				if logger.GetAppLogger() != nil {
+					appLog.Info().Msg("running in background")
+				}
 				//log.Println("Running in background")
 				_command, _err := m.RunInternalCommand(InternalCommandOptions{
 					Args:    []string{c.Cmd},
@@ -207,12 +210,16 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				})
 				if _err != nil {
 					// TODO: we should handle if we can't start!
-					appLog.Error().Err(_err).Msg("failed to start command... ")
+					if logger.GetAppLogger() != nil {
+						appLog.Error().Err(_err).Msg("failed to start command... ")
+					}
 					return
 				}
 
 				//log.Println("PID", command.Process.Pid)
-				appLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
+				if logger.GetAppLogger() != nil {
+					appLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
+				}
 			} else {
 				if c.LockProcess && !lock.FLock(c.GetProcessLockName(), false) {
 					// handle locking error
