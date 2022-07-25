@@ -81,7 +81,7 @@ type Model struct {
 	}
 	// Different connections to different services
 	Clients struct {
-		DefaultDBClient string `yaml:"default_db_client" mapstructure:"" default:"cockroach"`
+		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach"`
 		MySQL           struct {
 			DefaultConn struct {
 				// This is the default Instance Name
