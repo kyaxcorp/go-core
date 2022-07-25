@@ -224,7 +224,9 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				if c.LockProcess && !lock.FLock(c.GetProcessLockName(), false) {
 					// handle locking error
 					//log.Println("Failed to lock the process!")
-					appLog.Warn().Msg(color.Style{color.LightYellow}.Render("failed to lock the process"))
+					if logger.GetAppLogger() != nil {
+						appLog.Warn().Msg(color.Style{color.LightYellow}.Render("failed to lock the process"))
+					}
 					return
 				}
 
