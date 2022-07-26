@@ -40,11 +40,15 @@ func (r *ReceivedMessage) Binary() []byte {
 // It decodes JSON into a Structure!
 func (r *ReceivedMessage) JSONDecode() (interface{}, error) {
 	var tmp interface{}
-	err := json.Unmarshal(r.Message, tmp)
+	err := json.Unmarshal(r.Message, &tmp)
 	if err != nil {
 		return nil, err
 	}
 	return tmp, nil
+}
+
+func (r *ReceivedMessage) JSONDecodeTo(to interface{}) error {
+	return json.Unmarshal(r.Message, to)
 }
 
 func (r *ReceivedMessage) IsText() bool {
