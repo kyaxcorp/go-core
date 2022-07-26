@@ -80,7 +80,7 @@ func (c *Client) WriteFile(filePayload FilePayload) *Client {
 	return c
 }
 
-// This can be large files, audio data, anything... this is multiparted!
+// WriteBinaryPayload - This can be large files, audio data, anything... this is multiparted!
 func (c *Client) WriteBinaryPayload(binaryPayload BinaryPayload) *Client {
 	/*
 		1. it should auto continue if connection failed!?...
@@ -102,7 +102,7 @@ func (c *Client) LiveStreaming() *Client {
 	return c
 }
 
-// We will write any type of Message which will be formatted into a JSON and into a specific structure!
+// WriteTextPayload - We will write any type of Message which will be formatted into a JSON and into a specific structure!
 // This also will receive a response from the client!
 // It's also limited to a specific packet length!
 // It's destined to receive back a response from the Client!
@@ -152,7 +152,7 @@ func (c *Client) SendTextPayload(textPayload TextPayload) *Client {
 	return c.SendTextPayload(textPayload)
 }
 
-// It sends clear Text to the client! without any encoding!
+// WriteText - It sends clear Text to the client! without any encoding!
 func (c *Client) WriteText(message string) *Client {
 	if message == "" {
 		return c
@@ -167,7 +167,7 @@ func (c *Client) SendText(message string) *Client {
 	return c.WriteText(message)
 }
 
-// It sends Any structure to the client encoded as JSON!
+// WriteJSON - It sends Any structure to the client encoded as JSON!
 func (c *Client) WriteJSON(message interface{}, onJsonError OnJsonError) *Client {
 	go func() {
 		encoded, err := msg.JsonToBytes(message)
@@ -185,7 +185,7 @@ func (c *Client) SendJSON(message interface{}, onJsonError OnJsonError) *Client 
 	return c.WriteJSON(message, onJsonError)
 }
 
-// It sends clear bytes to the client
+// WriteBinary - It sends clear bytes to the client
 func (c *Client) WriteBinary(message []byte) *Client {
 	if len(message) == 0 {
 		return c
@@ -199,8 +199,7 @@ func (c *Client) SendBinary(message []byte) *Client {
 	return c.WriteBinary(message)
 }
 
-//--------------BROADCAST FUNCTIONS------------\\
-// It sends clear Text to the c! without any encoding!
+// BroadcastText - It sends clear Text to the c! without any encoding!
 func (c *Client) BroadcastText(message string) *Client {
 	if message == "" {
 		return c
@@ -211,7 +210,7 @@ func (c *Client) BroadcastText(message string) *Client {
 	return c
 }
 
-// It sends Any structure to the c encoded as JSON!
+// BroadcastJSON - It sends Any structure to the c encoded as JSON!
 func (c *Client) BroadcastJSON(message interface{}, onJsonError OnJsonError) *Client {
 	go func() {
 		encoded, err := msg.JsonToBytes(message)

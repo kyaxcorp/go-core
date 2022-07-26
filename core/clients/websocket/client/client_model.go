@@ -32,6 +32,8 @@ Should be created 2 way of sending/receive messages in an async way!
 
 // These client can connect to multiple destinations if one server is not responding!
 
+type OnJsonError func(err error, message interface{})
+
 // OnReceive -> when we receive any message (text or binary)
 type OnReceive func(recvMessage *server.ReceivedMessage, c *Client)
 type OnConnect func()
