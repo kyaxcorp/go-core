@@ -72,6 +72,9 @@ func (h *RegistrationHub) run() {
 
 			// Simply unregister all clients...
 			// The clients routines will also receive the signal and they will auto close...!?
+
+			// TODO: all clients should disconnect and get offline based on the provided context from the WebSocket Server!!!
+			// TODO: we should remove this code from here!!!
 			clients := h.s.GetClients()
 			for cl, _ := range clients {
 				_err := cl.Disconnect()

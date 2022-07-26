@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
@@ -107,6 +108,9 @@ func (s *Server) UpgradeToWS(
 		clientIdentifier = clientIPFiltered
 	}
 
+	// create a context for the client!
+	clientCtx := _context.WithCancel(s.ctx.Context())
+
 	// Can be IPv4 & IPv6, so we should take care of that very wisely
 	// The best way to identify the connection is by device id, or something unique that identifies it!
 	// We can check sum all the metadata, but after that we will not understand the folder path name
@@ -133,6 +137,9 @@ func (s *Server) UpgradeToWS(
 	clientLogger.Logger = &subLogger
 
 	client := &Client{
+		parentCtx: s.ctx.Context(),
+		ctx:       clientCtx,
+
 		// Logger
 		Logger: clientLogger,
 

@@ -8,4 +8,4 @@ async meaning we should create goroutines, but anyway... if we have pipes... wri
 
 3. Check http recover and connection_id generation... for client, when the session dies, the http recovers, and
 we have an incorrect connection id attached for the client!...
-4. 
+4. add termination context

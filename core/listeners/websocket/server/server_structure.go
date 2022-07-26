@@ -183,6 +183,11 @@ type ReceivedMessage struct {
 }
 
 type Client struct {
+	// parentCtx -> e WS Server-ul
+	parentCtx context.Context
+	// ctx asta e Client-ul!
+	ctx *_context.CancelCtx
+
 	// Logger -> it's specifically related to client
 	// Logs will be written to client file, but not in the main websocket log file
 	// If needed, this can be enabled
