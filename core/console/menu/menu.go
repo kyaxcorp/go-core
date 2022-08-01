@@ -22,6 +22,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -75,7 +76,21 @@ func (m *Menu) Execute() error {
 
 //func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
 func (m *Menu) RunInternalCommand(options InternalCommandOptions) (*exec.Cmd, error) {
-	currentApp, _ := os.Executable()
+	var _err error
+	var currentApp string
+	var execPath string
+	execPath, _err = os.Executable()
+	currentApp = execPath
+	// let's change the working directory!
+	if options.RunDaemonFromExecDir {
+		appDirPath := filepath.Dir(currentApp)
+		_err = os.Chdir(appDirPath)
+		if _err != nil {
+			return nil, _err
+		}
+		currentApp = "./" + filepath.Base(execPath)
+	}
+
 	var _cmd *exec.Cmd
 	if options.Release {
 		_cmd = exec.Command(currentApp, options.Args...)
@@ -83,7 +98,7 @@ func (m *Menu) RunInternalCommand(options InternalCommandOptions) (*exec.Cmd, er
 		_cmd = exec.CommandContext(_context.GetDefaultContext(), currentApp, options.Args...)
 	}
 	// TODO: start as detached child?!...
-	_err := _cmd.Start()
+	_err = _cmd.Start()
 	// TODO: how to call release to detach ?!
 	if _err != nil {
 		return _cmd, _err
@@ -151,8 +166,9 @@ func (m *Menu) AddCommands(c []*command.AddCmd) *Menu {
 }
 
 type InternalCommandOptions struct {
-	Args    []string
-	Release bool
+	Args                 []string
+	Release              bool
+	RunDaemonFromExecDir bool
 }
 
 // AddCommand -> Adding commands
@@ -205,8 +221,9 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				}
 				//log.Println("Running in background")
 				_command, _err := m.RunInternalCommand(InternalCommandOptions{
-					Args:    []string{c.Cmd},
-					Release: true,
+					Args:                 []string{c.Cmd},
+					Release:              true,
+					RunDaemonFromExecDir: c.RunDaemonFromExecDir,
 				})
 				if _err != nil {
 					// TODO: we should handle if we can't start!

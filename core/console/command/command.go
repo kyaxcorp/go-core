@@ -49,6 +49,9 @@ type AddCmd struct {
 	LongName  string
 	Name      string
 
+	// it will run the executable from its current location! ./APP
+	RunDaemonFromExecDir bool
+
 	// This enables startup services
 	EnableStartupServices bool
 	StartupCoreServices   StartupCoreServices
