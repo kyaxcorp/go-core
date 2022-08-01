@@ -253,10 +253,12 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				}()
 
 				// Destruct on signal!
-				go shutdown.MonitorSigMessages(func() {
+
+				shutdown.OnShutdown(func() {
 					cmdCtx.Cancel() // Send Signal,Cancel by context!
 					c.Destructor()
 				})
+				go shutdown.MonitorSigMessages()
 
 				// Generate PID only if needed!
 				if c.GeneratePID {

@@ -17,8 +17,35 @@ import (
 // TODO: should be set here the default context instead of the background?!
 var WaitFinished, WaitCancel = context.WithCancel(context.Background())
 
+type OnShutdownCb func()
+
+var onShutdownItems = []OnShutdownCb{}
+
 func CallGracefulShutdown() {
+	// We should tell to the global context that the application is shutting down!
+	// context with 30s timeout
 	_context.Cancel()
+	// Running shutdown in a separate routine
+	if len(onShutdownItems) > 0 {
+		for _, onShutdown := range onShutdownItems {
+			if function.IsCallable(onShutdown) {
+				go onShutdown()
+			}
+		}
+	}
+
+	waitTime := config.GetConfig().Application.OnShutdownWaitSeconds
+	if vars.ApplicationLogger != nil {
+		logger.GetAppLogger().Info().Int("shutdown_wait_time", waitTime).Msg("waiting processes to finish")
+	}
+	time.Sleep(time.Second * time.Duration(waitTime))
+	if vars.ApplicationLogger != nil {
+		logger.GetAppLogger().Info().Msg("shutting down...")
+	}
+	//WaitFinished <- true
+	WaitCancel()
+	// Exiting the application!
+	//os.Exit(0)
 }
 
 /*
@@ -50,9 +77,13 @@ func GracefulShutdown(
 	return <-fail
 }*/
 
+func OnShutdown(onShutdown ...OnShutdownCb) {
+	onShutdownItems = append(onShutdownItems, onShutdown...)
+}
+
 // MonitorSigMessages -> receives the signal of termination, and reacts based on this
 // It should call the Cancel Context, and the entire app should terminate gracefully
-func MonitorSigMessages(onShutdown ...func()) {
+func MonitorSigMessages() {
 	term := make(chan os.Signal) // OS termination signal
 	// fail := make(chan error)     // Teardown failure signal
 
@@ -64,26 +95,6 @@ func MonitorSigMessages(onShutdown ...func()) {
 		)
 
 		<-term // waits for termination signal
-
-		// We should tell to the global context that the application is shutting down!
-		// context with 30s timeout
-		_context.Cancel()
-		// Running shutdown in a separate routine
-		if len(onShutdown) > 0 && function.IsCallable(onShutdown[0]) {
-			go onShutdown[0]()
-		}
-
-		waitTime := config.GetConfig().Application.OnShutdownWaitSeconds
-		if vars.ApplicationLogger != nil {
-			logger.GetAppLogger().Info().Int("shutdown_wait_time", waitTime).Msg("waiting processes to finish")
-		}
-		time.Sleep(time.Second * time.Duration(waitTime))
-		if vars.ApplicationLogger != nil {
-			logger.GetAppLogger().Info().Msg("shutting down...")
-		}
-		//WaitFinished <- true
-		WaitCancel()
-		// Exiting the application!
-		//os.Exit(0)
+		CallGracefulShutdown()
 	}()
 }
