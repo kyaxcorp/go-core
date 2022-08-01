@@ -7,7 +7,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/logger"
 	"github.com/kyaxcorp/go-core/core/logger/application/vars"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -18,7 +17,12 @@ import (
 // TODO: should be set here the default context instead of the background?!
 var WaitFinished, WaitCancel = context.WithCancel(context.Background())
 
-func GracefullShutdown(
+func CallGracefulShutdown() {
+	_context.Cancel()
+}
+
+/*
+func GracefulShutdown(
 	callback func() error,
 	teardown func(context.Context) error,
 ) error {
@@ -44,7 +48,7 @@ func GracefullShutdown(
 
 	// after server gracefully stopped, code proceeds here and waits for any error produced by teardown() process @ line 26
 	return <-fail
-}
+}*/
 
 // MonitorSigMessages -> receives the signal of termination, and reacts based on this
 // It should call the Cancel Context, and the entire app should terminate gracefully
