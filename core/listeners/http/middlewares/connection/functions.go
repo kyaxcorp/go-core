@@ -1,7 +1,6 @@
 package connection
 
 import (
-	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/slice"
 )
 
@@ -25,10 +24,10 @@ func (c *ConnDetails) generateDetails() {
 	// Saving the authentication details into Http Connection Context
 	//a.C.Request.TLS
 
-	remoteIP := ""
-	if remIP, gotIP := c.C.RemoteIP(); gotIP {
-		remoteIP = conv.BytesToStr(remIP)
-	}
+	remoteIP := c.C.RemoteIP()
+	//if remIP, gotIP := c.C.RemoteIP(); gotIP {
+	//	remoteIP = conv.BytesToStr(remIP)
+	//}
 
 	c.DomainName = "" // TODO:
 	c.Host = c.C.Request.Host

@@ -210,6 +210,9 @@ func New(
 	//gin.SetMode(gin.DebugMode)
 
 	infoServer().Msg("creating new gin server")
+
+	// TODO: use HTTP/2?
+
 	// Create the HTTP SERVER
 	s.HttpServer = gin.New()
 

@@ -251,7 +251,7 @@ func (f *Input) processGroupCondition(input *GroupConditionInput) *gorm.DB {
 		for groupIndex, group := range gc.Groups {
 			// The first item OR/AND operator is ignored
 
-			// Process the group
+			// Check the group
 			groupDb := f.processGroupCondition(&GroupConditionInput{
 				// here we should give a clean DB!
 				DB:             input.DB,

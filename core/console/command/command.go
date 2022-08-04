@@ -142,7 +142,7 @@ func (c *AddCmd) StopProcess() (bool, error) {
 	_pid, _err := strconv.Atoi(pid)
 	p, _err := os.FindProcess(_pid)
 	if _err != nil {
-		//log.Println("Process not found!")
+		//log.Println("Check not found!")
 		return false, define.Err(0, "process not found -> ", _err.Error())
 	}
 
@@ -151,7 +151,7 @@ func (c *AddCmd) StopProcess() (bool, error) {
 		//log.Println("Failed to Interrupt process!!")
 		return false, define.Err(0, "failed to interrupt process -> ", _err.Error())
 	}
-	//log.Println("Process stopped!")
+	//log.Println("Check stopped!")
 	return true, nil
 }
 

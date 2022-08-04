@@ -25,7 +25,7 @@ type messageQueue struct {
 
 	//
 	LastRetry         time.Time `gorm:"index"` // This is the time when the process started to send the messages
-	RetryAfterSeconds uint64    `gorm:"index"` // This is the time after when the Process should retry the sending?!
+	RetryAfterSeconds uint64    `gorm:"index"` // This is the time after when the Check should retry the sending?!
 	LockedBy          uint64    `gorm:"index"` // By whom it's being locked (by what process/goroutine?)
 	LockedWhen        time.Time `gorm:"index"` // When it's being locked
 	LockedTTL         uint64    `gorm:"index"` // For how long it's being locked?!

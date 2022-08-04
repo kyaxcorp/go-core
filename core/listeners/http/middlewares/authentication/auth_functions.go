@@ -1,6 +1,8 @@
 package authentication
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 // ByHeaderKeys > Search in header specific keys
 func (a *Auth) ByHeaderKeys(authHeaderKeys []string) *Auth {
@@ -51,6 +53,8 @@ func (a *Auth) GetAuthTypeKeyName() string {
 func (a *Auth) SetAuthDetails(details *AuthDetails) {
 	// Saving the authentication details into Http Connection Context
 	a.C.Set(HttpContextAuthDetailsKey, details)
+	//ctx := context.WithValue(a.C.Request.Context(), HttpContextAuthDetailsKey, details)
+	//a.C.Request = a.C.Request.WithContext(ctx)
 }
 
 func (a *Auth) Abort(code int, httpCode int, msg string) {
