@@ -256,7 +256,6 @@ func (s *Server) Start() error {
 				// TODO: make a callback for fail listening!
 				//err := s.WSServer.Run(*addr)
 				_err := instance.ListenAndServe()
-
 				if _err != nil {
 					_error().Err(_err).Msg(color.Style{color.LightRed}.Render("failed to listen http server"))
 				}

@@ -6,6 +6,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gin-gonic/gin"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
 	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/connection"
 )
@@ -30,7 +31,11 @@ func NewResolverHelper(rh *ResolverHelper) *ResolverHelper {
 	}
 
 	// call it once...
-	rh.GetGinContext()
+	_, _err := rh.GetGinContext()
+	if _err != nil {
+		panic(define.Err(0, "failed to get gin context -> ", _err.Error()))
+		//return nil, define.Err(0, "failed to get gin context -> ", _err.Error())
+	}
 	rh.GetAuthDetails()
 	rh.GetConnectionDetails()
 	if !rh.DisableGetRequestedFields {
