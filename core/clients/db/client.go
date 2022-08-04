@@ -12,6 +12,8 @@ import (
 )
 
 // here we store the default clients for specific drivers... (for default instances only)
+
+var DefaultInstanceClient *gorm.DB
 var CRDBDefaultInstanceClient *gorm.DB
 var MySQLDefaultInstanceClient *gorm.DB
 
@@ -64,9 +66,17 @@ func New(
 // GetDefaultClient -> this is a common function which helps getting the default Database client
 // based on the current configuration!
 func GetDefaultClient() (*gorm.DB, error) {
+	// TODO: do we need a lock?!
+	if DefaultInstanceClient != nil {
+		return DefaultInstanceClient, nil
+	}
 	cl := getDefaultDBClient()
 	// TODO: add function and variable which can override the get default client!...
-	return cl.GetDefaultClient()
+	c, _err := cl.GetDefaultClient()
+	if _err == nil {
+		DefaultInstanceClient = c
+	}
+	return c, _err
 }
 
 // DB -> will get the default client without any errors

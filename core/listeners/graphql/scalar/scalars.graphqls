@@ -8,3 +8,5 @@ scalar TimeRFC3339Nano
 
 scalar UUID
 scalar NonNilUUID
+
+scalar IBAN
