@@ -233,7 +233,7 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 					return
 				}
 
-				//log.Println("PID", command.Process.Pid)
+				//log.Println("PID", command.Check.Pid)
 				if logger.GetAppLogger() != nil {
 					appLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
 				}

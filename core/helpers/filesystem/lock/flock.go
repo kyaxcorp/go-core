@@ -82,7 +82,7 @@ func FLock(lockName string, wait bool) bool {
 func FRelease(lockName string) {
 	// Get lock name hashed form
 	lockNameHash := getLockName(lockName)
-	// Lock inside the Main Process! (Globally)
+	// Lock inside the Main Check! (Globally)
 	locksLocker.Lock()
 	// Check if there is a key with this lock name!
 	if fileLock, ok := locks[lockNameHash]; ok {

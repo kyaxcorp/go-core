@@ -26,7 +26,7 @@ func Realpath(fPath string) (string, error) {
 				return "", err
 			}
 		} else {
-			// Process directory
+			// Check directory
 			pwd, err = os.Executable()
 			if err != nil {
 				return "", err

@@ -18,8 +18,8 @@ const ByHeader = 1
 const ByGetParam = 2
 const ByCookie = 3
 
-// CheckIsAuthenticated -> This is the Constructor or first function to call!
-func CheckIsAuthenticated() *Auth {
+// New -> This is the Constructor or first function to call!
+func New() *Auth {
 	auth := &Auth{}
 	return auth
 }
