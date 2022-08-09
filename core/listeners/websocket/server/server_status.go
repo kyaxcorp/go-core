@@ -9,7 +9,10 @@ import (
 )
 
 type ClientDetails struct {
-	IPAddress        string
+	ConnectionID     int64
+	ClientIP         string
+	RemoteIP         string
+	RequestPath      string
 	ConnectedAt      time.Time
 	ConnectedSeconds int64
 	UserID           string
@@ -121,7 +124,7 @@ func (s *Server) Stack(onCollected func(stack string)) {
 	}()
 }
 
-func (s *Server) ClientsStatus(onCollected func(clients []ClientDetails)) {
+func (s *Server) ClientsStatus(onCollected func(clients map[int64]ClientDetails)) {
 	go func() {
 
 		/*
@@ -132,15 +135,18 @@ func (s *Server) ClientsStatus(onCollected func(clients []ClientDetails)) {
 
 		now := time.Now()
 		currentClients := s.GetClients()
-		var cls []ClientDetails
+		var cls = make(map[int64]ClientDetails)
 		for c, _ := range currentClients {
-			cls = append(cls, ClientDetails{
-				IPAddress:        c.GetIPAddress(),
+			cls[int64(c.connectionID)] = ClientDetails{
+				ConnectionID:     int64(c.connectionID),
+				ClientIP:         c.GetIPAddress(),
+				RemoteIP:         c.GetRemoteIP(),
+				RequestPath:      c.GetRequestPath(),
 				ConnectedAt:      c.connectTime,
 				ConnectedSeconds: now.Unix() - c.connectTime.Unix(),
 				UserID:           c.GetUserID(),
 				DeviceID:         c.GetDeviceID(),
-			})
+			}
 		}
 
 		if onCollected != nil {
@@ -206,7 +212,7 @@ func (s *Server) startServerStatus() *Server {
 				awaitStatus <- stack
 			})
 		case "clients":
-			s.ClientsStatus(func(clients []ClientDetails) {
+			s.ClientsStatus(func(clients map[int64]ClientDetails) {
 				// We have received the status, and we return through channel the response!
 				awaitStatus <- clients
 			})
