@@ -238,13 +238,15 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 					appLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
 				}
 			} else {
-				if c.LockProcess && !lock.FLock(c.GetProcessLockName(), false) {
-					// handle locking error
-					//log.Println("Failed to lock the process!")
-					if logger.GetAppLogger() != nil {
-						appLog.Warn().Msg(color.Style{color.LightYellow}.Render("failed to lock the process"))
+				if c.LockProcess {
+					if isLockAcquired, lockErr := lock.FLock(c.GetProcessLockName(), false); !isLockAcquired || lockErr != nil {
+						// handle locking error
+						//log.Println("Failed to lock the process!")
+						if logger.GetAppLogger() != nil {
+							appLog.Warn().Msg(color.Style{color.LightYellow}.Render("failed to lock the process"))
+						}
+						return
 					}
-					return
 				}
 
 				// Destruct when leaving this...

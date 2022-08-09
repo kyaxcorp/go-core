@@ -223,7 +223,7 @@ func New(
 	infoServer().Msg("setting default middleware for connections")
 	// We set as default middle related to connections
 	// TODO: maybe we should also log into a folder the arriving connections!
-	s.HttpServer.Use(connection.GetMiddleware(s.Logger))
+	s.HttpServer.Use(connection.Middleware(s.Logger))
 	// Latency in processing
 	s.HttpServer.Use(request_timing.GetMiddleware(s.Logger))
 

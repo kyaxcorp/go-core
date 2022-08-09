@@ -81,9 +81,9 @@ func StartAutoLoader(c Config) error {
 	// the config can be modified by multiple processes at once if launched simultaneously!
 	// This is why each process will do its work and after finishing it, the next process will do the same thing!
 	// That will not degrade much in performance, but still will be a small slow down
-	if !lock.FLock(configFilePath, true) {
+	if isLockAcquired, lockErr := lock.FLock(configFilePath, true); !isLockAcquired || lockErr != nil {
 		// Here we have some kind of error?!
-		return err.New(0, "failed to lock config file")
+		return err.New(0, "failed to lock config file -> ", lockErr.Error())
 	}
 	// Release the file lock on return
 	defer lock.FRelease(configFilePath)

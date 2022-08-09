@@ -3,10 +3,11 @@ package lock
 import (
 	"github.com/gofrs/flock"
 	"github.com/kyaxcorp/go-core/core/config"
+	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
 	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
-	"log"
+	"github.com/kyaxcorp/go-core/core/logger/appLog"
 	"sync"
 )
 
@@ -21,50 +22,72 @@ func getLockName(lockName string) string {
 	return hash.Sha256(lockName) + ".lock"
 }
 
-func getLockPath(lockName string) string {
-	return getLocksDir() + getLockName(lockName)
+func getLockPath(lockName string) (string, error) {
+	locksDir, locksDirErr := getLocksDir()
+	if locksDirErr != nil {
+		return "", locksDirErr
+	}
+	return locksDir + getLockName(lockName), nil
 }
 
-func getLocksDir() string {
-	var err error = nil
+func getLocksDir() (string, error) {
+	var pathErr error
 	locksPath := config.GetConfig().Application.LocksPath
-	locksPath, err = fsPath.GenRealPath(locksPath, true)
+	appLog.Info().Str("application_locks_path", locksPath).Msg("application locks path")
 
-	if err != nil {
-		log.Println(err)
+	locksPath, pathErr = fsPath.GenRealPath(locksPath, true)
+
+	if pathErr != nil {
+		return "", pathErr
 	}
 
 	if !folder.Exists(locksPath) {
 		folder.MkDir(locksPath)
 	}
 
-	return locksPath
+	appLog.Info().Str("locks_dir", locksPath).Msg("application generated real path")
+
+	return locksPath, nil
 }
 
-func FLock(lockName string, wait bool) bool {
+func FLock(lockName string, wait bool) (bool, error) {
+	appLog.Info().
+		Str("lock_name", lockName).
+		Bool("wait", wait).
+		Msg("FLock called")
+	defer appLog.Info().Msg("leaving...")
 	lockNameHash := getLockName(lockName)
-	lockPath := getLockPath(lockName)
+	appLog.Info().
+		Str("lock_name_hashed", lockNameHash).
+		Msg("lock name hashed, getting lock path")
+	lockPath, lockPathErr := getLockPath(lockName)
+	if lockPathErr != nil {
+		appLog.Error().Err(lockPathErr).Msg("failed to get lock path")
+		return false, lockPathErr
+	}
+
+	appLog.Info().Str("lock_path", lockPath).Msg("lock path retrieved")
 
 	// log.Println(lockPath)
 	fileLock := flock.New(lockPath)
 	var locked bool
-	var err interface{} = nil
+	//var err interface{} = nil
+	var lockErr error
 	if wait {
-		err = fileLock.Lock()
+		lockErr = fileLock.Lock()
 		locked = true
 	} else {
-		locked, err = fileLock.TryLock()
+		locked, lockErr = fileLock.TryLock()
 	}
 
-	if err != nil {
+	if lockErr != nil {
 		// handle locking error
-		log.Println("Failed to lock the process!")
-		return false
+		return false, define.Err(0, "failed to lock the process -> ", lockErr.Error())
 	}
 
 	if !locked {
-		log.Println("Is Locked!")
-		return false
+		//log.Println("Is Locked!")
+		return false, nil
 	}
 
 	// Lock inside the main process and globally!
@@ -76,7 +99,7 @@ func FLock(lockName string, wait bool) bool {
 
 	//locks = append(locks, fileLock)
 
-	return true
+	return true, nil
 }
 
 func FRelease(lockName string) {

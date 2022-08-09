@@ -1,6 +1,9 @@
 package connection
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/kyaxcorp/go-core/core/logger/model"
+)
 
 const HttpContextConnDetailsKey = "CONN_DETAILS"
 
@@ -18,6 +21,8 @@ type ConnDetails struct {
 	// Is it through SSL
 	IsSecure bool
 	Referer  string
+
+	Logger *model.Logger
 
 	// Connection context
 	C *gin.Context
