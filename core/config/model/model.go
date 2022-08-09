@@ -182,6 +182,9 @@ type Model struct {
 	}
 
 	Logging struct {
+		// AppLogLevel -> it's for the app itself... it's the main (root) LOGGER!
+		AppLogLevel int `yaml:"level" mapstructure:"level" default:"4"`
+
 		LogsPath string `yaml:"logs_path" mapstructure:"logs_path" default:"logs"`
 		// This is the default channel
 		DefaultChannel string `yaml:"default_channel" mapstructure:"default_channel" default:"default"`

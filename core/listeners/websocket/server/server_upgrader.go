@@ -13,7 +13,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
 	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/connection"
 	"github.com/kyaxcorp/go-core/core/logger"
-	"log"
 	"strings"
 	"time"
 )
@@ -35,9 +34,10 @@ func (s *Server) UpgradeToWS(
 	})
 
 	// Upgrade the http connection to websocket!
-	conn, err := s.WSUpgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println(err)
+	conn, errUpgrade := s.WSUpgrader.Upgrade(w, r, nil)
+	if errUpgrade != nil {
+		//log.Println(err)
+		s.LError().Err(errUpgrade).Msg("failed to upgrade client to websocket")
 		return false
 	}
 	// log.Println("Creating client")

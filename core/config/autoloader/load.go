@@ -282,7 +282,9 @@ func StartAutoLoader(c Config) error {
 
 	// Everything is ok...
 	// Let's call the events...
-	application.CreateAppLogger()
+	application.CreateAppLogger(application.MainLogOptions{
+		Level: cfgData.MainConfig.Logging.AppLogLevel,
+	})
 
 	/*// Register the broker client service
 	brokerClientService.RegisterBrokerService()
