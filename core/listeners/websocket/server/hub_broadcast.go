@@ -37,24 +37,28 @@ const SplitForPercentageLoad = 25 // 25 percentage*/
 func getNrOfRoutines(nrOfConnections uint64) uint16 {
 	routines := 0
 	switch conn := nrOfConnections; {
-	case conn < 5:
+	case conn <= 5:
 		routines = 1
-	case 5 < conn && conn < 10:
+	case 6 <= conn && conn <= 10:
 		routines = 2
-	case 10 < conn && conn < 50:
+	case 11 <= conn && conn <= 50:
 		routines = 5
-	case 50 < conn && conn < 100:
+	case 51 <= conn && conn <= 100:
 		routines = 10
-	case 100 < conn && conn < 500:
+	case 101 <= conn && conn <= 500:
 		routines = 20
-	case 500 < conn && conn < 1000:
+	case 501 <= conn && conn <= 1000:
 		routines = 40
-	case 1000 < conn && conn < 5000:
+	case 1001 <= conn && conn <= 5000:
 		routines = 80
-	case 10000 < conn && conn < 50000:
+	case 5001 <= conn && conn <= 10000:
 		routines = 320
-	case 50000 < conn:
+	case 10001 <= conn && conn <= 50000:
 		routines = 400
+	case 50001 <= conn:
+		routines = 500
+	default:
+		routines = 1
 	}
 	return uint16(routines)
 }
@@ -105,6 +109,10 @@ func (h *Hub) run() {
 
 				// Split in multiple routines if there are many ClientsStatus
 
+				if clients == nil {
+					return
+				}
+
 				for _, clientsChunk := range clients {
 					go func(c map[*Client]bool) {
 						for client := range c {
@@ -140,6 +148,9 @@ func (h *Hub) run() {
 				}
 				nrOfRoutines := getNrOfRoutines(uint64(nrOfClients))
 				clients := GetClientsInChunksWithConn(broadcastTo.to, nrOfRoutines)
+				if clients == nil {
+					return
+				}
 
 				for _, clientsChunk := range clients {
 					go func(c map[uint64]*Client) {
