@@ -94,8 +94,6 @@ type Server struct {
 	onStarted     *_map_string_interface.MapStringInterface
 
 	// Here we store the active/registered Clients (Connections)
-	// c      map[*Client]bool
-	// clientsIndex ClientsIndex
 	c *clientsData
 }
 

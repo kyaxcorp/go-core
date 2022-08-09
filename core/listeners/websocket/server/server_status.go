@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/kyaxcorp/go-core/core/helpers/info"
+	"runtime"
 	"strings"
 )
 
@@ -100,6 +101,17 @@ func (s *Server) StatusNrOfClients(onCollected func(status NrOfClientsStatus)) {
 	}()
 }
 
+func (s *Server) Stack(onCollected func(stack string)) {
+	go func() {
+		var data []byte
+		runtime.Stack(data, true)
+
+		if onCollected != nil {
+			onCollected(string(data))
+		}
+	}()
+}
+
 func (s *Server) StatusHubs(onCollected func(status HubsStatus)) {
 	go func() {
 		status := HubsStatus{
@@ -150,6 +162,11 @@ func (s *Server) startServerStatus() *Server {
 			s.StatusNrOfClients(func(status NrOfClientsStatus) {
 				// We have received the status, and we return through channel the response!
 				awaitStatus <- status
+			})
+		case "stack":
+			s.Stack(func(stack string) {
+				// We have received the status, and we return through channel the response!
+				awaitStatus <- stack
 			})
 		default:
 			s.Status(func(status FullStatus) {
