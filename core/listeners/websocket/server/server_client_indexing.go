@@ -347,6 +347,14 @@ func GetClientsInChunks(clients map[*Client]bool, nrOfChunks uint16) []map[*Clie
 
 	}*/
 
+	nrOfConnections := len(clients)
+	if nrOfConnections == 0 {
+		return nil
+	}
+	if nrOfChunks == 0 {
+		return nil
+	}
+
 	chunks := make([]map[*Client]bool, nrOfChunks)
 	nr := int(nrOfChunks)
 	// Create the chunks first! why? because we don't need to make multiple verifications
@@ -355,7 +363,6 @@ func GetClientsInChunks(clients map[*Client]bool, nrOfChunks uint16) []map[*Clie
 		nmap := make(map[*Client]bool)
 		chunks[i] = nmap
 	}
-	nrOfConnections := len(clients)
 	itemsPerChunk := int(math.Ceil(float64(nrOfConnections) / float64(nr)))
 	currentChunkNr := 0
 	added := 0
@@ -371,7 +378,16 @@ func GetClientsInChunks(clients map[*Client]bool, nrOfChunks uint16) []map[*Clie
 }
 
 func GetClientsInChunksWithConn(clients map[uint64]*Client, nrOfChunks uint16) []map[uint64]*Client {
+	nrOfConnections := len(clients)
+	if nrOfConnections == 0 {
+		return nil
+	}
+	if nrOfChunks == 0 {
+		return nil
+	}
+
 	chunks := make([]map[uint64]*Client, nrOfChunks)
+
 	nr := int(nrOfChunks)
 	// Create the chunks first! why? because we don't need to make multiple verifications
 	// in the clients loop! so it's better to do it here!
@@ -379,7 +395,6 @@ func GetClientsInChunksWithConn(clients map[uint64]*Client, nrOfChunks uint16) [
 		nmap := make(map[uint64]*Client)
 		chunks[i] = nmap
 	}
-	nrOfConnections := len(clients)
 	itemsPerChunk := int(math.Ceil(float64(nrOfConnections) / float64(nr)))
 	currentChunkNr := 0
 	added := 0
