@@ -37,7 +37,9 @@ const SplitForPercentageLoad = 25 // 25 percentage*/
 func getNrOfRoutines(nrOfConnections uint64) uint16 {
 	routines := 0
 	switch conn := nrOfConnections; {
-	case conn < 10:
+	case conn < 5:
+		routines = 1
+	case 5 < conn && conn < 10:
 		routines = 2
 	case 10 < conn && conn < 50:
 		routines = 5
@@ -94,6 +96,10 @@ func (h *Hub) run() {
 
 			go func() {
 				nrOfClients := h.c.GetNrOfClients()
+				if nrOfClients == 0 {
+					return
+				}
+
 				nrOfRoutines := getNrOfRoutines(uint64(nrOfClients))
 				clients := h.c.GetClientsInChunks(nrOfRoutines)
 
@@ -129,6 +135,9 @@ func (h *Hub) run() {
 
 			go func() {
 				nrOfClients := len(broadcastTo.to)
+				if nrOfClients == 0 {
+					return
+				}
 				nrOfRoutines := getNrOfRoutines(uint64(nrOfClients))
 				clients := GetClientsInChunksWithConn(broadcastTo.to, nrOfRoutines)
 

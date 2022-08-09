@@ -89,6 +89,10 @@ func (c *Client) GetHttpContext() *gin.Context {
 	return c.httpContext
 }
 
+func (c *Client) GetSafeHttpContext() *gin.Context {
+	return c.safeHttpContext
+}
+
 func (c *Client) GetDeviceID() string {
 	return c.authDetails.DeviceDetails.DeviceID
 }

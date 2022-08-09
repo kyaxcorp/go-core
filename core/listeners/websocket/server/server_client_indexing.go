@@ -291,7 +291,7 @@ func (c *clientsData) unsetIndexes(client *Client) {
 	}
 }
 
-func (c *clientsData) GetClientByID(connectionID uint64) *Client {
+func (c *clientsData) GetClientByConnID(connectionID uint64) *Client {
 	c.clientsIndex.connectionsLock.RLock()
 	client, ok := c.clientsIndex.Connections[connectionID]
 	c.clientsIndex.connectionsLock.RUnlock()
@@ -750,7 +750,7 @@ func (c *clientsData) getClientsByFilter(filter FindClientsFilter) map[uint64]*C
 							continue
 						}
 					}
-					tmpClient := c.GetClientByID(connectionID)
+					tmpClient := c.GetClientByConnID(connectionID)
 					if tmpClient != nil {
 						if _, ok := local[connectionID]; !ok {
 							local[connectionID] = tmpClient
