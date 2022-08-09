@@ -268,7 +268,7 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				// -------Run Services--------\\
 
 				if c.EnableStartupServices {
-					// Run Broker Clients
+					// Run Broker ClientsStatus
 					if c.StartupCoreServices.BrokerClients {
 						// Register the broker client service
 						brokerClientService.RegisterBrokerService()

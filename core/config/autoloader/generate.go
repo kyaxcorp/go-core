@@ -32,7 +32,7 @@ func SaveConfigFromMemory(cfg Config) error {
 	c := viper.New()
 
 	// Create the map!
-	//MainConfig.Clients.MySQL.Connections = make(map[string]mysql.Config)
+	//MainConfig.ClientsStatus.MySQL.Connections = make(map[string]mysql.Config)
 	//MainConfig.Listeners.Http.Instances = make(map[string]http.Config)
 
 	// This is the default config!
@@ -232,7 +232,7 @@ func SaveConfigFromMemory(cfg Config) error {
 	//---------------------------------------------------------------------------------\\
 
 	// Cassandra Default Config Instance
-	/*if _, ok := cfgData.MainConfig.Clients.Cassandra.Instances["default"]; !ok {
+	/*if _, ok := cfgData.MainConfig.ClientsStatus.Cassandra.Instances["default"]; !ok {
 		_cassandra := &cassandraConfig.Config{
 			Hosts: []cassandraConfig.Host{
 				cassandraConfig.Host{
@@ -245,11 +245,11 @@ func SaveConfigFromMemory(cfg Config) error {
 			panic(_err)
 		}
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Clients.Cassandra.Instances == nil {
+		if cfgData.MainConfig.ClientsStatus.Cassandra.Instances == nil {
 			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Clients.Cassandra.Instances = make(map[string]cassandraConfig.Config)
+			cfgData.MainConfig.ClientsStatus.Cassandra.Instances = make(map[string]cassandraConfig.Config)
 		}
-		cfgData.MainConfig.Clients.Cassandra.Instances["default"] = *_cassandra
+		cfgData.MainConfig.ClientsStatus.Cassandra.Instances["default"] = *_cassandra
 	}*/
 
 	//---------------------------------------------------------------------------------\\

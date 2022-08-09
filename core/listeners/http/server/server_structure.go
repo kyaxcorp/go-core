@@ -93,7 +93,7 @@ type Server struct {
 	onBeforeStart *_map_string_interface.MapStringInterface
 	onStarted     *_map_string_interface.MapStringInterface
 
-	// Here we store the active/registered Clients (Connections)
+	// Here we store the active/registered ClientsStatus (Connections)
 	c *clientsData
 }
 

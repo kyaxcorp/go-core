@@ -55,7 +55,7 @@ func (dbc *DBClient) New(
 // GetDefaultClient -> it returns the default client based on the existing app configuration
 func (dbc *DBClient) GetDefaultClient() (*gorm.DB, error) {
 	conf := mainConfig.GetConfig()
-	//defaultConnName := conf.Clients.MySQL.DefaultConn.Name
+	//defaultConnName := conf.ClientsStatus.MySQL.DefaultConn.Name
 
 	// TODO: get driverType and get from config
 

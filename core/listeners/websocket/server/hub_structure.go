@@ -63,7 +63,7 @@ type Hub struct {
 	// ControlMessages
 	ControlChannel chan int
 
-	// Unregistered Clients
+	// Unregistered ClientsStatus
 	UnregisterClientChannel chan *Client
 }
 

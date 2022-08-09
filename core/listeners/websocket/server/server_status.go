@@ -5,7 +5,16 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/info"
 	"runtime"
 	"strings"
+	"time"
 )
+
+type ClientDetails struct {
+	IPAddress        string
+	ConnectedAt      time.Time
+	ConnectedSeconds int64
+	UserID           string
+	DeviceID         string
+}
 
 type FullStatus struct {
 	Name                  string
@@ -112,6 +121,34 @@ func (s *Server) Stack(onCollected func(stack string)) {
 	}()
 }
 
+func (s *Server) ClientsStatus(onCollected func(clients []ClientDetails)) {
+	go func() {
+
+		/*
+			IP
+			Device ID
+			Connected Time
+		*/
+
+		now := time.Now()
+		currentClients := s.GetClients()
+		var cls []ClientDetails
+		for c, _ := range currentClients {
+			cls = append(cls, ClientDetails{
+				IPAddress:        c.GetIPAddress(),
+				ConnectedAt:      c.connectTime,
+				ConnectedSeconds: now.Unix() - c.connectTime.Unix(),
+				UserID:           c.GetUserID(),
+				DeviceID:         c.GetDeviceID(),
+			})
+		}
+
+		if onCollected != nil {
+			onCollected(cls)
+		}
+	}()
+}
+
 func (s *Server) StatusHubs(onCollected func(status HubsStatus)) {
 	go func() {
 		status := HubsStatus{
@@ -168,6 +205,11 @@ func (s *Server) startServerStatus() *Server {
 				// We have received the status, and we return through channel the response!
 				awaitStatus <- stack
 			})
+		case "clients":
+			s.ClientsStatus(func(clients []ClientDetails) {
+				// We have received the status, and we return through channel the response!
+				awaitStatus <- clients
+			})
 		default:
 			s.Status(func(status FullStatus) {
 				// We have received the status, and we return through channel the response!
@@ -194,6 +236,7 @@ func (s *Server) startServerStatus() *Server {
 		serverStatus.GET("/stack", getStatus)
 		serverStatus.GET("/hubs", getStatus)
 		serverStatus.GET("/nr_of_clients", getStatus)
+		serverStatus.GET("/clients", getStatus)
 		serverStatus.GET("/system_status", getStatus)
 	}
 	return s
