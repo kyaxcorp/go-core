@@ -487,7 +487,7 @@ func (c *clientsData) getClientsByFilter(filter FindClientsFilter) map[uint64]*C
 	// Prepare the filter..
 	prepareFilter(&filter)
 
-	// TODO: we can also save where we have found the Clients
+	// TODO: we can also save where we have found the ClientsStatus
 	// We are searching through 6 indexes!
 
 	// There are no overheads on local slices when using len function!
@@ -793,7 +793,7 @@ func NewClientsInstance() *clientsData {
 	return &clientsData{
 		// Here we store the c
 		clients: make(map[*Client]bool),
-		// Creating map of Clients indexes
+		// Creating map of ClientsStatus indexes
 		clientsIndex: ClientsIndex{
 			Users:       make(map[string]map[uint64]*Client),
 			Devices:     make(map[string]map[uint64]*Client),

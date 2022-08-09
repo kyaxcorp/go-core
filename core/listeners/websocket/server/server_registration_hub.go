@@ -32,7 +32,7 @@ func (h *RegistrationHub) unregisterClient(client *Client) {
 		}
 	}()
 
-	// Hub -> Server -> Clients
+	// Hub -> Server -> ClientsStatus
 	h.s.c.unregisterClient(client)
 
 	// Close the channel for output buffering

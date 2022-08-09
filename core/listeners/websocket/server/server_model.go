@@ -137,7 +137,7 @@ type Server struct {
 
 	// ------Settings ---------\\
 
-	// Here we store the active/registered Clients (Connections)
+	// Here we store the active/registered ClientsStatus (Connections)
 	// c      map[*Client]bool
 	// clientsIndex ClientsIndex
 	c *clientsData

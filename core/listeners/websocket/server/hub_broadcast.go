@@ -22,8 +22,8 @@ const SplitForPercentageLoad = 25 // 25 percentage*/
 // 1750 / 437.5 = 4 GoRoutines
 //
 // ---------------ALGO nr. 2------------------\\
-// Total nr of Clients
-// If Nr of Clients
+// Total nr of ClientsStatus
+// If Nr of ClientsStatus
 // x < 10 -> 2 routine
 // 10 < x < 50 ->  5 routines
 // 50 < x < 100 -> 10 routines
@@ -97,7 +97,7 @@ func (h *Hub) run() {
 				nrOfRoutines := getNrOfRoutines(uint64(nrOfClients))
 				clients := h.c.GetClientsInChunks(nrOfRoutines)
 
-				// Split in multiple routines if there are many Clients
+				// Split in multiple routines if there are many ClientsStatus
 
 				for _, clientsChunk := range clients {
 					go func(c map[*Client]bool) {
@@ -119,7 +119,7 @@ func (h *Hub) run() {
 			}()
 		case broadcastTo := <-h.broadcastTo:
 
-			// For faster broadcasting maybe we should goroutine here... because looping through Clients takes some time...!
+			// For faster broadcasting maybe we should goroutine here... because looping through ClientsStatus takes some time...!
 			// And if starting more goroutines that will also start looping and transmit messages will not be a problem!
 			// This will improve speed, but can consume resources!
 
