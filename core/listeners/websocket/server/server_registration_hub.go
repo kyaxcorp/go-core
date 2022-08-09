@@ -27,6 +27,7 @@ func (h *RegistrationHub) unregisterClient(client *Client) {
 	// Unregister from all current hubs
 	go func() {
 		for hub := range h.s.Hubs {
+			// We are sending to all hubs that are related to this websocket server! (children)
 			hub.UnregisterClientChannel <- client
 		}
 	}()

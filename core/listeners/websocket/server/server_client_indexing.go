@@ -455,6 +455,14 @@ func (c *clientsData) registerClient(client *Client) *clientsData {
 	}()
 	return c
 }
+func (c *clientsData) IsClientExist(client *Client) bool {
+	c.clientsLock.RLock()
+	defer c.clientsLock.RUnlock()
+	if _, ok := c.clients[client]; ok {
+		return true
+	}
+	return false
+}
 
 func (c *clientsData) unregisterClient(client *Client) *clientsData {
 	go func() {
