@@ -19,6 +19,11 @@ type ClientDetails struct {
 	DeviceID         string
 }
 
+type ClientsStatus struct {
+	NrOfClients int64
+	Clients     map[int64]ClientDetails
+}
+
 type FullStatus struct {
 	Name                  string
 	ListeningAddresses    []string
@@ -124,7 +129,7 @@ func (s *Server) Stack(onCollected func(stack string)) {
 	}()
 }
 
-func (s *Server) ClientsStatus(onCollected func(clients map[int64]ClientDetails)) {
+func (s *Server) ClientsStatus(onCollected func(clients ClientsStatus)) {
 	go func() {
 
 		/*
@@ -134,7 +139,9 @@ func (s *Server) ClientsStatus(onCollected func(clients map[int64]ClientDetails)
 		*/
 
 		now := time.Now()
+
 		currentClients := s.GetClientsOrderedByConnectionID()
+
 		var cls = make(map[int64]ClientDetails)
 		for _, c := range currentClients {
 			cls[int64(c.connectionID)] = ClientDetails{
@@ -149,8 +156,13 @@ func (s *Server) ClientsStatus(onCollected func(clients map[int64]ClientDetails)
 			}
 		}
 
+		clientsStatus := ClientsStatus{
+			NrOfClients: int64(len(cls)),
+			Clients:     cls,
+		}
+
 		if onCollected != nil {
-			onCollected(cls)
+			onCollected(clientsStatus)
 		}
 	}()
 }
@@ -212,9 +224,9 @@ func (s *Server) startServerStatus() *Server {
 				awaitStatus <- stack
 			})
 		case "clients":
-			s.ClientsStatus(func(clients map[int64]ClientDetails) {
+			s.ClientsStatus(func(clientsStatus ClientsStatus) {
 				// We have received the status, and we return through channel the response!
-				awaitStatus <- clients
+				awaitStatus <- clientsStatus
 			})
 		default:
 			s.Status(func(status FullStatus) {

@@ -36,6 +36,23 @@ func (s *Server) UpgradeToWS(
 		v.(OnBeforeUpgrade)(s)
 	})
 
+	// we should gather info about the client before the upgrade...even the context
+	// should be copied after the upgrade!
+	var _authDetails *authentication.AuthDetails
+	var _connDetails *connection.ConnDetails
+
+	// Generate an ID for this connection
+	connectionID := s.genConnID()
+
+	// GET and GET Authentication Details!
+	_authDetails = authentication.GetAuthDetailsFromCtx(c)
+
+	// Set the connection Details
+	_connDetails = connection.GetConnectionDetailsFromCtx(c)
+
+	safeHttpContext := c.Copy()
+	clientIP := c.ClientIP()
+
 	// Upgrade the http connection to websocket!
 	conn, errUpgrade := s.WSUpgrader.Upgrade(w, r, nil)
 	if errUpgrade != nil {
@@ -50,18 +67,6 @@ func (s *Server) UpgradeToWS(
 	// TODO: extract Device UUID
 	// TODO: or simply get the middleware data!
 
-	var _authDetails *authentication.AuthDetails
-	var _connDetails *connection.ConnDetails
-
-	// Generate an ID for this connection
-	connectionID := s.genConnID()
-
-	// GET and GET Authentication Details!
-	_authDetails = authentication.GetAuthDetailsFromCtx(c)
-
-	// Set the connection Details
-	_connDetails = connection.GetConnectionDetailsFromCtx(c)
-
 	/*
 		Try logging clients as per connection ID? or by other authentication details?!
 		Save the logs in separate files!
@@ -72,7 +77,6 @@ func (s *Server) UpgradeToWS(
 	// Based on the identifier, we will create the logs, and we will identify in much easier way the client
 	var identifiedBy string
 	clientIdentifier := ""
-	clientIP := c.ClientIP()
 	clientIPFiltered := clientIP
 	isIpv6 := false
 	switch clientIPFiltered {
@@ -171,7 +175,8 @@ func (s *Server) UpgradeToWS(
 		isClosed: _bool.New(),
 
 		// Gin Context
-		httpContext: c.Copy(),
+		httpContext:     c,
+		safeHttpContext: safeHttpContext,
 
 		// registrationHub:  s.WSRegistrationHub,
 		onMessage:       onMessage,
