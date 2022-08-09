@@ -317,6 +317,18 @@ func (c *clientsData) GetClients() map[*Client]bool {
 	return nmap
 }
 
+func (c *clientsData) GetClientsOrderedByConnectionID() map[int64]*Client {
+	defer func() {
+		c.clientsLock.RUnlock()
+	}()
+	nmap := make(map[int64]*Client)
+	c.clientsLock.RLock()
+	for cl, _ := range c.clients {
+		nmap[int64(cl.connectionID)] = cl
+	}
+	return nmap
+}
+
 func (c *clientsData) GetClientsInChunks(nrOfChunks uint16) []map[*Client]bool {
 	defer c.clientsLock.RUnlock()
 	c.clientsLock.RLock()

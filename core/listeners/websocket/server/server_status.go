@@ -134,9 +134,9 @@ func (s *Server) ClientsStatus(onCollected func(clients map[int64]ClientDetails)
 		*/
 
 		now := time.Now()
-		currentClients := s.GetClients()
+		currentClients := s.GetClientsOrderedByConnectionID()
 		var cls = make(map[int64]ClientDetails)
-		for c, _ := range currentClients {
+		for _, c := range currentClients {
 			cls[int64(c.connectionID)] = ClientDetails{
 				ConnectionID:     int64(c.connectionID),
 				ClientIP:         c.GetIPAddress(),
