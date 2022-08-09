@@ -69,9 +69,14 @@ func (c *Client) Disconnect() error {
 
 	info().Msg("closing the client connection...")
 
-	c.pingTicker.Stop()
+	if c.pingTicker != nil {
+		c.pingTicker.Stop()
+	}
+	// TODO: check if channel closed
 	c.closeWritePump <- true // Close the write pump!
-	c.isDisconnecting.True()
+	if c.isDisconnecting != nil {
+		c.isDisconnecting.True()
+	}
 	c.server.WSRegistrationHub.unregister <- c
 	// This is a force Close!
 	return c.conn.Close()

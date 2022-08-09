@@ -23,6 +23,12 @@ func GetAppLogger() *model.Logger {
 	return vars.ApplicationLogger
 }
 
+// GetCoreLogger -> it returns the instance which is the main logger of the app, it centralizes all the data together
+func GetCoreLogger() *model.Logger {
+	// TODO: we can switch loggers when the app logger has started... but there should be a logic of levels...
+	return vars.CoreLogger
+}
+
 //func New(ctx context.Context, config config.Config) *Logger {
 
 // Here we will store writers which handle writing to file, if we don't want to create multiple handlers and have conflict,

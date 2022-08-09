@@ -7,7 +7,7 @@ import (
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
 	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
-	"github.com/kyaxcorp/go-core/core/logger/appLog"
+	"github.com/kyaxcorp/go-core/core/logger/coreLog"
 	"sync"
 )
 
@@ -33,7 +33,7 @@ func getLockPath(lockName string) (string, error) {
 func getLocksDir() (string, error) {
 	var pathErr error
 	locksPath := config.GetConfig().Application.LocksPath
-	appLog.Info().Str("application_locks_path", locksPath).Msg("application locks path")
+	coreLog.Info().Str("application_locks_path", locksPath).Msg("application locks path")
 
 	locksPath, pathErr = fsPath.GenRealPath(locksPath, true)
 
@@ -45,28 +45,28 @@ func getLocksDir() (string, error) {
 		folder.MkDir(locksPath)
 	}
 
-	appLog.Info().Str("locks_dir", locksPath).Msg("application generated real path")
+	coreLog.Info().Str("locks_dir", locksPath).Msg("application generated real path")
 
 	return locksPath, nil
 }
 
 func FLock(lockName string, wait bool) (bool, error) {
-	appLog.Info().
+	coreLog.Info().
 		Str("lock_name", lockName).
 		Bool("wait", wait).
 		Msg("FLock called")
-	defer appLog.Info().Msg("leaving...")
+	defer coreLog.Info().Msg("leaving...")
 	lockNameHash := getLockName(lockName)
-	appLog.Info().
+	coreLog.Info().
 		Str("lock_name_hashed", lockNameHash).
 		Msg("lock name hashed, getting lock path")
 	lockPath, lockPathErr := getLockPath(lockName)
 	if lockPathErr != nil {
-		appLog.Error().Err(lockPathErr).Msg("failed to get lock path")
+		coreLog.Error().Err(lockPathErr).Msg("failed to get lock path")
 		return false, lockPathErr
 	}
 
-	appLog.Info().Str("lock_path", lockPath).Msg("lock path retrieved")
+	coreLog.Info().Str("lock_path", lockPath).Msg("lock path retrieved")
 
 	// log.Println(lockPath)
 	fileLock := flock.New(lockPath)
