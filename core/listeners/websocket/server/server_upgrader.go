@@ -26,6 +26,9 @@ func (s *Server) UpgradeToWS(
 	w := c.Writer
 	r := c.Request
 
+	// when we will do the upgrade, the http context will not remain, so we need to take
+	// all we need from it
+
 	s.LInfo().Msg("upgrading to websocket")
 
 	// Before Upgrade
@@ -73,6 +76,7 @@ func (s *Server) UpgradeToWS(
 	clientIPFiltered := clientIP
 	isIpv6 := false
 	switch clientIPFiltered {
+	// TODO: maybe we should remove this...
 	case "::1":
 		isIpv6 = true
 		clientIPFiltered = "localhost"
@@ -167,7 +171,7 @@ func (s *Server) UpgradeToWS(
 		isClosed: _bool.New(),
 
 		// Gin Context
-		httpContext: c,
+		httpContext: c.Copy(),
 
 		// registrationHub:  s.WSRegistrationHub,
 		onMessage:       onMessage,
