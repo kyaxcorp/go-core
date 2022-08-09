@@ -7,7 +7,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/fsnotify"
 	"github.com/kyaxcorp/go-core/core/helpers/str"
 	"github.com/kyaxcorp/go-core/core/listeners/websocket/server"
-	"log"
+	"github.com/rs/zerolog"
 	"path/filepath"
 	"time"
 )
@@ -39,7 +39,12 @@ func (wsNotifier *WSNotifier) onError(msg string) {
 
 func New(wsNotifier *WSNotifier) *WSNotifier {
 	wsNotifier.WSHub = wsNotifier.WebSocketServer.NewHub(func(h *server.Hub) {
-
+		warn := func() *zerolog.Event {
+			return wsNotifier.WebSocketServer.LWarnF("ws_notifier")
+		}
+		_error := func() *zerolog.Event {
+			return wsNotifier.WebSocketServer.LErrorF("ws_notifier")
+		}
 		// Get the data!
 		if h.StopCalled.Get() {
 			return
@@ -48,8 +53,9 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 		// Create the file notifier!
 		fsNotifier, err := fsnotify.New()
 		if err != nil {
-			wsNotifier.onError("") // TODO:
-			log.Println("Failed to create notifier...")
+			errorMsg := "Failed to create notifier..."
+			wsNotifier.onError(errorMsg)
+			_error().Err(err).Msg(errorMsg)
 			return
 		}
 
@@ -65,8 +71,8 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 				if scanDir != "" {
 					// Delete only old notifications
 					//matches, err := filepath.Glob(scanDir + filesystem.DirSeparator() + "*.notif")
-					matches, err := filepath.Glob(scanDir + filesystem.DirSeparator() + listeningPath.FileRegex)
-					if err == nil {
+					matches, globErr := filepath.Glob(scanDir + filesystem.DirSeparator() + listeningPath.FileRegex)
+					if globErr == nil {
 						for _, match := range matches {
 							file.Unlink(match)
 						}
@@ -80,23 +86,26 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 
 					// Check if it's a file!
 					if !file.IsFile(e.Path) {
-						log.Println("not a file..")
+						warnMsg := "Failed to create notifier..."
+						warn().Msg(warnMsg)
 						return
 					}
 
-					data, err := file.GetContents(e.Path)
+					data, getErr := file.GetContents(e.Path)
 
 					// check if it's a json!
 
-					if err != nil {
-						wsNotifier.onError("") // TODO:
-						log.Println("failed reading file", e.Path)
+					if getErr != nil {
+						errorMsg := "failed reading file"
+						wsNotifier.onError(errorMsg)
+						_error().Err(getErr).Str("file_path", e.Path).Msg(errorMsg)
 						return
 					}
 
 					if !str.IsJSON(data) {
-						wsNotifier.onError("") // TODO:
-						log.Println("File data is not a json")
+						errorMsg := "file data is not a json"
+						wsNotifier.onError(errorMsg)
+						_error().Str("data", data).Msg(errorMsg)
 						return
 					}
 

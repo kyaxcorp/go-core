@@ -24,14 +24,19 @@ func NewRegistrationHub(s *Server) *RegistrationHub {
 }
 
 func (h *RegistrationHub) unregisterClient(client *Client) {
+	// Unregister from all current hubs
 	go func() {
 		for hub := range h.s.Hubs {
+			// We are sending to all hubs that are related to this websocket server! (children)
 			hub.UnregisterClientChannel <- client
 		}
 	}()
 
+	// Hub -> Server -> Clients
 	h.s.c.unregisterClient(client)
-	// Close the channel
+
+	// Close the channel for output buffering
+	// Should we wait until we unregister from everywhere?!
 	close(client.send)
 }
 
@@ -49,7 +54,6 @@ func (h *RegistrationHub) run() {
 	defer info().Msg("leaving...")
 	terminate := false
 	for {
-
 		select {
 		case client := <-h.register:
 			h.s.c.registerClient(client)

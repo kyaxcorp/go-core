@@ -9,7 +9,7 @@ func (h *Hub) NrOfClients() uint {
 	return h.c.GetNrOfClients()
 }
 
-// Adds the client to the hub!
+// RegisterClient -> Adds the client to the hub!
 func (h *Hub) RegisterClient(client *Client) *Hub {
 	// Register the Client to the Index
 	h.c.registerClient(client)
@@ -20,14 +20,18 @@ func (h *Hub) RegisterClient(client *Client) *Hub {
 	return h
 }
 
-// Removes the client from the Hub
+// UnRegisterClient -> Removes the client from the Hub
 func (h *Hub) UnRegisterClient(client *Client) *Hub {
 	// Unregister the client from the index
-	h.c.unregisterClient(client)
-	// Calling an event with Goroutine
-	go h.onClientUnRegister.Scan(func(k string, v interface{}) {
-		v.(HubOnClientUnRegister)(h, client)
-	})
+	// Well if the client exists, we should trigger the event...
+
+	if h.c.IsClientExist(client) {
+		h.c.unregisterClient(client)
+		// Calling an event with Goroutine
+		go h.onClientUnRegister.Scan(func(k string, v interface{}) {
+			v.(HubOnClientUnRegister)(h, client)
+		})
+	}
 	return h
 }
 
