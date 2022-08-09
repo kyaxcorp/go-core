@@ -11,13 +11,17 @@ import (
 // Define variables
 var applicationLoggerConfig loggerConfig.Config
 
-func CreateAppLogger() {
+type MainLogOptions struct {
+	Level int
+}
+
+func CreateAppLogger(o MainLogOptions) {
 	applicationLoggerConfig, _ = loggerConfig.DefaultConfig(&loggerConfig.Config{
 		IsEnabled:   "yes",
 		Name:        "application",
 		ModuleName:  "Application",
 		Description: "saving all application logs...",
-		Level:       0,
+		Level:       o.Level,
 		DirLogPath:  loggerPaths.GetApplicationLogsPath(),
 		// We set to yes, because this is the main Application Logger from which others will extend
 		IsApplication: "yes",
@@ -28,6 +32,6 @@ func CreateAppLogger() {
 
 func RegisterAppLogger() {
 	var _, _ = configEvents.OnLoaded(func() {
-		CreateAppLogger()
+		CreateAppLogger(MainLogOptions{})
 	})
 }

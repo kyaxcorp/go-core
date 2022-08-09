@@ -191,6 +191,7 @@ func (s *Server) startServerStatus() *Server {
 	{
 		serverStatus.GET("/", getStatus)
 		serverStatus.GET("/server", getStatus)
+		serverStatus.GET("/stack", getStatus)
 		serverStatus.GET("/hubs", getStatus)
 		serverStatus.GET("/nr_of_clients", getStatus)
 		serverStatus.GET("/system_status", getStatus)
