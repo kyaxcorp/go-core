@@ -1,7 +1,7 @@
 package register_service
 
 import (
-	"github.com/kyaxcorp/go-core/core/logger/appLog"
+	"github.com/kyaxcorp/go-core/core/logger/coreLog"
 	"github.com/rs/zerolog"
 	"sync"
 )
@@ -41,7 +41,7 @@ func RunRegisteredServices() {
 		brokerClient.Connect()
 	}*/
 	info := func() *zerolog.Event {
-		return appLog.InfoF("RunRegisteredServices")
+		return coreLog.InfoF("RunRegisteredServices")
 	}
 	/*info().Msg("entering...")
 	defer info().Msg("leaving...")*/

@@ -14,8 +14,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"github.com/kyaxcorp/go-core/core/helpers/process/shutdown"
-	"github.com/kyaxcorp/go-core/core/logger"
-	"github.com/kyaxcorp/go-core/core/logger/appLog"
+	"github.com/kyaxcorp/go-core/core/logger/coreLog"
 	"github.com/kyaxcorp/go-core/core/services/broker/console"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -216,9 +215,7 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				// TODO: the primary app remains online! and child program becomes dependent of the primary one!
 				// TODO: it should not be dependent!
 
-				if logger.GetAppLogger() != nil {
-					appLog.Info().Msg("running in background")
-				}
+				coreLog.Info().Msg("running in background")
 				//log.Println("Running in background")
 				_command, _err := m.RunInternalCommand(InternalCommandOptions{
 					Args:                 []string{c.Cmd},
@@ -227,24 +224,18 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 				})
 				if _err != nil {
 					// TODO: we should handle if we can't start!
-					if logger.GetAppLogger() != nil {
-						appLog.Error().Err(_err).Msg("failed to start command... ")
-					}
+					coreLog.Error().Err(_err).Msg("failed to start command... ")
 					return
 				}
 
 				//log.Println("PID", command.Check.Pid)
-				if logger.GetAppLogger() != nil {
-					appLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
-				}
+				coreLog.Info().Int("pid", _command.Process.Pid).Msg("getting pid")
 			} else {
 				if c.LockProcess {
 					if isLockAcquired, lockErr := lock.FLock(c.GetProcessLockName(), false); !isLockAcquired || lockErr != nil {
 						// handle locking error
 						//log.Println("Failed to lock the process!")
-						if logger.GetAppLogger() != nil {
-							appLog.Warn().Msg(color.Style{color.LightYellow}.Render("failed to lock the process"))
-						}
+						coreLog.Warn().Msg(color.Style{color.LightYellow}.Render("failed to lock the process"))
 						return
 					}
 				}
