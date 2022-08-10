@@ -4,7 +4,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kyaxcorp/go-core/core/helpers/info"
 	"strings"
+	"time"
 )
+
+type ClientDetails struct {
+	ConnectionID     int64
+	ClientIP         string
+	RemoteIP         string
+	RequestPath      string
+	ConnectedAt      time.Time
+	ConnectedSeconds int64
+	UserID           string
+	DeviceID         string
+}
+
+type ClientsStatus struct {
+	NrOfClients int64
+	Clients     map[int64]ClientDetails
+}
 
 type FullStatus struct {
 	Name                  string
@@ -94,6 +111,44 @@ func (s *Server) StatusNrOfClients(onCollected func(status NrOfClientsStatus)) {
 	}()
 }
 
+func (s *Server) ClientsStatus(onCollected func(clients ClientsStatus)) {
+	go func() {
+
+		/*
+			IP
+			Device ID
+			Connected Time
+		*/
+
+		now := time.Now()
+
+		currentClients := s.GetClientsOrderedByConnectionID()
+
+		var cls = make(map[int64]ClientDetails)
+		for _, c := range currentClients {
+			cls[int64(c.connectionID)] = ClientDetails{
+				ConnectionID:     int64(c.connectionID),
+				ClientIP:         c.GetIPAddress(),
+				RemoteIP:         c.GetRemoteIP(),
+				RequestPath:      c.GetRequestPath(),
+				ConnectedAt:      c.connectTime,
+				ConnectedSeconds: now.Unix() - c.connectTime.Unix(),
+				UserID:           c.GetUserID(),
+				DeviceID:         c.GetDeviceID(),
+			}
+		}
+
+		clientsStatus := ClientsStatus{
+			NrOfClients: int64(len(cls)),
+			Clients:     cls,
+		}
+
+		if onCollected != nil {
+			onCollected(clientsStatus)
+		}
+	}()
+}
+
 func (s *Server) startServerStatus() *Server {
 	// TODO: add authentication details
 	/*
@@ -128,6 +183,11 @@ func (s *Server) startServerStatus() *Server {
 				// We have received the status, and we return through channel the response!
 				awaitStatus <- status
 			})
+		case "clients":
+			s.ClientsStatus(func(clientsStatus ClientsStatus) {
+				// We have received the status, and we return through channel the response!
+				awaitStatus <- clientsStatus
+			})
 		default:
 			s.Status(func(status FullStatus) {
 				// We have received the status, and we return through channel the response!
@@ -153,6 +213,7 @@ func (s *Server) startServerStatus() *Server {
 		serverStatus.GET("/server", getStatus)
 		serverStatus.GET("/nr_of_clients", getStatus)
 		serverStatus.GET("/system_status", getStatus)
+		serverStatus.GET("/clients", getStatus)
 	}
 	return s
 }
