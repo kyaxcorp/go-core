@@ -23,3 +23,7 @@ func (s *Server) GetClientsLogPath() string {
 	// Creating clients path
 	return file.FilterPath(s.LoggerDirPath + filesystem.DirSeparator() + "clients" + filesystem.DirSeparator())
 }
+
+func (s *Server) GetClientsOrderedByConnectionID() map[int64]*Client {
+	return s.c.GetClientsOrderedByConnectionID()
+}

@@ -802,3 +802,15 @@ func NewClientsInstance() *clientsData {
 func (s *Server) GetClientsByFilter(filter FindClientsFilter) map[uint64]*Client {
 	return s.c.getClientsByFilter(filter)
 }
+
+func (c *clientsData) GetClientsOrderedByConnectionID() map[int64]*Client {
+	defer func() {
+		c.clientsLock.RUnlock()
+	}()
+	nmap := make(map[int64]*Client)
+	c.clientsLock.RLock()
+	for cl, _ := range c.clients {
+		nmap[int64(cl.connectionID)] = cl
+	}
+	return nmap
+}
