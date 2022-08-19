@@ -37,7 +37,10 @@ type UserDetails struct {
 	LastName  string
 	Username  string
 	IsActive  bool
-	UserType  string
+	// UserType -> admin, client etc...
+	UserType string
+	// Role -> SuperAdmin, Admin, SalesMan etc...
+	Role string
 
 	// Secondary
 	Phone1 string
