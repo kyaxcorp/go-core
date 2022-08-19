@@ -16,6 +16,18 @@ func (a *AuthDetails) UserUUID() uuid.UUID {
 	return id
 }
 
+func (a *AuthDetails) GetFullName() string {
+	return a.UserDetails.GetFullName()
+}
+
+func (a *AuthDetails) GetRole() string {
+	return a.UserDetails.GetRole()
+}
+
+func (a *AuthDetails) GetUserType() string {
+	return a.UserDetails.GetUserType()
+}
+
 //-------------------------------------\\
 
 func (a *AuthDetails) GetDeviceID() string {
