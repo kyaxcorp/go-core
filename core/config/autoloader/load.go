@@ -249,6 +249,14 @@ func StartAutoLoader(c Config) error {
 
 	//
 
+	// We should save the configuration only if has being changed!
+	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
+
+	// Save again the config with the newly added/removed keys based on the app structure!
+	if _err := SaveConfigFromMemory(c); _err != nil {
+		return err.New(0, "failed to save config from memory -> "+_err.Error())
+	}
+
 	// ===================== ENV ========================\\
 	if _err = env.Parse(&cfgData.MainConfig); _err != nil {
 		return err.New(0, "failed to set env variables for MainConfig -> "+_err.Error())
@@ -258,16 +266,6 @@ func StartAutoLoader(c Config) error {
 		return err.New(0, "failed to set env variables for CustomConfig -> "+_err.Error())
 	}
 	// ===================== ENV ========================\\
-
-	//
-
-	// We should save the configuration only if has being changed!
-	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
-
-	// Save again the config with the newly added/removed keys based on the app structure!
-	if _err := SaveConfigFromMemory(c); _err != nil {
-		return err.New(0, "failed to save config from memory -> "+_err.Error())
-	}
 
 	// Launch config watcher... if something changes, we will notify the others
 	cfgData.MainConfigViper.WatchConfig()
@@ -288,6 +286,18 @@ func StartAutoLoader(c Config) error {
 			log.Println(_err)
 			// return false
 		}
+
+		// ===================== ENV ========================\\
+		if _err = env.Parse(&cfgData.MainConfig); _err != nil {
+			log.Println(_err)
+			//return err.New(0, "failed to set env variables for MainConfig -> "+_err.Error())
+		}
+
+		if _err = env.Parse(c.CustomConfig); _err != nil {
+			log.Println(_err)
+			//return err.New(0, "failed to set env variables for CustomConfig -> "+_err.Error())
+		}
+		// ===================== ENV ========================\\
 
 		// log.Println(cfgData.MainConfig)
 
