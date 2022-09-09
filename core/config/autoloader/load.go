@@ -1,6 +1,7 @@
 package autoloader
 
 import (
+	"github.com/caarlos0/env/v6"
 	"github.com/fsnotify/fsnotify"
 	"github.com/kyaxcorp/go-core/core/config"
 	cfgData "github.com/kyaxcorp/go-core/core/config/data"
@@ -215,6 +216,8 @@ func StartAutoLoader(c Config) error {
 
 	//log.Println(c.Get("main"))
 
+	// ==================== DEFAULTS ====================\\
+	// This is the Standard Config Structure
 	obj := &model.Model{}
 	if _err := defaults.Set(obj); _err != nil {
 		panic(_err)
@@ -222,11 +225,16 @@ func StartAutoLoader(c Config) error {
 	// I'm not sure if i am doing right over here!... but it works... (13.05.2021)
 	cfgData.MainConfig = *obj
 
+	// This is the Custom Config Structure
 	objCustom := c.CustomConfigModel
 	if _err := defaults.Set(objCustom); _err != nil {
 		panic(_err)
 	}
+	// ==================== DEFAULTS ====================\\
 
+	//
+
+	// =================== VIPER SET ======================\\
 	// c.Sub("main")
 	_err = cfgData.MainConfigViper.UnmarshalKey("main", &cfgData.MainConfig)
 	if _err != nil {
@@ -237,6 +245,21 @@ func StartAutoLoader(c Config) error {
 	if _err != nil {
 		return err.New(0, "failed to decode 'custom' key from config -> "+_err.Error())
 	}
+	// =================== VIPER SET ======================\\
+
+	//
+
+	// ===================== ENV ========================\\
+	if _err = env.Parse(&cfgData.MainConfig); _err != nil {
+		return err.New(0, "failed to set env variables for MainConfig -> "+_err.Error())
+	}
+
+	if _err = env.Parse(c.CustomConfig); _err != nil {
+		return err.New(0, "failed to set env variables for CustomConfig -> "+_err.Error())
+	}
+	// ===================== ENV ========================\\
+
+	//
 
 	// We should save the configuration only if has being changed!
 	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
