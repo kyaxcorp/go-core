@@ -1,10 +1,8 @@
 package model
 
 import (
-	// cassandraConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cassandra/config"
 	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
 	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
-	//sqliteConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/sqlite/config"
 	websocketClientConfig "github.com/kyaxcorp/go-core/core/clients/websocket/config"
 	httpConfig "github.com/kyaxcorp/go-core/core/listeners/http/config"
 	websocketConfig "github.com/kyaxcorp/go-core/core/listeners/websocket/config"
@@ -86,7 +84,6 @@ type Model struct {
 				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
 			}
 			Instances map[string]mysqlConfig.Config
-			//Instances2 map[string]mysqlConfig.Config
 		}
 		Cockroach struct {
 			// This is the default connection name -> from which we
@@ -96,21 +93,6 @@ type Model struct {
 			}
 			Instances map[string]cockroachConfig.Config
 		}
-		/*SQLite struct {
-			DefaultConn struct {
-				// This is the default Instance Name
-				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
-			}
-			Instances map[string]sqliteConfig.Config
-		}
-		*/
-		/*Cassandra struct {
-			DefaultConn struct {
-				// This is the default Instance Name
-				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
-			}
-			Instances map[string]cassandraConfig.Config
-		}*/
 		Redis struct {
 			Instances struct {
 			}
