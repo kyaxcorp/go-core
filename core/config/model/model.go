@@ -1,7 +1,6 @@
 package model
 
 import (
-	brokerClientConfig "github.com/kyaxcorp/go-core/core/clients/broker/config"
 	// cassandraConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cassandra/config"
 	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
 	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
@@ -10,7 +9,6 @@ import (
 	httpConfig "github.com/kyaxcorp/go-core/core/listeners/http/config"
 	websocketConfig "github.com/kyaxcorp/go-core/core/listeners/websocket/config"
 	loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
-	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 )
 
 // Here we will be storing default configuration key from the map!
@@ -128,10 +126,6 @@ type Model struct {
 			Instances           struct {
 			}
 		}
-		Broker struct {
-			DefaultInstanceName string `yaml:"default_instance_name" mapstructure:"default_instance_name" default:"default"`
-			Instances           map[string]brokerClientConfig.Config
-		}
 		WebSocket struct {
 			DefaultInstanceName string `yaml:"default_instance_name" mapstructure:"default_instance_name" default:"default"`
 			Instances           map[string]websocketClientConfig.Config
@@ -142,10 +136,6 @@ type Model struct {
 	}
 	// Specific Autonomous services which are isolated and separately!
 	Services struct {
-		Broker struct {
-			DefaultInstanceName string `yaml:"default_instance_name" mapstructure:"default_instance_name" default:"default"`
-			Instances           map[string]brokerConfig.Config
-		}
 	}
 
 	// The one's that are listening on some ports (Servers)
