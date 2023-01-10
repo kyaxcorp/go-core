@@ -1,16 +1,12 @@
 package model
 
 import (
-	brokerClientConfig "github.com/kyaxcorp/go-core/core/clients/broker/config"
-	// cassandraConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cassandra/config"
 	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
 	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
-	//sqliteConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/sqlite/config"
 	websocketClientConfig "github.com/kyaxcorp/go-core/core/clients/websocket/config"
 	httpConfig "github.com/kyaxcorp/go-core/core/listeners/http/config"
 	websocketConfig "github.com/kyaxcorp/go-core/core/listeners/websocket/config"
 	loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
-	brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 )
 
 // Here we will be storing default configuration key from the map!
@@ -88,7 +84,6 @@ type Model struct {
 				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
 			}
 			Instances map[string]mysqlConfig.Config
-			//Instances2 map[string]mysqlConfig.Config
 		}
 		Cockroach struct {
 			// This is the default connection name -> from which we
@@ -98,21 +93,6 @@ type Model struct {
 			}
 			Instances map[string]cockroachConfig.Config
 		}
-		/*SQLite struct {
-			DefaultConn struct {
-				// This is the default Instance Name
-				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
-			}
-			Instances map[string]sqliteConfig.Config
-		}
-		*/
-		/*Cassandra struct {
-			DefaultConn struct {
-				// This is the default Instance Name
-				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
-			}
-			Instances map[string]cassandraConfig.Config
-		}*/
 		Redis struct {
 			Instances struct {
 			}
@@ -128,10 +108,6 @@ type Model struct {
 			Instances           struct {
 			}
 		}
-		Broker struct {
-			DefaultInstanceName string `yaml:"default_instance_name" mapstructure:"default_instance_name" default:"default"`
-			Instances           map[string]brokerClientConfig.Config
-		}
 		WebSocket struct {
 			DefaultInstanceName string `yaml:"default_instance_name" mapstructure:"default_instance_name" default:"default"`
 			Instances           map[string]websocketClientConfig.Config
@@ -142,10 +118,6 @@ type Model struct {
 	}
 	// Specific Autonomous services which are isolated and separately!
 	Services struct {
-		Broker struct {
-			DefaultInstanceName string `yaml:"default_instance_name" mapstructure:"default_instance_name" default:"default"`
-			Instances           map[string]brokerConfig.Config
-		}
 	}
 
 	// The one's that are listening on some ports (Servers)

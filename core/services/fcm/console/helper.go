@@ -1,7 +1,6 @@
 package console
 
 import (
-	"github.com/kyaxcorp/go-core/core/config"
 	"github.com/kyaxcorp/go-core/core/helpers/array"
 	"log"
 	"strings"
@@ -16,7 +15,7 @@ func getInstanceName(args []string) string {
 
 	if instanceName == "" {
 		log.Println("taking default configuration instance name")
-		instanceName = config.GetConfig().Clients.Broker.DefaultInstanceName
+		//instanceName = config.GetConfig().Clients.Broker.DefaultInstanceName
 	}
 
 	if instanceName == "" {

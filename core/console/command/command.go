@@ -37,6 +37,7 @@ type AddCmd struct {
 	OnCreate         CmdOnCreate
 	OnGetProcessName OnGetProcessName
 
+	// Args -> are the input arguments received from the caller
 	Args       []string
 	ArgsPolicy string
 

@@ -41,6 +41,53 @@ type Config struct {
 	AdditionalLoggingChannels map[string]loggingConfig.Config
 }
 
+func GenerateConfig(c Config) error {
+	configPath := GetConfigPath()
+	if configPath == "" {
+		return err.New(0, "config path is empty...")
+	}
+
+	configFilePath := GetConfigFilePath()
+	if configFilePath == "" {
+		return err.New(0, "config file path is empty...")
+	}
+
+	// We add the name as config path for uniqueness because multiple processes can read the same file!
+	// the config can be modified by multiple processes at once if launched simultaneously!
+	// This is why each process will do its work and after finishing it, the next process will do the same thing!
+	// That will not degrade much in performance, but still will be a small slow down
+	if isLockAcquired, lockErr := lock.FLock(configFilePath, true); !isLockAcquired || lockErr != nil {
+		// Here we have some kind of error?!
+		return err.New(0, "failed to lock config file -> ", lockErr.Error())
+	}
+	// Release the file lock on return
+	defer lock.FRelease(configFilePath)
+
+	v := viper.New()
+	// NonPtrObj
+	obj := &model.Model{}
+	if _err := _struct.SetDefaultValues(obj); _err != nil {
+		panic(_err)
+	}
+	// NonPtrObj of the custom config
+	customObj := c.CustomConfigModel
+	// Setting the default values
+	if _err := _struct.SetDefaultValues(customObj); _err != nil {
+		panic(_err)
+	}
+
+	// Setting in viper the main config
+	v.Set("main", obj)
+	// Setting in viper the custom config
+	v.Set("custom", customObj)
+	_err := v.SafeWriteConfigAs(configFilePath)
+	if _err != nil {
+		// log.Println("Failed to generate default config!")
+		return err.New(0, "failed to generate default config -> "+_err.Error())
+	}
+	return nil
+}
+
 func StartAutoLoader(c Config) error {
 	// Check if it's locked!
 	// If yes then return
@@ -58,7 +105,8 @@ func StartAutoLoader(c Config) error {
 
 	// We set the default values for the custom config!
 	if _err := _struct.SetDefaultValues(c.CustomConfig); _err != nil {
-		panic(_err)
+		return err.New(0, "failed to set default values for CustomConfig -> ", _err)
+		//panic(_err)
 	}
 
 	// Check if autoloader launched!
@@ -91,32 +139,8 @@ func StartAutoLoader(c Config) error {
 
 	// Check if the configuration exists...
 	if !IsConfigExists() {
-		// If it doesn't exist, we generate it!
-		//GenerateDefaultConfig()
-
-		// We generate here the default config
-		v := viper.New()
-		// NonPtrObj
-		obj := &model.Model{}
-		if _err := _struct.SetDefaultValues(obj); _err != nil {
-			panic(_err)
-		}
-		// NonPtrObj of the custom config
-		customObj := c.CustomConfigModel
-		// Setting the default values
-		if _err := _struct.SetDefaultValues(customObj); _err != nil {
-			panic(_err)
-		}
-
-		// Setting in viper the main config
-		v.Set("main", obj)
-		// Setting in viper the custom config
-		v.Set("custom", customObj)
-		_err := v.SafeWriteConfigAs(configFilePath)
-		if _err != nil {
-			// log.Println("Failed to generate default config!")
-			return err.New(0, "failed to generate default config -> "+_err.Error())
-		}
+		// if config doesn't exist... what should we do?!
+		// it means we don't load anything?
 	} else {
 		// Do a backup of the current config file before launching anything else!
 		// This ensures that we will have a copy of the previous file before doing any automatic changes
