@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/bootstrap/register_service"
-	brokerClientService "github.com/kyaxcorp/go-core/core/clients/broker/services"
+	//brokerClientService "github.com/kyaxcorp/go-core/core/clients/broker/services"
 	"github.com/kyaxcorp/go-core/core/console/command"
 	"github.com/kyaxcorp/go-core/core/console/commands/version"
 	"github.com/kyaxcorp/go-core/core/console/working_stage"
@@ -15,7 +15,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"github.com/kyaxcorp/go-core/core/helpers/process/shutdown"
 	"github.com/kyaxcorp/go-core/core/logger/coreLog"
-	"github.com/kyaxcorp/go-core/core/services/broker/console"
+	//"github.com/kyaxcorp/go-core/core/services/broker/console"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -73,7 +73,7 @@ func (m *Menu) Execute() error {
 	return m.RootCmd.ExecuteContext(m.ctx.Context())
 }
 
-//func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
+// func (m *Menu) RunInternalCommand(arg ...string) (*exec.Cmd, error) {
 func (m *Menu) RunInternalCommand(options InternalCommandOptions) (*exec.Cmd, error) {
 	var _err error
 	var currentApp string
@@ -121,8 +121,8 @@ func (m *Menu) init() {
 
 	//Adding additional Core Commands
 	m.AddCommands([]*command.AddCmd{
-		console.StartBrokerServer,
-		console.StopBrokerServer,
+		//console.StartBrokerServer,
+		//console.StopBrokerServer,
 		version.ShowVersion,     // Show app version
 		version.ShowVersionJSON, // Show app Version in JSON format
 	})
@@ -264,7 +264,7 @@ func (m *Menu) AddCommand(c *command.AddCmd) *Menu {
 					// Run Broker ClientsStatus
 					if c.StartupCoreServices.BrokerClients {
 						// Register the broker client service
-						brokerClientService.RegisterBrokerService()
+						//brokerClientService.RegisterBrokerService()
 					}
 
 					// Run the registered services
