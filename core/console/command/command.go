@@ -21,7 +21,7 @@ type OnGetProcessName func(*AddCmd) string
 // StartupCoreServices -> Here we add defined/core services, don't know how right is to do it here... but anyway...
 type StartupCoreServices struct {
 	// Will launch the broker clients on this command!
-	BrokerClients bool
+	//BrokerClients bool
 }
 
 type AddCmd struct {

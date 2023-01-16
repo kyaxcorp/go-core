@@ -13,9 +13,9 @@ var StartPushNotificationsServer = &command.AddCmd{
 	ProcessName: "push_notifications_server",
 	// Run the broker client service
 	EnableStartupServices: true,
-	StartupCoreServices: command.StartupCoreServices{
-		BrokerClients: true,
-	},
+	//StartupCoreServices: command.StartupCoreServices{
+	//	BrokerClients: true,
+	//},
 
 	OnGetProcessName: func(cmd *command.AddCmd) string {
 		//brokerName := getBrokerName(cmd.Args)
