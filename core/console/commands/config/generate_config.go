@@ -17,7 +17,7 @@ var GenerateDefaultConfig = &command.AddCmd{
 	OnExecute: func(cmd *command.AddCmd) {
 		// Print information !
 		log.Println("generating config file...")
-		if _err := autoloader.GenerateConfig(); _err != nil {
+		if _err := autoloader.GenerateConfigFromMemory(); _err != nil {
 			log.Println("failed to generate config -> ", _err.Error())
 		} else {
 			log.Println("config has been generated successfully")

@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Deprecated
 // func GenerateConfig(c Config) error {
 func GenerateConfig() error {
 	configPath := GetConfigPath()
@@ -38,7 +39,7 @@ func GenerateConfig() error {
 		panic(_err)
 	}
 	// NonPtrObj of the custom config
-	customObj := LoadedConfigModel.CustomConfigModel
+	customObj := LoadedConfig.CustomConfigModel
 	// Setting the default values
 	if _err := _struct.SetDefaultValues(customObj); _err != nil {
 		panic(_err)
@@ -54,4 +55,8 @@ func GenerateConfig() error {
 		return err.New(0, "failed to generate default config -> "+_err.Error())
 	}
 	return nil
+}
+
+func GenerateConfigFromMemory() error {
+	return SaveConfigFromMemory(LoadedConfig)
 }
