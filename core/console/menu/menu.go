@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/bootstrap/register_service"
+	"github.com/kyaxcorp/go-core/core/console/commands/config"
+
 	//brokerClientService "github.com/kyaxcorp/go-core/core/clients/broker/services"
 	"github.com/kyaxcorp/go-core/core/console/command"
 	"github.com/kyaxcorp/go-core/core/console/commands/version"
@@ -123,6 +125,7 @@ func (m *Menu) init() {
 	m.AddCommands([]*command.AddCmd{
 		//console.StartBrokerServer,
 		//console.StopBrokerServer,
+		config.GenerateDefaultConfig,
 		version.ShowVersion,     // Show app version
 		version.ShowVersionJSON, // Show app Version in JSON format
 	})
