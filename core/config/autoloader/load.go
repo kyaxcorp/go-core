@@ -8,7 +8,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/config/events"
 	"github.com/kyaxcorp/go-core/core/config/model"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
-	"github.com/kyaxcorp/go-core/core/helpers/_struct/defaults"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
 	"github.com/kyaxcorp/go-core/core/helpers/err"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
@@ -22,7 +21,6 @@ import (
 	timezone "github.com/kyaxcorp/go-core/core/helpers/time"
 	"github.com/kyaxcorp/go-core/core/logger/application"
 	"github.com/spf13/viper"
-	"io/ioutil"
 	"log"
 	"os"
 	"time"
@@ -71,6 +69,7 @@ func StartAutoLoader(c Config) error {
 	if configFilePath == "" {
 		return err.New(0, "config file path is empty...")
 	}
+
 	// We add the name as config path for uniqueness because multiple processes can read the same file!
 	// the config can be modified by multiple processes at once if launched simultaneously!
 	// This is why each process will do its work and after finishing it, the next process will do the same thing!
@@ -120,23 +119,20 @@ func StartAutoLoader(c Config) error {
 
 		currentConfigChecksum, _err := hash.FileSha256(configFilePath)
 		if _err != nil {
-			return err.New(0, "failed to generate checksum for "+configFilePath+" -> "+_err.Error())
+			return err.New(0, "failed to generate checksum for "+configFilePath+" -> ", _err.Error())
 		}
 		createBackup := false
 
 		// Find the last backup file from that directory
-		backups, _err := ioutil.ReadDir(backupFolderPath)
+		backups, _err := os.ReadDir(backupFolderPath)
 		if _err != nil {
-			// log.Fatal(_err)
-			return err.New(0, "failed to read the backups folder -> "+_err.Error())
+			return err.New(0, "failed to read the backups folder -> ", _err.Error())
 		}
-
-		//log.Println(backupFolderPath)
-		//log.Println(backups)
 
 		if len(backups) > 0 {
 			// Let's get the last file
 			lastBackupFile := backups[len(backups)-1]
+
 			// Generate the full path of the backup
 			lastBackupFullPath := backupFolderPath + filesystem.DirSeparator() + lastBackupFile.Name()
 			// Generate the checksum of the backup
@@ -183,9 +179,10 @@ func StartAutoLoader(c Config) error {
 	//c.Set("main", defaultConfig)
 
 	if isConfigExists {
+		// Read the current config file
 		_err = cfgData.MainConfigViper.ReadInConfig()
 		if _err != nil {
-			return err.New(0, "failed to read config in viper -> "+_err.Error())
+			return err.New(0, "failed to read config in viper -> ", _err.Error())
 		}
 	}
 
@@ -194,16 +191,17 @@ func StartAutoLoader(c Config) error {
 	// ==================== DEFAULTS ====================\\
 	// This is the Standard Config Structure
 	obj := &model.Model{}
-	if _err = defaults.Set(obj); _err != nil {
-		panic(_err)
+	if _err = _struct.SetDefaultValues(obj); _err != nil {
+		return err.New(0, "failed to set default values for obj -> ", _err.Error())
 	}
+
 	// I'm not sure if i am doing right over here!... but it works... (13.05.2021)
 	cfgData.MainConfig = *obj
 
 	// This is the Custom Config Structure
 	objCustom := c.CustomConfigModel
-	if _err = defaults.Set(objCustom); _err != nil {
-		panic(_err)
+	if _err = _struct.SetDefaultValues(objCustom); _err != nil {
+		return err.New(0, "failed to set default values for CustomConfigModel -> ", _err.Error())
 	}
 	// ==================== DEFAULTS ====================\\
 
@@ -213,12 +211,12 @@ func StartAutoLoader(c Config) error {
 	// c.Sub("main")
 	_err = cfgData.MainConfigViper.UnmarshalKey("main", &cfgData.MainConfig)
 	if _err != nil {
-		return err.New(0, "failed to decode 'main' key from config -> "+_err.Error())
+		return err.New(0, "failed to decode 'main' key from config -> ", _err.Error())
 	}
 
 	_err = cfgData.MainConfigViper.UnmarshalKey("custom", c.CustomConfig)
 	if _err != nil {
-		return err.New(0, "failed to decode 'custom' key from config -> "+_err.Error())
+		return err.New(0, "failed to decode 'custom' key from config -> ", _err.Error())
 	}
 	// =================== VIPER SET ======================\\
 
@@ -227,18 +225,24 @@ func StartAutoLoader(c Config) error {
 	// We should save the configuration only if has being changed!
 	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
 
-	// Save again the config with the newly added/removed keys based on the app structure!
-	if _err = SaveConfigFromMemory(c); _err != nil {
-		return err.New(0, "failed to save config from memory -> "+_err.Error())
+	if _err = setDefaults(c); _err != nil {
+		return err.New(0, "failed to set config defaults -> ", _err.Error())
+	}
+
+	if isConfigExists {
+		// Save again the config with the newly added/removed keys based on the app structure!
+		if _err = SaveConfigFromMemory(c); _err != nil {
+			return err.New(0, "failed to save config from memory -> ", _err.Error())
+		}
 	}
 
 	// ===================== ENV ========================\\
 	if _err = env.Parse(&cfgData.MainConfig); _err != nil {
-		return err.New(0, "failed to set env variables for MainConfig -> "+_err.Error())
+		return err.New(0, "failed to set env variables for MainConfig -> ", _err.Error())
 	}
 
 	if _err = env.Parse(c.CustomConfig); _err != nil {
-		return err.New(0, "failed to set env variables for CustomConfig -> "+_err.Error())
+		return err.New(0, "failed to set env variables for CustomConfig -> ", _err.Error())
 	}
 	// ===================== ENV ========================\\
 
@@ -284,8 +288,7 @@ func StartAutoLoader(c Config) error {
 	// save in memory same config but as JSON
 	cfgData.MainConfigJson, _err = json.Encode(cfgData.MainConfig)
 	if _err != nil {
-		log.Println(_err)
-		panic("failed to convert MainConfig to json and save it...")
+		return err.New(0, "failed to convert MainConfig to json and save it...", _err.Error())
 	}
 
 	// Everything is ok...
