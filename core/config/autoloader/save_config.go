@@ -41,27 +41,35 @@ func SaveConfigFromMemory(cfg Config) error {
 
 	// Compare the 2 configs
 	tmpConfigHash, _err := hash.FileSha256(configTmpPath)
+	if _err != nil {
+		return _err
+	}
 	// Delete the tmp config
-	file.Delete(configTmpPath)
+	_, _err = file.Delete(configTmpPath)
 	if _err != nil {
 		return _err
 	}
 
-	realConfigHash, _err := hash.FileSha256(configPath)
-	if _err != nil {
-		return _err
-	}
-	// log.Println(realConfigHash, tmpConfigHash)
+	// CHeck if config exists
+	isConfigExists := IsConfigExists()
+	if isConfigExists {
+		realConfigHash, _err := hash.FileSha256(configPath)
+		if _err != nil {
+			return _err
+		}
+		// log.Println(realConfigHash, tmpConfigHash)
 
-	// Compare the 2 configs
-	if tmpConfigHash == realConfigHash {
-		// It's the same configuration!
-		// log.Println("Same config!!! skipping save...")
-		return nil
+		// Compare the 2 configs
+		if tmpConfigHash == realConfigHash {
+			// It's the same configuration!
+			// log.Println("Same config!!! skipping save...")
+			return nil
+		}
 	}
 
 	// Save the real config file
 	_err = c.WriteConfigAs(configPath)
+	//_err = c.SafeWriteConfigAs(configPath)
 	if _err != nil {
 		// log.Println("Failed to generate config!")
 		return _err
