@@ -32,7 +32,7 @@ func StartAutoLoader(c Config) error {
 
 	// let's save for later usage inside the library!
 	// we will use it for config generation!
-	LoadedConfigModel = c
+	LoadedConfig = c
 
 	// Set autoloader as called
 	var _err error

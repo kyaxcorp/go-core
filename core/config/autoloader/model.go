@@ -2,7 +2,7 @@ package autoloader
 
 import loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
 
-var LoadedConfigModel Config
+var LoadedConfig Config
 
 type Config struct {
 	// This is where the Custom Config data is saved... it's a pointer!
