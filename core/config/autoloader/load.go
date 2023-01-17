@@ -247,43 +247,47 @@ func StartAutoLoader(c Config) error {
 	// ===================== ENV ========================\\
 
 	// Launch config watcher... if something changes, we will notify the others
-	cfgData.MainConfigViper.WatchConfig()
-	cfgData.MainConfigViper.OnConfigChange(func(e fsnotify.Event) {
-		log.Println("config file changed:", e.Name)
-		// If a change occured, we should check if the config is ok!
-		// we should set the new config to the memory var
 
-		// Check if viper has no errors reading the config file...!
-		_err = cfgData.MainConfigViper.UnmarshalKey("main", &cfgData.MainConfig)
-		if _err != nil {
-			log.Println(_err)
-			// return false
-		}
+	// Launch watcher only if the config exists
+	if isConfigExists {
+		cfgData.MainConfigViper.WatchConfig()
+		cfgData.MainConfigViper.OnConfigChange(func(e fsnotify.Event) {
+			log.Println("config file changed:", e.Name)
+			// If a change occured, we should check if the config is ok!
+			// we should set the new config to the memory var
 
-		_err = cfgData.MainConfigViper.UnmarshalKey("custom", c.CustomConfig)
-		if _err != nil {
-			log.Println(_err)
-			// return false
-		}
+			// Check if viper has no errors reading the config file...!
+			_err = cfgData.MainConfigViper.UnmarshalKey("main", &cfgData.MainConfig)
+			if _err != nil {
+				log.Println(_err)
+				// return false
+			}
 
-		// ===================== ENV ========================\\
-		if _err = env.Parse(&cfgData.MainConfig); _err != nil {
-			log.Println(_err)
-			//return err.New(0, "failed to set env variables for MainConfig -> "+_err.Error())
-		}
+			_err = cfgData.MainConfigViper.UnmarshalKey("custom", c.CustomConfig)
+			if _err != nil {
+				log.Println(_err)
+				// return false
+			}
 
-		if _err = env.Parse(c.CustomConfig); _err != nil {
-			log.Println(_err)
-			//return err.New(0, "failed to set env variables for CustomConfig -> "+_err.Error())
-		}
-		// ===================== ENV ========================\\
+			// ===================== ENV ========================\\
+			if _err = env.Parse(&cfgData.MainConfig); _err != nil {
+				log.Println(_err)
+				//return err.New(0, "failed to set env variables for MainConfig -> "+_err.Error())
+			}
 
-		// log.Println(cfgData.MainConfig)
+			if _err = env.Parse(c.CustomConfig); _err != nil {
+				log.Println(_err)
+				//return err.New(0, "failed to set env variables for CustomConfig -> "+_err.Error())
+			}
+			// ===================== ENV ========================\\
 
-		// TODO: we can create other triggers from here...
-		// But it's not easy to reload configurations for multiple services...
-		// This is why each service should monitor a specific part of the configuration!
-	})
+			// log.Println(cfgData.MainConfig)
+
+			// TODO: we can create other triggers from here...
+			// But it's not easy to reload configurations for multiple services...
+			// This is why each service should monitor a specific part of the configuration!
+		})
+	}
 
 	// save in memory same config but as JSON
 	cfgData.MainConfigJson, _err = json.Encode(cfgData.MainConfig)
