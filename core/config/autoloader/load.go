@@ -21,7 +21,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/process"
 	timezone "github.com/kyaxcorp/go-core/core/helpers/time"
 	"github.com/kyaxcorp/go-core/core/logger/application"
-	loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"log"
@@ -29,70 +28,16 @@ import (
 	"time"
 )
 
-type Config struct {
-	// This is where the Custom Config data is saved... it's a pointer!
-	CustomConfig interface{}
-	// This is the structure of the Custom Config, from which the yaml is generated
-	CustomConfigModel interface{}
-	// Here we define Additional logging channels if required... for example we know that our app
-	// has some functionality which requires logging channeling, so everything is isolated and understood
-	// so, we also need to generate a config file which already has that channels without a user intervention
-	// or having a ready template file! So in this case we dictate from here additional channels
-	AdditionalLoggingChannels map[string]loggingConfig.Config
-}
-
-func GenerateConfig(c Config) error {
-	configPath := GetConfigPath()
-	if configPath == "" {
-		return err.New(0, "config path is empty...")
-	}
-
-	configFilePath := GetConfigFilePath()
-	if configFilePath == "" {
-		return err.New(0, "config file path is empty...")
-	}
-
-	// We add the name as config path for uniqueness because multiple processes can read the same file!
-	// the config can be modified by multiple processes at once if launched simultaneously!
-	// This is why each process will do its work and after finishing it, the next process will do the same thing!
-	// That will not degrade much in performance, but still will be a small slow down
-	if isLockAcquired, lockErr := lock.FLock(configFilePath, true); !isLockAcquired || lockErr != nil {
-		// Here we have some kind of error?!
-		return err.New(0, "failed to lock config file -> ", lockErr.Error())
-	}
-	// Release the file lock on return
-	defer lock.FRelease(configFilePath)
-
-	v := viper.New()
-	// NonPtrObj
-	obj := &model.Model{}
-	if _err := _struct.SetDefaultValues(obj); _err != nil {
-		panic(_err)
-	}
-	// NonPtrObj of the custom config
-	customObj := c.CustomConfigModel
-	// Setting the default values
-	if _err := _struct.SetDefaultValues(customObj); _err != nil {
-		panic(_err)
-	}
-
-	// Setting in viper the main config
-	v.Set("main", obj)
-	// Setting in viper the custom config
-	v.Set("custom", customObj)
-	_err := v.SafeWriteConfigAs(configFilePath)
-	if _err != nil {
-		// log.Println("Failed to generate default config!")
-		return err.New(0, "failed to generate default config -> "+_err.Error())
-	}
-	return nil
-}
-
 func StartAutoLoader(c Config) error {
 	// Check if it's locked!
 	// If yes then return
 
+	// let's save for later usage inside the library!
+	// we will use it for config generation!
+	LoadedConfigModel = c
+
 	// Set autoloader as called
+	var _err error
 
 	if !cfgData.AutoLoaderLaunched.TryLock() {
 		return err.New(0, "failed to lock the loader")
@@ -104,7 +49,7 @@ func StartAutoLoader(c Config) error {
 	config.ProcessConfig()
 
 	// We set the default values for the custom config!
-	if _err := _struct.SetDefaultValues(c.CustomConfig); _err != nil {
+	if _err = _struct.SetDefaultValues(c.CustomConfig); _err != nil {
 		return err.New(0, "failed to set default values for CustomConfig -> ", _err)
 		//panic(_err)
 	}
@@ -137,10 +82,14 @@ func StartAutoLoader(c Config) error {
 	// Release the file lock on return
 	defer lock.FRelease(configFilePath)
 
+	isConfigExists := IsConfigExists()
+
 	// Check if the configuration exists...
-	if !IsConfigExists() {
+	if !isConfigExists {
 		// if config doesn't exist... what should we do?!
 		// it means we don't load anything?
+		// or we should load the default settings that are been provided to the app... like environment or arguments
+
 	} else {
 		// Do a backup of the current config file before launching anything else!
 		// This ensures that we will have a copy of the previous file before doing any automatic changes
@@ -233,9 +182,11 @@ func StartAutoLoader(c Config) error {
 	// c.SetDefault("main", NonPtrObj{})
 	//c.Set("main", defaultConfig)
 
-	_err := cfgData.MainConfigViper.ReadInConfig()
-	if _err != nil {
-		return err.New(0, "failed to read config in viper -> "+_err.Error())
+	if isConfigExists {
+		_err = cfgData.MainConfigViper.ReadInConfig()
+		if _err != nil {
+			return err.New(0, "failed to read config in viper -> "+_err.Error())
+		}
 	}
 
 	//log.Println(c.Get("main"))
@@ -243,7 +194,7 @@ func StartAutoLoader(c Config) error {
 	// ==================== DEFAULTS ====================\\
 	// This is the Standard Config Structure
 	obj := &model.Model{}
-	if _err := defaults.Set(obj); _err != nil {
+	if _err = defaults.Set(obj); _err != nil {
 		panic(_err)
 	}
 	// I'm not sure if i am doing right over here!... but it works... (13.05.2021)
@@ -251,7 +202,7 @@ func StartAutoLoader(c Config) error {
 
 	// This is the Custom Config Structure
 	objCustom := c.CustomConfigModel
-	if _err := defaults.Set(objCustom); _err != nil {
+	if _err = defaults.Set(objCustom); _err != nil {
 		panic(_err)
 	}
 	// ==================== DEFAULTS ====================\\
@@ -277,7 +228,7 @@ func StartAutoLoader(c Config) error {
 	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
 
 	// Save again the config with the newly added/removed keys based on the app structure!
-	if _err := SaveConfigFromMemory(c); _err != nil {
+	if _err = SaveConfigFromMemory(c); _err != nil {
 		return err.New(0, "failed to save config from memory -> "+_err.Error())
 	}
 
@@ -359,7 +310,7 @@ func StartAutoLoader(c Config) error {
 	cwd := config.GetConfig().Application.CurrentWorkingDirectory
 	if cwd == "" {
 		if conv.ParseBool(config.GetConfig().Application.IfEmptyCWDSetToExecPath) {
-			_err := os.Chdir(path.Root())
+			_err = os.Chdir(path.Root())
 			if _err != nil {
 				panic(_err)
 			}
@@ -371,7 +322,7 @@ func StartAutoLoader(c Config) error {
 		// but first, we should check if this path really exists!
 		if folder.Exists(cwd) {
 			// let's set it!
-			_err := os.Chdir(cwd)
+			_err = os.Chdir(cwd)
 			if _err != nil {
 				panic(_err)
 			}
