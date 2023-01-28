@@ -6,10 +6,27 @@ import (
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	"github.com/kyaxcorp/go-core/core/helpers/process/name"
+	"os"
 	"path/filepath"
+	"strings"
 )
 
+var cachedAppEnvConfigPathParamName string
+
 func GetConfigPath() string {
+	// Check if there is an argument having the -c=path or --config=path
+	// Or check if there is an ENVIRONMENT PARAM
+	// the param should based on the app name
+	appName := GetCleanAppFileName()
+	if cachedAppEnvConfigPathParamName == "" {
+		cachedAppEnvConfigPathParamName = strings.ReplaceAll("-", "_", strings.ToUpper(appName)) + "_" + "CONFIG_PATH"
+	}
+	// Check if exists
+	envConfigPath := os.Getenv(cachedAppEnvConfigPathParamName)
+	if envConfigPath != "" {
+		return envConfigPath
+	}
+
 	if globalConfigPath != "" {
 		return globalConfigPath
 	}
