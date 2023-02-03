@@ -19,21 +19,21 @@ type Resolver struct {
 	// if it's not working (depending on the policy type and algo of selection)
 	// it will go to next one...if none of them working it will start from beginning or it will trigger
 	// an error...? we should define how many times or how much time it will check for the connections to be ok
-	PolicyName string `yaml:"policy_name" default:"round_robin"`
+	PolicyName string `yaml:"policy_name" mapstructure:"policy_name" default:"round_robin"`
 
 	//PolicyOptions PolicyOptions `yaml:"policy_options" mapstructure:"policy_options"`
 	// PolicyOptions should not be exported to yaml
 	// It should be used only internal as code...
 	PolicyOptions dbresolver.Policy `yaml:"-"`
 
-	ReconnectOptions `yaml:"reconnect_options"`
+	ReconnectOptions `yaml:"reconnect_options" mapstructure:"reconnect_options"`
 
 	// For which tables it's referred to...it will switch automatically the connections based on this
 	// Is using this, the Root Resolver will switch/use the resolver based on this
 	Tables []string
 	// TODO: we can also add here Regions, so based on a TABLE COLUMN,but for that we should scan the query for words
 
-	ConnectionPoolOptions `yaml:"connection_pool_options"`
+	ConnectionPoolOptions `yaml:"connection_pool_options" mapstructure:"connection_pool_options"`
 
 	// When writing or read writing it will always take the connections from here...
 	Sources []Connection
@@ -78,12 +78,12 @@ func (r *Resolver) GetConnectionMaxIdleTimeSeconds() uint32 {
 	return r.ConnectionMaxIdleTimeSeconds
 }
 
-// func (r *Resolver) GetPolicyOptions() dbresolver.Policy {
+//func (r *Resolver) GetPolicyOptions() dbresolver.Policy {
 func (r *Resolver) GetPolicyOptions() interface{} {
 	return r.PolicyOptions
 }
 
-// func (r *Resolver) SetPolicyOptions(policy dbresolver.Policy) {
+//func (r *Resolver) SetPolicyOptions(policy dbresolver.Policy) {
 func (r *Resolver) SetPolicyOptions(policy interface{}) {
 	r.PolicyOptions = policy.(dbresolver.Policy)
 }
