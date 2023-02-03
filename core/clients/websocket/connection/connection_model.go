@@ -24,26 +24,26 @@ const AuthByGETParamToken = 4
 
 type AuthOptions struct {
 	// AuthType -> this is the authentication type
-	AuthType int `yaml:"auth_type" mapstructure:"auth_type" default:"1"`
+	AuthType int `yaml:"auth_type" default:"1"`
 	// Token -> it's used by AuthByToken & AuthByBearerToken
-	Token string `yaml:"token" mapstructure:"token" default:""`
+	Token string `yaml:"token" default:""`
 	// Username -> it's used by AuthBasic
-	Username string `yaml:"username" mapstructure:"username" default:""`
+	Username string `yaml:"username" default:""`
 	// Password -> it's used by AuthBasic
-	Password string `yaml:"password" mapstructure:"password" default:""`
+	Password string `yaml:"password" default:""`
 }
 
 type Connection struct {
 	// Connection params
-	IsSecure string `yaml:"is_secure" mapstructure:"is_secure" default:"yes"`
+	IsSecure string `yaml:"is_secure" default:"yes"`
 	// Scheme -> wss is encrypted connection!
-	Scheme string `yaml:"scheme" mapstructure:"scheme" default:"wss://"`
-	Host   string `yaml:"host" mapstructure:"host" default:"localhost"`
+	Scheme string `yaml:"scheme" default:"wss://"`
+	Host   string `yaml:"host" default:"localhost"`
 	// Port -> the default is 0, in this case no port will be used!
-	Port    uint16 `yaml:"port" mapstructure:"port" default:"0"`
-	UriPath string `yaml:"uri_path" mapstructure:"uri_path" default:"/"`
+	Port    uint16 `yaml:"port" default:"0"`
+	UriPath string `yaml:"uri_path" default:"/"`
 	// AcceptCertificate -> Accept Self Signed Certificate
-	AcceptCertificate string `yaml:"accept_certificate" mapstructure:"accept_certificate" default:"no"`
+	AcceptCertificate string `yaml:"accept_certificate" default:"no"`
 
 	// TODO: we should also add here CUUSTOM CERTIFICATES FOR BETTER SECURITY AND AUTHORITY
 	// TODO: it's very easy to be an authorized certified owner and become a Man in Middle!
@@ -57,15 +57,15 @@ type Connection struct {
 	// MaxRetries 0 - means no retries, -1 - means infinite, >0 - means a specific nr of retries:
 	// How many times it should retry to connect to same host. It's better to not set to infinite because
 	// if you have multiple connections, the infinite param it's better to set on websocket client itself
-	MaxRetries int16 `yaml:"max_retries" mapstructure:"max_retries" default:"3"`
+	MaxRetries int16 `yaml:"max_retries" default:"3"`
 	// RetryTimeout -> 5 Seconds by default
-	RetryTimeout uint16 `yaml:"retry_timeout" mapstructure:"retry_timeout" default:"5"`
+	RetryTimeout uint16 `yaml:"retry_timeout" default:"5"`
 
 	// Authentication
 	// EnableAuth -> If authentication is needed
-	EnableAuth string `yaml:"enable_auth" mapstructure:"enable_auth" default:"no"`
+	EnableAuth string `yaml:"enable_auth" default:"no"`
 	// AuthType -> What type of authentication is needed
-	AuthOptions AuthOptions `yaml:"auth_options" mapstructure:"auth_options"`
+	AuthOptions AuthOptions `yaml:"auth_options"`
 }
 
 func DefaultConfig(connObj ...*Connection) (Connection, error) {

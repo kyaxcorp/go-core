@@ -9,11 +9,11 @@ import (
 
 type Connection struct {
 	// OverrideCredentials string `yaml:"override_credentials" mapstructure:"override_credentials" default:"no"`
-	CredentialsOverrides CredentialsOverrides `yaml:"credentials_overrides" mapstructure:"credentials_overrides"`
-	Credentials          `yaml:"credentials" mapstructure:"credentials"`
+	CredentialsOverrides CredentialsOverrides `yaml:"credentials_overrides"`
+	Credentials          `yaml:"credentials"`
 
 	// This is only for this connection!
-	ReconnectOptions `yaml:"reconnect_options" mapstructure:"reconnect_options"`
+	ReconnectOptions `yaml:"reconnect_options"`
 
 	//
 	logger       *model.Logger
