@@ -12,19 +12,35 @@ import (
 )
 
 var cachedAppEnvConfigPathParamName string
+var envConfigPath string
 
-func GetConfigPath() string {
+func GetEnvFullConfigPath() string {
 	// Check if there is an argument having the -c=path or --config=path
 	// Or check if there is an ENVIRONMENT PARAM
 	// the param should based on the app name
 	appName := GetCleanAppFileName()
 	if cachedAppEnvConfigPathParamName == "" {
-		cachedAppEnvConfigPathParamName = strings.ReplaceAll("-", "_", strings.ToUpper(appName)) + "_" + "CONFIG_PATH"
+		cachedAppEnvConfigPathParamName = strings.ReplaceAll(strings.ToUpper(appName), "-", "_") + "_" + "CONFIG_PATH"
 	}
-	// Check if exists
-	envConfigPath := os.Getenv(cachedAppEnvConfigPathParamName)
+
 	if envConfigPath != "" {
 		return envConfigPath
+	}
+
+	// Check if exists
+	envConfigPath = os.Getenv(cachedAppEnvConfigPathParamName)
+	if envConfigPath != "" {
+		return envConfigPath
+	}
+	return ""
+}
+
+func GetConfigPath() string {
+
+	envFullConfigPath := GetEnvFullConfigPath()
+	if envFullConfigPath != "" {
+		// let's extract the path!
+		return filepath.Dir(envFullConfigPath) + filepath.FromSlash("/")
 	}
 
 	if globalConfigPath != "" {
@@ -45,6 +61,14 @@ func GetConfigFilePath() string {
 	// From the argument list from the process
 	// From the OS Default config path: /etc/.... or Windows somewhere...
 
+	// Check if env is present
+	// Get full config path?!
+	envFullConfigPath := GetEnvFullConfigPath()
+	if envFullConfigPath != "" {
+		// let's extract the path!
+		return envFullConfigPath
+	}
+
 	path := fsPath.Root()
 
 	if path != "" {
@@ -57,7 +81,20 @@ func GetConfigFilePath() string {
 // We should have the same config name if the app name is not changed (doesn't matter if it's on windows or Linux)
 // we should remove the file extension!
 func GetConfigFileName() string {
-	return model.ConfigFileName + "_" + hash.MD5(GetCleanAppFileName())
+	envFullConfigPath := GetEnvFullConfigPath()
+	if envFullConfigPath != "" {
+		// let's extract the path!
+		fullFileName := filepath.Base(envFullConfigPath)
+
+		//if strings.Contains(fullFileName, ".") {
+		//	fullFileNameChunks := strings.Split(fullFileName, ".")
+		//	return fullFileNameChunks[0]
+		//} else {
+		return fullFileName
+		//}
+	}
+
+	return model.ConfigFileName + "_" + hash.MD5(GetCleanAppFileName()) + "." + GetConfigFileType()
 }
 
 func GetCleanAppFileName() string {
@@ -69,11 +106,13 @@ func GetConfigFileType() string {
 }
 
 func GetConfigFullFileName() string {
-	return GetConfigFileName() + "." + GetConfigFileType()
+	//return GetConfigFileName() + "." + GetConfigFileType()
+	return GetConfigFileName()
 }
 
 func GetTmpConfigFileName() string {
-	return model.ConfigTmpFileName + "_" + hash.MD5(GetCleanAppFileName()) + "." + model.ConfigFileType
+	return "tmp_" + GetConfigFileName()
+	//return model.ConfigTmpFileName + "_" + hash.MD5(GetCleanAppFileName()) + "." + model.ConfigFileType
 }
 
 // GetConfigTmpFilePath -> this is the temporary file path of the config... it's only for comparation purpose
@@ -85,14 +124,14 @@ func GetConfigTmpFilePath() string {
 	return path
 }
 
-func GetCustomConfigFilePath() string {
-	// TODO: try reading from environment values or input arguments the path of the config!
-	path := GetConfigPath()
-	if path != "" {
-		path = path + model.CustomConfigFileName + "." + model.CustomConfigFileType
-	}
-	return path
-}
+//func GetCustomConfigFilePath() string {
+//	// TODO: try reading from environment values or input arguments the path of the config!
+//	path := GetConfigPath()
+//	if path != "" {
+//		path = path + model.CustomConfigFileName + "." + model.CustomConfigFileType
+//	}
+//	return path
+//}
 
 func IsConfigExists() bool {
 	path := GetConfigFilePath()
@@ -102,15 +141,15 @@ func IsConfigExists() bool {
 	return file.Exists(path)
 }
 
-func IsCustomConfigExists() bool {
-	path := GetCustomConfigFilePath()
-	if path == "" {
-		return false
-	}
-	return file.Exists(path)
-}
+//func IsCustomConfigExists() bool {
+//	path := GetCustomConfigFilePath()
+//	if path == "" {
+//		return false
+//	}
+//	return file.Exists(path)
+//}
 
-func IsConfigValid() bool {
-	// TODO: load through viper and check if loaded!
-	return true
-}
+//func IsConfigValid() bool {
+//	// TODO: load through viper and check if loaded!
+//	return true
+//}
