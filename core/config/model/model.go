@@ -32,6 +32,7 @@ const ConfigFileName = "config"
 const ConfigTmpFileName = "config.tmp"
 const ConfigFileType = "yaml"
 
+//
 // Tag mapstructure - how it's being read from file!
 // yaml and after that name, it's how it's saved!
 // default is the default value of the element, check -> https://github.com/creasty/defaults for docs
