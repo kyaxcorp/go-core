@@ -32,6 +32,7 @@ const ConfigFileName = "config"
 const ConfigTmpFileName = "config.tmp"
 const ConfigFileType = "yaml"
 
+//
 // Tag mapstructure - how it's being read from file!
 // yaml and after that name, it's how it's saved!
 // default is the default value of the element, check -> https://github.com/creasty/defaults for docs
@@ -78,20 +79,21 @@ type Model struct {
 	// Different connections to different services
 	Clients struct {
 		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach"`
-		MySQL           struct {
-			DefaultConn struct {
-				// This is the default Instance Name
-				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
-			}
-			Instances map[string]mysqlConfig.Config
-		}
-		Cockroach struct {
+		Cockroach       struct {
 			// This is the default connection name -> from which we
 			DefaultConn struct {
 				// This is the default Instance Name
 				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
 			}
 			Instances map[string]cockroachConfig.Config
+		}
+		// TODO: add PgSQL as a separate
+		MySQL struct {
+			DefaultConn struct {
+				// This is the default Instance Name
+				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
+			}
+			Instances map[string]mysqlConfig.Config
 		}
 		Redis struct {
 			Instances struct {
