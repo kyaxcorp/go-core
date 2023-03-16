@@ -45,10 +45,10 @@ type Model struct {
 	// Application params (Which are custom defined by the user
 	Application struct {
 		// CurrentWorkingDirectory -> you can override this value! if nothing is set, no change will be performed, check IfEmptyCWDSetToExecPath
-		CurrentWorkingDirectory string `yaml:"current_working_directory" mapstructure:"current_working_directory" default:""`
+		CurrentWorkingDirectory string `yaml:"current_working_directory" mapstructure:"current_working_directory" default:"" env:"APP_CURRENT_WORKING_DIR"`
 		// IfEmptyCWDSetToExecPath -> if no CurrentWorkingDirectory has been set, then it will bet set to the current executable's path!
 		// if it's no, then the default CWD will remain!
-		IfEmptyCWDSetToExecPath string `yaml:"if_empty_cwd_set_to_exec_path" mapstructure:"if_empty_cwd_set_to_exec_path" default:"yes"`
+		IfEmptyCWDSetToExecPath string `yaml:"if_empty_cwd_set_to_exec_path" mapstructure:"if_empty_cwd_set_to_exec_path" default:"yes" env:"APP_IF_EMPTY_CWD_SET_TO_EXEC_PATH"`
 		// Stage -> prod, dev, beta, testing etc...
 		Stage string `yaml:"stage" mapstructure:"stage" default:"dev"`
 		// App Data Path (all other subfolders will be stored there...)
