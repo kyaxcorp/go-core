@@ -236,6 +236,8 @@ func StartAutoLoader(c Config) error {
 		}
 	}
 
+	// TODO: try adding env tags
+
 	// ===================== ENV ========================\\
 	if _err = env.Parse(&cfgData.MainConfig); _err != nil {
 		return err.New(0, "failed to set env variables for MainConfig -> ", _err.Error())
@@ -244,6 +246,9 @@ func StartAutoLoader(c Config) error {
 	if _err = env.Parse(c.CustomConfig); _err != nil {
 		return err.New(0, "failed to set env variables for CustomConfig -> ", _err.Error())
 	}
+
+	// Now try Checking manually for env variables... and if they exist, try overriding the values from the config!
+	setEnv()
 	// ===================== ENV ========================\\
 
 	// Launch config watcher... if something changes, we will notify the others
