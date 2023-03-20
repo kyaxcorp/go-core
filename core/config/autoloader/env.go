@@ -20,6 +20,9 @@ func setEnv() error {
 	//---------------------------------------------------------------------------------\\
 	//-----------------------\\    COCKROACHDB CLIENT    //----------------------------\\
 	//---------------------------------------------------------------------------------\\
+	// TODO: try adding the tags into the model, so the info will be more generalized...
+	// 		create a function which will read the tags as a suffix!
+
 	for connectionName, dbInstance := range cfgData.MainConfig.Clients.Cockroach.Instances {
 
 		if host := os.Getenv(getInstanceEnvVarName(connectionName, "CRDB_HOST")); host != "" {
