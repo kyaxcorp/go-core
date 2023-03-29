@@ -7,6 +7,9 @@ import (
 )
 
 func IsDuplicateKey(_err error) bool {
+	if _err == nil {
+		return false
+	}
 	if pgError := _err.(*pgconn.PgError); errors.Is(_err, pgError) {
 		switch pgError.Code {
 		case "23505":
