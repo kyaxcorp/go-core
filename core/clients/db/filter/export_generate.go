@@ -54,8 +54,11 @@ func (e *Export) GenerateExcel() bool {
 	f := excelize.NewFile()
 
 	sheetName := "Sheet1"
-	sheetIndex := f.GetSheetIndex(sheetName)
-
+	sheetIndex, _err := f.GetSheetIndex(sheetName)
+	if _err != nil {
+		e.excelError = _err
+		return false
+	}
 	// First, let's create the struct for speeding up the process!
 
 	type HeaderField struct {
@@ -72,7 +75,6 @@ func (e *Export) GenerateExcel() bool {
 	//firstRow := e.items[0]
 	// TODO: later on if no columns defined, we can set to get from the DB or model/table
 
-	var _err error
 	//var mFields = make(map[string]string)
 	//if e.Model != nil {
 	//	mFields, _err = dbHelper.GetModelMapWithDBColumns(e.Model, true)
@@ -455,12 +457,12 @@ func (e *Export) GetNrOfRows() int64 {
 	return e.nrOfRows
 }
 
-//func (e *Export) GetItems() []map[string]interface{} {
+// func (e *Export) GetItems() []map[string]interface{} {
 func (e *Export) GetItems() interface{} {
 	return e.items
 }
 
-//func (e *Export) SetItems(items []map[string]interface{}) *Export {
+// func (e *Export) SetItems(items []map[string]interface{}) *Export {
 func (e *Export) SetItems(items interface{}) *Export {
 	e.itemsSet = true
 	e.items = items
