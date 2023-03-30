@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 import (
 	"gorm.io/gorm"

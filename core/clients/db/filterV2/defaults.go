@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 const (
 	DefaultPageNr       int64 = 1

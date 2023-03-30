@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 type Condition struct {
 	Or *bool `json:"or"`

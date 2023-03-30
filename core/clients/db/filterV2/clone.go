@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 func (f *Input) NewInstanceWithConditions() *Input {
 	pageNr := *f.PageNr
