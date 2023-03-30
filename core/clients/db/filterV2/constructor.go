@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 func New(f *Input) *Input {
 	if f == nil {

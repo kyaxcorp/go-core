@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 import (
 	"github.com/kyaxcorp/go-core/core/clients/db/helper"

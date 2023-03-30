@@ -1,4 +1,4 @@
-package filter
+package filterV2
 
 type HigherOrEqual struct {
 	Name  string `json:"name"`
