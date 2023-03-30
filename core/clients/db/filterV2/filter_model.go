@@ -7,15 +7,15 @@ import (
 
 type Counters struct {
 	// how many items there are in the db without pagination
-	TotalItems int64
+	TotalItems int64 `json:"total_items"`
 	// how many pages there are based on the requested nr of items
-	TotalPages int64
+	TotalPages int64 `json:"total_pages"`
 	// How many items have been requested
-	RequestedNrOfItems int64
+	RequestedNrOfItems int64 `json:"requested_nr_of_items"`
 	// what is the requested page nr
-	RequestedPageNr int64
+	RequestedPageNr int64 `json:"requested_page_nr"`
 	// how many items have been received from the server
-	ReceivedNrOfItems int64
+	ReceivedNrOfItems int64 `json:"received_nr_of_items"`
 }
 
 type Details struct {
