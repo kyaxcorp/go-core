@@ -4,13 +4,13 @@ type Condition struct {
 	Or *bool `json:"Or"`
 	// Group       *GroupCondition `json:"Group"`
 	Eq    *Eq    `json:"Eq"`
-	NotEq *NotEq `json:"NotEq"`
+	NotEq *NotEq `json:"NotEqual"`
 
-	Ht *Ht `json:"Ht"`
-	He *He `json:"He"`
+	Ht *Ht `json:"HigherThan"`
+	He *He `json:"HigherOrEqual"`
 
-	Lt *Lt `json:"Lt"`
-	Le *Le `json:"Le"`
+	Lt *Lt `json:"LowerThan"`
+	Le *Le `json:"LowerOrEqual"`
 
 	Contains    *Contains    `json:"Contains"`
 	NotContains *NotContains `json:"NotContains"`
@@ -27,13 +27,13 @@ type Condition struct {
 	NotIn *NotIn `json:"NotIn"`
 
 	IsNull  *IsNull  `json:"IsNull"`
-	NotNull *NotNull `json:"NotNull"`
+	NotNull *NotNull `json:"IsNotNull"`
 
 	IsTrue  *IsTrue  `json:"IsTrue"`
 	IsFalse *IsFalse `json:"IsFalse"`
 
-	Empty    *Empty    `json:"Empty"`
-	NotEmpty *NotEmpty `json:"NotEmpty"`
+	Empty    *Empty    `json:"IsEmpty"`
+	NotEmpty *NotEmpty `json:"IsNotEmpty"`
 
 	Between    *Between    `json:"Between"`
 	NotBetween *NotBetween `json:"NotBetween"`

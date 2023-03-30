@@ -134,7 +134,7 @@ func (c *AddCmd) StopProcess() (bool, error) {
 
 	//log.Println(pid)
 	if pid == "" {
-		//log.Println("PID Empty...")
+		//log.Println("PID IsEmpty...")
 		return false, define.Err(0, "pid empty")
 	}
 

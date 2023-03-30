@@ -82,41 +82,41 @@ func (f *Input) processGroupCondition(input *GroupConditionInput) *gorm.DB {
 			like := "LIKE"
 
 			var dbFieldName string
-			if cond.Eq != nil && cond.Eq.Name != "" {
-				validateFieldNameAndPanic(cond.Eq.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.Eq.Name)
+			if cond.Equal != nil && cond.Equal.Name != "" {
+				validateFieldNameAndPanic(cond.Equal.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.Equal.Name)
 				dbParams.Query = dbFieldName + " = ?"
-				dbParams.Args = []interface{}{cond.Eq.Value}
-				//db = db.Where(cond.Eq.Name+" = ?", cond.Eq.Value)
-			} else if cond.NotEq != nil && cond.NotEq.Name != "" {
-				validateFieldNameAndPanic(cond.NotEq.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.NotEq.Name)
+				dbParams.Args = []interface{}{cond.Equal.Value}
+				//db = db.Where(cond.Equal.Name+" = ?", cond.Equal.Value)
+			} else if cond.NotEqual != nil && cond.NotEqual.Name != "" {
+				validateFieldNameAndPanic(cond.NotEqual.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.NotEqual.Name)
 				dbParams.Query = dbFieldName + " != ?"
-				dbParams.Args = []interface{}{cond.NotEq.Value}
+				dbParams.Args = []interface{}{cond.NotEqual.Value}
 				//db = db.Where(cond.NotEqual.Name+" != ?", cond.NotEqual.Value)
-			} else if cond.Ht != nil && cond.Ht.Name != "" {
-				validateFieldNameAndPanic(cond.Ht.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.Ht.Name)
+			} else if cond.HigherThan != nil && cond.HigherThan.Name != "" {
+				validateFieldNameAndPanic(cond.HigherThan.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.HigherThan.Name)
 				dbParams.Query = dbFieldName + " > ?"
-				dbParams.Args = []interface{}{cond.Ht.Value}
+				dbParams.Args = []interface{}{cond.HigherThan.Value}
 				//db = db.Where(cond.HigherThan.Name+" > ?", cond.HigherThan.Value)
-			} else if cond.He != nil && cond.He.Name != "" {
-				validateFieldNameAndPanic(cond.He.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.He.Name)
+			} else if cond.HigherOrEqual != nil && cond.HigherOrEqual.Name != "" {
+				validateFieldNameAndPanic(cond.HigherOrEqual.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.HigherOrEqual.Name)
 				dbParams.Query = dbFieldName + " >= ?"
-				dbParams.Args = []interface{}{cond.He.Value}
+				dbParams.Args = []interface{}{cond.HigherOrEqual.Value}
 				//db = db.Where(cond.HigherOrEqual.Name+" >= ?", cond.HigherOrEqual.Value)
-			} else if cond.Lt != nil && cond.Lt.Name != "" {
-				validateFieldNameAndPanic(cond.Lt.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.Lt.Name)
+			} else if cond.LowerThan != nil && cond.LowerThan.Name != "" {
+				validateFieldNameAndPanic(cond.LowerThan.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.LowerThan.Name)
 				dbParams.Query = dbFieldName + " < ?"
-				dbParams.Args = []interface{}{cond.Lt.Value}
+				dbParams.Args = []interface{}{cond.LowerThan.Value}
 				//db = db.Where(cond.LowerThan.Name+" < ?", cond.LowerThan.Value)
-			} else if cond.Le != nil && cond.Le.Name != "" {
-				validateFieldNameAndPanic(cond.Le.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.Le.Name)
+			} else if cond.LowerOrEqual != nil && cond.LowerOrEqual.Name != "" {
+				validateFieldNameAndPanic(cond.LowerOrEqual.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.LowerOrEqual.Name)
 				dbParams.Query = dbFieldName + " <= ?"
-				dbParams.Args = []interface{}{cond.Le.Value}
+				dbParams.Args = []interface{}{cond.LowerOrEqual.Value}
 				//db = db.Where(cond.LowerOrEqual.Name+" <= ?", cond.LowerOrEqual.Value)
 			} else if cond.Contains != nil && cond.Contains.Name != "" {
 				validateFieldNameAndPanic(cond.Contains.Name)
@@ -190,21 +190,21 @@ func (f *Input) processGroupCondition(input *GroupConditionInput) *gorm.DB {
 				dbParams.Query = dbFieldName + " IS NULL"
 				dbParams.Args = []interface{}{}
 				//db = db.Where(cond.IsNull.Name + " IS NULL")
-			} else if cond.NotNull != nil && cond.NotNull.Name != "" {
-				validateFieldNameAndPanic(cond.NotNull.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.NotNull.Name)
+			} else if cond.IsNotNull != nil && cond.IsNotNull.Name != "" {
+				validateFieldNameAndPanic(cond.IsNotNull.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.IsNotNull.Name)
 				dbParams.Query = dbFieldName + " NOT NULL"
 				dbParams.Args = []interface{}{}
 				//db = db.Where(cond.IsNotNull.Name + " NOT NULL")
-			} else if cond.Empty != nil && cond.Empty.Name != "" {
-				validateFieldNameAndPanic(cond.Empty.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.Empty.Name)
+			} else if cond.IsEmpty != nil && cond.IsEmpty.Name != "" {
+				validateFieldNameAndPanic(cond.IsEmpty.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.IsEmpty.Name)
 				dbParams.Query = "(" + dbFieldName + " ='' OR " + dbFieldName + " IS NULL)"
 				dbParams.Args = []interface{}{}
 				//db = db.Where("(" + cond.IsEmpty.Name + " ='' OR " + cond.IsEmpty.Name + " IS NULL)")
-			} else if cond.NotEmpty != nil && cond.NotEmpty.Name != "" {
-				validateFieldNameAndPanic(cond.NotEmpty.Name)
-				dbFieldName = f.getDBFieldNameOrPanic(cond.NotEmpty.Name)
+			} else if cond.IsNotEmpty != nil && cond.IsNotEmpty.Name != "" {
+				validateFieldNameAndPanic(cond.IsNotEmpty.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.IsNotEmpty.Name)
 				dbParams.Query = "(" + dbFieldName + " !='' AND " + dbFieldName + " NOT NULL)"
 				dbParams.Args = []interface{}{}
 				//db = db.Where("(" + cond.IsNotEmpty.Name + " !='' AND " + cond.IsNotEmpty.Name + " NOT NULL)")
@@ -224,13 +224,13 @@ func (f *Input) processGroupCondition(input *GroupConditionInput) *gorm.DB {
 				validateFieldNameAndPanic(cond.Between.Name)
 				dbFieldName = f.getDBFieldNameOrPanic(cond.Between.Name)
 				dbParams.Query = "(" + dbFieldName + " BETWEEN ? AND ? )"
-				dbParams.Args = []interface{}{cond.Between.Value1, cond.Between.Value2}
+				dbParams.Args = []interface{}{cond.Between.Start, cond.Between.End}
 				//db = db.Where("("+cond.Between.Name+" BETWEEN ? AND ? )", cond.Between.Start, cond.Between.End)
 			} else if cond.NotBetween != nil && cond.NotBetween.Name != "" {
 				validateFieldNameAndPanic(cond.NotBetween.Name)
 				dbFieldName = f.getDBFieldNameOrPanic(cond.NotBetween.Name)
 				dbParams.Query = "(" + dbFieldName + " NOT BETWEEN ? AND ? )"
-				dbParams.Args = []interface{}{cond.NotBetween.Value1, cond.NotBetween.Value2}
+				dbParams.Args = []interface{}{cond.NotBetween.Start, cond.NotBetween.End}
 				//db = db.Where("("+cond.NotBetween.Name+" NOT BETWEEN ? AND ? )", cond.NotBetween.Start, cond.NotBetween.End)
 			}
 

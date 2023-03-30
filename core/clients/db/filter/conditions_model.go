@@ -48,8 +48,8 @@ type NotEndsWith struct {
 
 type Between struct {
 	Name   string  `json:"Name"`
-	Value1 *string `json:"Value1"`
-	Value2 *string `json:"Value2"`
+	Value1 *string `json:"Start"`
+	Value2 *string `json:"End"`
 }
 
 type Empty struct {
@@ -78,8 +78,8 @@ type Lt struct {
 
 type NotBetween struct {
 	Name   string  `json:"Name"`
-	Value1 *string `json:"Value1"`
-	Value2 *string `json:"Value2"`
+	Value1 *string `json:"Start"`
+	Value2 *string `json:"End"`
 }
 
 type NotEmpty struct {
