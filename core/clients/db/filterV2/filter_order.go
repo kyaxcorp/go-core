@@ -15,11 +15,11 @@ func (f *Input) applyOrdering(db *gorm.DB) (rdb *gorm.DB) {
 
 	rdb = db.Scopes()
 
-	if f.Order == nil || len(f.Order) == 0 {
+	if f.OrderBy == nil || len(f.OrderBy) == 0 {
 		return
 	}
 
-	for _, o := range f.Order {
+	for _, o := range f.OrderBy {
 		// Check if field exists?!
 
 		// Checking against injection!
