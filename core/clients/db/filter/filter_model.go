@@ -37,7 +37,7 @@ type Input struct {
 	// maxNrOfItems -> don't allow this param to be controlled by the front end part... it's a security measure!
 	maxNrOfItems *int64
 	// it allows to go higher than 1000 limit!
-	Order          []*Order        `json:"Order"`
+	Order          []*Order        `json:"OrderBy"`
 	Search         *string         `json:"Search"`
 	RootConditions *GroupCondition `json:"RootConditions"`
 
