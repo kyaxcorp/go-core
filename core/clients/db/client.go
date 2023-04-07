@@ -90,6 +90,10 @@ func DB() *gorm.DB {
 	return _db
 }
 
+func DBCtx(ctx context.Context) *gorm.DB {
+	return DB().WithContext(ctx)
+}
+
 // NewClient ->  Get the default driver and generate a new client...
 func NewClient(instanceName string) (*gorm.DB, error) {
 	cl := getDefaultDBClient()
