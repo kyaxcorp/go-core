@@ -59,5 +59,22 @@ func setEnv() error {
 	//-----------------------\\    COCKROACHDB CLIENT    //----------------------------\\
 	//---------------------------------------------------------------------------------\\
 
+	//
+
+	//---------------------------------------------------------------------------------\\
+	//-----------------------\\    HTTP SERVER/LISTENER    //--------------------------\\
+	//---------------------------------------------------------------------------------\\
+	for instanceName, instance := range cfgData.MainConfig.Listeners.Http.Instances {
+		// Comma separated
+		if listeningAddresses := os.Getenv(getInstanceEnvVarName(instanceName, "HTTP_LISTENING_ADDRESSES")); listeningAddresses != "" {
+			addresses := strings.Split(listeningAddresses, ",")
+			instance.ListeningAddresses = addresses
+		}
+		cfgData.MainConfig.Listeners.Http.Instances[instanceName] = instance
+	}
+	//---------------------------------------------------------------------------------\\
+	//-----------------------\\    HTTP SERVER/LISTENER    //--------------------------\\
+	//---------------------------------------------------------------------------------\\
+
 	return _err
 }
