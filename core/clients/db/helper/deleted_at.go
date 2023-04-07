@@ -14,6 +14,11 @@ func DeletedAt(t *time.Time) gorm.DeletedAt {
 	return deletedAt
 }
 
+func DeletedAtP(t *time.Time) *gorm.DeletedAt {
+	d := DeletedAt(t)
+	return &d
+}
+
 func DeletedAtNow() gorm.DeletedAt {
 	deletedAt := gorm.DeletedAt{}
 	deletedAt.Time = time.Now()
