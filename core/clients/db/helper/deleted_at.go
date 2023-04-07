@@ -20,3 +20,8 @@ func DeletedAtNow() gorm.DeletedAt {
 	deletedAt.Valid = true
 	return deletedAt
 }
+
+func DeletedAtNowP() *gorm.DeletedAt {
+	d := DeletedAtNow()
+	return &d
+}
