@@ -13,3 +13,10 @@ func DeletedAt(t *time.Time) gorm.DeletedAt {
 	}
 	return deletedAt
 }
+
+func DeletedAtNow() gorm.DeletedAt {
+	deletedAt := gorm.DeletedAt{}
+	deletedAt.Time = time.Now()
+	deletedAt.Valid = true
+	return deletedAt
+}
