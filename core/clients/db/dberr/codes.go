@@ -1,7 +1,6 @@
 package dberr
 
 import (
-	"errors"
 	"github.com/go-sql-driver/mysql"
 	"github.com/jackc/pgx/v5/pgconn"
 )
@@ -10,13 +9,14 @@ func IsDuplicateKey(_err error) bool {
 	if _err == nil {
 		return false
 	}
-	if pgError := _err.(*pgconn.PgError); errors.Is(_err, pgError) {
-		switch pgError.Code {
+	switch t := _err.(type) {
+	case *pgconn.PgError:
+		switch t.Code {
 		case "23505":
 			return true
 		}
-	} else if mysqlErr := _err.(*mysql.MySQLError); errors.Is(_err, mysqlErr) {
-		switch mysqlErr.Number {
+	case *mysql.MySQLError:
+		switch t.Number {
 		case 1062:
 			return true
 		}
