@@ -19,7 +19,7 @@ type DeleteInput struct {
 
 // We created these functions because GORM doesn't allow setting additional data When Calling Delete function!
 
-func Delete(input DeleteInput) (_err error) {
+func DeleteV3(input DeleteInput) (_err error) {
 	var dbc *gorm.DB
 	if input.DB == nil {
 		dbc = db.DBCtx(input.Ctx)
@@ -81,5 +81,24 @@ func DeleteV2(input DeleteInput) (_err error) {
 		return nil
 	})
 
+	return
+}
+
+// Delete -> it will work only in case if UpdateOnSoftDelete
+// Tag has been set in Model gorm Tag
+func Delete(input DeleteInput) (_err error) {
+	var dbc *gorm.DB
+	if input.DB == nil {
+		dbc = db.DBCtx(input.Ctx)
+	} else {
+		dbc = input.DB
+	}
+
+	_struct.SetAny(input.Record, "DeletedByID", &input.UserID)
+	result := dbc.Delete(input.Record)
+	if result.Error != nil {
+		_err = result.Error
+		return
+	}
 	return
 }
