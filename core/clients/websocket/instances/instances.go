@@ -2,7 +2,7 @@ package instances
 
 import (
 	"github.com/kyaxcorp/go-core/core/clients/websocket/client"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"sync"
 )
 

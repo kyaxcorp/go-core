@@ -2,7 +2,7 @@ package _struct
 
 import (
 	"github.com/kyaxcorp/go-core/core/helpers/_int"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"reflect"
 	"strings"
 )

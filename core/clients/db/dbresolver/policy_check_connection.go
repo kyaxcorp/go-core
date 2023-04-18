@@ -3,7 +3,7 @@ package dbresolver
 import (
 	"context"
 	"github.com/gookit/color"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 	"time"
@@ -109,14 +109,14 @@ retry:
 		if !isPingRetryEnabled {
 			errorMsg := "ping retry is disabled"
 			_error().Msg(errorMsg)
-			return nil, err.New(0, errorMsg)
+			return nil, errors2.New(0, errorMsg)
 		}
 
 		if retryTime >= int(pingRetryTimes) && pingRetryTimes != -1 {
 			// If we have exhausted or retry times...
 			errorMsg := "retry times exhausted"
 			_error().Msg(errorMsg)
-			return nil, err.New(0, errorMsg)
+			return nil, errors2.New(0, errorMsg)
 		} else {
 			debug().Msg("sleeping, and after that retrying...")
 			// Retry again...

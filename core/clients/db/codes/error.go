@@ -1,7 +1,7 @@
 package codes
 
 import (
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"gorm.io/gorm"
 )
 
@@ -39,10 +39,8 @@ const ErrCodeFailedToRunResolversManagerMonitoringGoroutine = 204
 
 const ErrCodeNoActiveMasters = 205
 
-//
 const ErrCodeFailedToStartConnectionsMonitoringForResolver = 206
 
-//
 const ErrCodeFailedToStartResolversMonitoring = 207
 
 const ErrCodeRetryTimesExhaustedForSearchActiveResolvers = 208
@@ -53,7 +51,6 @@ const ErrCodeDbClientInstanceNameEmpty = 212
 const ErrCodeDbInstanceConfigurationIsMissing = 214
 const ErrCodeDriverNoDefaultConfigFound = 215
 
-//
 const ErrCodeNoResolversHaveBeenFound = 216
 const ErrCodeNoSourcesHaveBeenFoundForResolver = 217
 const ErrCodeNoSourcesHaveBeenFoundForAnyResolver = 218
@@ -94,22 +91,18 @@ var ErrFailedToRunResolversManagerMonitoringGoroutine = define.Err(ErrCodeFailed
 
 var ErrNoActiveMasters = define.Err(ErrCodeNoActiveMasters, "no active master resolvers")
 
-//
 var ErrFailedToStartConnectionsMonitoringForResolver = define.Err(ErrCodeFailedToStartConnectionsMonitoringForResolver, "failed to start connections monitoring for resolver")
 
-//
 var ErrFailedToStartResolversMonitoring = define.Err(ErrCodeFailedToStartResolversMonitoring, "failed to start resolvers monitoring")
 var ErrRetryTimesExhaustedForSearchActiveResolvers = define.Err(ErrCodeRetryTimesExhaustedForSearchActiveResolvers, "retry times exhausted for search active resolvers")
 var ErrConnPoolNilNoConnectionFound = define.Err(ErrCodeConnPoolNilNoConnectionFound, "no active masters (db resolvers), check error types...")
 
-//
 var ErrDbInstanceIsMissing = define.Err(ErrCodeDbInstanceIsMissing, "db instance is missing")
 var ErrDefaultDbInstanceNameIsEmpty = define.Err(ErrCodeDefaultDbInstanceNameIsEmpty, "default db instance name is empty")
 var ErrDbClientInstanceNameEmpty = define.Err(ErrCodeDbClientInstanceNameEmpty, "db client instance name is empty")
 var ErrDbInstanceConfigurationIsMissing = define.Err(ErrCodeDbInstanceConfigurationIsMissing, "db client instance configuration is missing")
 var ErrDriverNoDefaultConfigFound = define.Err(ErrCodeDriverNoDefaultConfigFound, "driver hasn't any default config")
 
-//
 var ErrNoResolversHaveBeenFound = define.Err(ErrCodeNoResolversHaveBeenFound, "no resolvers have have been defined/found in the config")
 var ErrNoSourcesHaveBeenFoundForResolver = define.Err(ErrCodeNoSourcesHaveBeenFoundForResolver, "no sources have been defined/found for the resolver in the config")
 var ErrNoSourcesHaveBeenFoundForAnyResolver = define.Err(ErrCodeNoSourcesHaveBeenFoundForAnyResolver, "no sources have been defined/found for any resolver in the config")

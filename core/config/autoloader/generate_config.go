@@ -3,7 +3,7 @@ package autoloader
 import (
 	"github.com/kyaxcorp/go-core/core/config/model"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
 	"github.com/spf13/viper"
 )
@@ -13,12 +13,12 @@ import (
 func GenerateConfig() error {
 	configPath := GetConfigPath()
 	if configPath == "" {
-		return err.New(0, "config path is empty...")
+		return errors2.New(0, "config path is empty...")
 	}
 
 	configFilePath := GetConfigFilePath()
 	if configFilePath == "" {
-		return err.New(0, "config file path is empty...")
+		return errors2.New(0, "config file path is empty...")
 	}
 
 	// We add the name as config path for uniqueness because multiple processes can read the same file!
@@ -27,7 +27,7 @@ func GenerateConfig() error {
 	// That will not degrade much in performance, but still will be a small slow down
 	if isLockAcquired, lockErr := lock.FLock(configFilePath, true); !isLockAcquired || lockErr != nil {
 		// Here we have some kind of error?!
-		return err.New(0, "failed to lock config file -> ", lockErr.Error())
+		return errors2.New(0, "failed to lock config file -> ", lockErr.Error())
 	}
 	// Release the file lock on return
 	defer lock.FRelease(configFilePath)
@@ -52,7 +52,7 @@ func GenerateConfig() error {
 	_err := v.SafeWriteConfigAs(configFilePath)
 	if _err != nil {
 		// log.Println("Failed to generate default config!")
-		return err.New(0, "failed to generate default config -> "+_err.Error())
+		return errors2.New(0, "failed to generate default config -> "+_err.Error())
 	}
 	return nil
 }

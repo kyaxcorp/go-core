@@ -11,7 +11,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct/defaults"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"math/big"
@@ -83,7 +83,7 @@ func GenerateCerts(scope string, options *CertGeneration) error {
 	}
 
 	if len(options.Host) == 0 {
-		return err.New(0, "Missing required host parameter")
+		return errors2.New(0, "Missing required host parameter")
 	}
 
 	var priv interface{}
@@ -104,11 +104,11 @@ func GenerateCerts(scope string, options *CertGeneration) error {
 		priv, _err = ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
 	default:
 		//log.Fatalf("Unrecognized elliptic curve: %q", options.EcdsaCurve)
-		return err.New(0, fmt.Sprintf("Unrecognized elliptic curve: %q", options.EcdsaCurve))
+		return errors2.New(0, fmt.Sprintf("Unrecognized elliptic curve: %q", options.EcdsaCurve))
 	}
 	if _err != nil {
 		// log.Fatalf("Failed to generate private key: %v", _err)
-		return err.New(0, fmt.Sprintf("Failed to generate private key: %v", _err))
+		return errors2.New(0, fmt.Sprintf("Failed to generate private key: %v", _err))
 	}
 
 	// ECDSA, ED25519 and RSA subject keys should have the DigitalSignature
@@ -128,7 +128,7 @@ func GenerateCerts(scope string, options *CertGeneration) error {
 		notBefore, _err = time.Parse("Jan 2 15:04:05 2006", options.ValidFrom)
 		if _err != nil {
 			// log.Fatalf("Failed to parse creation date: %v", _err)
-			return err.New(0, fmt.Sprintf("Failed to parse creation date: %v", _err))
+			return errors2.New(0, fmt.Sprintf("Failed to parse creation date: %v", _err))
 		}
 	}
 
@@ -138,7 +138,7 @@ func GenerateCerts(scope string, options *CertGeneration) error {
 	serialNumber, _err := rand.Int(rand.Reader, serialNumberLimit)
 	if _err != nil {
 		// log.Fatalf("Failed to generate serial number: %v", _err)
-		return err.New(0, fmt.Sprintf("Failed to generate serial number: %v", _err))
+		return errors2.New(0, fmt.Sprintf("Failed to generate serial number: %v", _err))
 	}
 
 	template := x509.Certificate{
@@ -171,51 +171,51 @@ func GenerateCerts(scope string, options *CertGeneration) error {
 	derBytes, _err := x509.CreateCertificate(rand.Reader, &template, &template, publicKey(priv), priv)
 	if _err != nil {
 		// log.Fatalf("Failed to create certificate: %v", _err)
-		return err.New(0, fmt.Sprintf("Failed to create certificate: %v", _err))
+		return errors2.New(0, fmt.Sprintf("Failed to create certificate: %v", _err))
 	}
 
 	certOut, _err := os.Create(certPath)
 	if _err != nil {
 		//log.Fatalf("Failed to open cert.pem for writing: %v", _err)
-		return err.New(0, fmt.Sprintf("Failed to open cert.pem for writing: %v", _err))
+		return errors2.New(0, fmt.Sprintf("Failed to open cert.pem for writing: %v", _err))
 
 	}
 	if er := pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); er != nil {
 		//log.Fatalf("Failed to write data to cert.pem: %v", err)
-		return err.New(0, fmt.Sprintf("Failed to write data to cert.pem: %v", er))
+		return errors2.New(0, fmt.Sprintf("Failed to write data to cert.pem: %v", er))
 	}
 	if er := certOut.Close(); er != nil {
 		//log.Fatalf("Error closing cert.pem: %v", err)
-		return err.New(0, fmt.Sprintf("Error closing cert.pem: %v", er))
+		return errors2.New(0, fmt.Sprintf("Error closing cert.pem: %v", er))
 	}
 	//log.Print("wrote cert.pem\n")
 
 	keyOut, _err := os.OpenFile(keyPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if _err != nil {
 		//log.Fatalf("Failed to open key.pem for writing: %v", _err)
-		return err.New(0, fmt.Sprintf("Failed to open key.pem for writing: %v", _err))
+		return errors2.New(0, fmt.Sprintf("Failed to open key.pem for writing: %v", _err))
 	}
 	privBytes, _err := x509.MarshalPKCS8PrivateKey(priv)
 	if _err != nil {
 		//log.Fatalf("Unable to marshal private key: %v", _err)
-		return err.New(0, fmt.Sprintf("Unable to marshal private key: %v", _err))
+		return errors2.New(0, fmt.Sprintf("Unable to marshal private key: %v", _err))
 	}
 	if er := pem.Encode(keyOut, &pem.Block{Type: "PRIVATE KEY", Bytes: privBytes}); er != nil {
 		//log.Fatalf("Failed to write data to key.pem: %v", err)
-		return err.New(0, fmt.Sprintf("Failed to write data to key.pem: %v", er))
+		return errors2.New(0, fmt.Sprintf("Failed to write data to key.pem: %v", er))
 	}
 	if er := keyOut.Close(); er != nil {
 		//log.Fatalf("Error closing key.pem: %v", err)
-		return err.New(0, fmt.Sprintf("Error closing key.pem: %v", er))
+		return errors2.New(0, fmt.Sprintf("Error closing key.pem: %v", er))
 	}
 	//log.Print("wrote key.pem\n")
 	// Check if files exist
 
 	if !file.Exists(options.CertPath) {
-		return err.New(0, "cert file doesn't exist", options.CertPath)
+		return errors2.New(0, "cert file doesn't exist", options.CertPath)
 	}
 	if !file.Exists(options.KeyPath) {
-		return err.New(0, "key file doesn't exist", options.KeyPath)
+		return errors2.New(0, "key file doesn't exist", options.KeyPath)
 	}
 
 	return nil

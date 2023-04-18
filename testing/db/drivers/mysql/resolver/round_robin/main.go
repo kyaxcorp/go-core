@@ -9,7 +9,7 @@ import (
 	configLoader "github.com/kyaxcorp/go-core/core/config/autoloader"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/helpers/version"
 	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
 	"log"
@@ -44,7 +44,7 @@ func LoadConfigs() bool {
 		AdditionalLoggingChannels: nil,
 	}); _err != nil {
 		msg := "Failed to load Main configuration file!" + " -> " + _err.Error()
-		err.New(0, msg)
+		errors2.New(0, msg)
 		fmt.Println(msg)
 		return false
 	}

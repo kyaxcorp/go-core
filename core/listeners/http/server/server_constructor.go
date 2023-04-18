@@ -6,7 +6,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/helpers/certs"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/sync/_bool"
