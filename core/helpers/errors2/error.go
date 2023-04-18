@@ -1,6 +1,7 @@
 package errors2
 
 import (
+	"errors"
 	"github.com/kyaxcorp/go-core/core/helpers/error_reporting"
 	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
@@ -82,6 +83,15 @@ func BeforeReport(report func(e *define.GeneralError) bool) {
 		reportHandlerSet = true
 		callbackToReport = report
 	}
+}
+
+func IsOneOf(err error, targets ...error) bool {
+	for _, target := range targets {
+		if errors.Is(err, target) {
+			return true
+		}
+	}
+	return false
 }
 
 // NewReport -> This will also report!
