@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/go-core/core/helpers/_interface"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"github.com/kyaxcorp/go-core/core/helpers/json"
 	"gorm.io/gorm"
 	"reflect"
@@ -39,14 +39,14 @@ func (r *Record) getInputOmitFields() []string {
 	return omitFields
 }
 
-//func (r *Record) GetSaveData() map[string]interface{} {
+// func (r *Record) GetSaveData() map[string]interface{} {
 func (r *Record) GetSaveData() interface{} {
 	return r.saveData
 }
 
 // TODO: get save data field and set save data field!
 
-//func (r *Record) SetSaveData(saveData map[string]interface{}) *Record {
+// func (r *Record) SetSaveData(saveData map[string]interface{}) *Record {
 func (r *Record) SetSaveData(saveData interface{}) *Record {
 	r.saveData = saveData
 	return r

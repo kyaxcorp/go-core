@@ -5,7 +5,7 @@ import (
 	"flag"
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"github.com/kyaxcorp/go-core/core/helpers/network/port"
 	"github.com/rs/zerolog"
 	"net/http"

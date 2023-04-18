@@ -9,7 +9,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/config/model"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/lock"
@@ -38,7 +38,7 @@ func StartAutoLoader(c Config) error {
 	var _err error
 
 	if !cfgData.AutoLoaderLaunched.TryLock() {
-		return err.New(0, "failed to lock the loader")
+		return errors2.New(0, "failed to lock the loader")
 	}
 
 	// We should set the default values for the configuration!
@@ -48,7 +48,7 @@ func StartAutoLoader(c Config) error {
 
 	// We set the default values for the custom config!
 	if _err = _struct.SetDefaultValues(c.CustomConfig); _err != nil {
-		return err.New(0, "failed to set default values for CustomConfig -> ", _err)
+		return errors2.New(0, "failed to set default values for CustomConfig -> ", _err)
 		//panic(_err)
 	}
 
@@ -62,12 +62,12 @@ func StartAutoLoader(c Config) error {
 	// The other configuration path should be read also here... from the arguments provided in  the app!?
 	configPath := GetConfigPath()
 	if configPath == "" {
-		return err.New(0, "config path is empty...")
+		return errors2.New(0, "config path is empty...")
 	}
 
 	configFilePath := GetConfigFilePath()
 	if configFilePath == "" {
-		return err.New(0, "config file path is empty...")
+		return errors2.New(0, "config file path is empty...")
 	}
 
 	// We add the name as config path for uniqueness because multiple processes can read the same file!
@@ -76,7 +76,7 @@ func StartAutoLoader(c Config) error {
 	// That will not degrade much in performance, but still will be a small slow down
 	if isLockAcquired, lockErr := lock.FLock(configFilePath, true); !isLockAcquired || lockErr != nil {
 		// Here we have some kind of error?!
-		return err.New(0, "failed to lock config file -> ", lockErr.Error())
+		return errors2.New(0, "failed to lock config file -> ", lockErr.Error())
 	}
 	// Release the file lock on return
 	defer lock.FRelease(configFilePath)
@@ -96,7 +96,7 @@ func StartAutoLoader(c Config) error {
 
 		backupFullPath := GetBackupFullPath()
 		if backupFullPath == "" {
-			return err.New(0, "config Backup Path Folder is empty...")
+			return errors2.New(0, "config Backup Path Folder is empty...")
 		}
 
 		// Keep a max nr of backups in a folder!
@@ -119,14 +119,14 @@ func StartAutoLoader(c Config) error {
 
 		currentConfigChecksum, _err := hash.FileSha256(configFilePath)
 		if _err != nil {
-			return err.New(0, "failed to generate checksum for "+configFilePath+" -> ", _err.Error())
+			return errors2.New(0, "failed to generate checksum for "+configFilePath+" -> ", _err.Error())
 		}
 		createBackup := false
 
 		// Find the last backup file from that directory
 		backups, _err := os.ReadDir(backupFolderPath)
 		if _err != nil {
-			return err.New(0, "failed to read the backups folder -> ", _err.Error())
+			return errors2.New(0, "failed to read the backups folder -> ", _err.Error())
 		}
 
 		if len(backups) > 0 {
@@ -138,7 +138,7 @@ func StartAutoLoader(c Config) error {
 			// Generate the checksum of the backup
 			backupConfigChecksum, _err := hash.FileSha256(lastBackupFullPath)
 			if _err != nil {
-				return err.New(0, "failed to generate checksum for "+backupConfigChecksum+" -> "+_err.Error())
+				return errors2.New(0, "failed to generate checksum for "+backupConfigChecksum+" -> "+_err.Error())
 			}
 
 			// Compare the 2 files and if are different then create the backup!
@@ -159,7 +159,7 @@ func StartAutoLoader(c Config) error {
 
 			_, _err := file.Copy(configFilePath, backupFullPath)
 			if _err != nil {
-				return err.New(0, "failed to create a backup of the current config file! -> "+_err.Error())
+				return errors2.New(0, "failed to create a backup of the current config file! -> "+_err.Error())
 			}
 		}
 	}
@@ -182,7 +182,7 @@ func StartAutoLoader(c Config) error {
 		// Read the current config file
 		_err = cfgData.MainConfigViper.ReadInConfig()
 		if _err != nil {
-			return err.New(0, "failed to read config in viper -> ", _err.Error())
+			return errors2.New(0, "failed to read config in viper -> ", _err.Error())
 		}
 	}
 
@@ -192,7 +192,7 @@ func StartAutoLoader(c Config) error {
 	// This is the Standard Config Structure
 	obj := &model.Model{}
 	if _err = _struct.SetDefaultValues(obj); _err != nil {
-		return err.New(0, "failed to set default values for obj -> ", _err.Error())
+		return errors2.New(0, "failed to set default values for obj -> ", _err.Error())
 	}
 
 	// I'm not sure if i am doing right over here!... but it works... (13.05.2021)
@@ -201,7 +201,7 @@ func StartAutoLoader(c Config) error {
 	// This is the Custom Config Structure
 	objCustom := c.CustomConfigModel
 	if _err = _struct.SetDefaultValues(objCustom); _err != nil {
-		return err.New(0, "failed to set default values for CustomConfigModel -> ", _err.Error())
+		return errors2.New(0, "failed to set default values for CustomConfigModel -> ", _err.Error())
 	}
 	// ==================== DEFAULTS ====================\\
 
@@ -211,12 +211,12 @@ func StartAutoLoader(c Config) error {
 	// c.Sub("main")
 	_err = cfgData.MainConfigViper.UnmarshalKey("main", &cfgData.MainConfig)
 	if _err != nil {
-		return err.New(0, "failed to decode 'main' key from config -> ", _err.Error())
+		return errors2.New(0, "failed to decode 'main' key from config -> ", _err.Error())
 	}
 
 	_err = cfgData.MainConfigViper.UnmarshalKey("custom", c.CustomConfig)
 	if _err != nil {
-		return err.New(0, "failed to decode 'custom' key from config -> ", _err.Error())
+		return errors2.New(0, "failed to decode 'custom' key from config -> ", _err.Error())
 	}
 	// =================== VIPER SET ======================\\
 
@@ -226,13 +226,13 @@ func StartAutoLoader(c Config) error {
 	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
 
 	if _err = setDefaults(c); _err != nil {
-		return err.New(0, "failed to set config defaults -> ", _err.Error())
+		return errors2.New(0, "failed to set config defaults -> ", _err.Error())
 	}
 
 	if isConfigExists {
 		// Save again the config with the newly added/removed keys based on the app structure!
 		if _err = SaveConfigFromMemory(c); _err != nil {
-			return err.New(0, "failed to save config from memory -> ", _err.Error())
+			return errors2.New(0, "failed to save config from memory -> ", _err.Error())
 		}
 	}
 
@@ -240,11 +240,11 @@ func StartAutoLoader(c Config) error {
 
 	// ===================== ENV ========================\\
 	if _err = env.Parse(&cfgData.MainConfig); _err != nil {
-		return err.New(0, "failed to set env variables for MainConfig -> ", _err.Error())
+		return errors2.New(0, "failed to set env variables for MainConfig -> ", _err.Error())
 	}
 
 	if _err = env.Parse(c.CustomConfig); _err != nil {
-		return err.New(0, "failed to set env variables for CustomConfig -> ", _err.Error())
+		return errors2.New(0, "failed to set env variables for CustomConfig -> ", _err.Error())
 	}
 
 	// Now try Checking manually for env variables... and if they exist, try overriding the values from the config!
@@ -297,7 +297,7 @@ func StartAutoLoader(c Config) error {
 	// save in memory same config but as JSON
 	cfgData.MainConfigJson, _err = json.Encode(cfgData.MainConfig)
 	if _err != nil {
-		return err.New(0, "failed to convert MainConfig to json and save it...", _err.Error())
+		return errors2.New(0, "failed to convert MainConfig to json and save it...", _err.Error())
 	}
 
 	// Everything is ok...

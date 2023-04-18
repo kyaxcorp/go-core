@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 )
 
 var WriterError = define.Err(100, "writer error")

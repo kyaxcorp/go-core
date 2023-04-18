@@ -2,7 +2,7 @@ package fsnotify
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"log"
 	"path/filepath"
@@ -110,7 +110,7 @@ func (n *Notifier) Watch(
 
 	// Add the path
 	if path == "" || watchConfig.Callback == nil {
-		err.New(0, "FsNotify - Path empty or callback")
+		errors2.New(0, "FsNotify - Path empty or callback")
 		return n
 	}
 
@@ -122,7 +122,7 @@ func (n *Notifier) Watch(
 		// Add to watcher
 		_err := n.watcher.Add(path)
 		if _err != nil {
-			err.New(0, _err.Error())
+			errors2.New(0, _err.Error())
 			return n
 		}
 	}
@@ -138,7 +138,7 @@ func (n *Notifier) Remove(path string) *Notifier {
 		_err := n.watcher.Remove(path)
 		if _err != nil {
 			// log.Println("Failed removing", _err)
-			err.New(0, "Failed removing -> "+_err.Error())
+			errors2.New(0, "Failed removing -> "+_err.Error())
 			return n
 		}
 		delete(n.watchPaths, path)

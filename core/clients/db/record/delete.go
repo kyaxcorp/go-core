@@ -2,7 +2,7 @@ package record
 
 import (
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"gorm.io/gorm"
 	"time"
 )
@@ -28,7 +28,7 @@ func (r *Record) Delete() bool {
 
 	var result *gorm.DB
 	if r.IsCreateMode() {
-		_err := err.New(0, "record doesn't exist or id not set")
+		_err := errors2.New(0, "record doesn't exist or id not set")
 		r.setDBError(_err)
 		return false
 	} else {
@@ -109,7 +109,7 @@ func (r *Record) ForceDelete() bool {
 
 	var result *gorm.DB
 	if r.IsCreateMode() {
-		_err := err.New(0, "record doesn't exist or id not set")
+		_err := errors2.New(0, "record doesn't exist or id not set")
 		r.setDBError(_err)
 		r.callOnError()
 		r.callOnDeleteError()

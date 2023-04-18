@@ -1,6 +1,6 @@
 package record
 
-import "github.com/kyaxcorp/go-core/core/helpers/err/define"
+import "github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 
 func (r *Record) Exists() (bool, error) {
 	if r.LoadData() {

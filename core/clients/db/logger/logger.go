@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/logger"
 	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
 	"github.com/kyaxcorp/go-core/core/logger/model"
@@ -101,7 +101,7 @@ func (l *GormLogger) Error(
 ) {
 	l.print(l.l().Error(), ctx, msg, data...)
 
-	err.NewCustom(err.CustomError{
+	errors2.NewCustom(errors2.CustomError{
 		Code:    0,
 		Message: "Database Error -> " + l.dbType + " -> " + l.instanceName + " -> " + msg,
 		// We don't need to log this to app logs... because the logger does already
@@ -133,7 +133,7 @@ func (l *GormLogger) Trace(
 			Int64("sql_elapsed_time_ms", elapsed).
 			Err(_err).Msg("" + elapsedInfo)
 		// Sentry
-		err.NewCustom(err.CustomError{
+		errors2.NewCustom(errors2.CustomError{
 			Code: 0,
 			Message: "Database Error -> " +
 				"db type -> " + l.dbType + " -> " +

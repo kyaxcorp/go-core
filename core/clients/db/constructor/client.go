@@ -7,7 +7,7 @@ import (
 	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
 	mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
 	mainConfig "github.com/kyaxcorp/go-core/core/config"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	// mysqlConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/mysql/config"
 	"gorm.io/gorm"
 )
@@ -81,7 +81,7 @@ func (dbc *DBClient) GetClient(
 	instanceName string,
 ) (*gorm.DB, error) {
 	if instanceName == "" {
-		return nil, err.New(0, "mysql client instance name is empty")
+		return nil, errors2.New(0, "mysql client instance name is empty")
 	}
 	// check if there is an existing instance
 	srv, _err := dbc.GetDriverInstance().GetClientByInstanceId(instanceName)
@@ -108,7 +108,7 @@ func (dbc *DBClient) NewClient(
 ) (*gorm.DB, error) {
 	// Check if instance name is ok
 	if instanceName == "" {
-		return nil, err.NewDefined(codes.ErrDbClientInstanceNameEmpty)
+		return nil, errors2.NewDefined(codes.ErrDbClientInstanceNameEmpty)
 	}
 
 	// Get configuration
@@ -116,10 +116,9 @@ func (dbc *DBClient) NewClient(
 		// If config is found... then create a new client
 		return dbc.New(cfg)
 	}
-	return nil, err.NewDefined(codes.ErrDbInstanceConfigurationIsMissing)
+	return nil, errors2.NewDefined(codes.ErrDbInstanceConfigurationIsMissing)
 }
 
-//
 func (dbc *DBClient) GetDefaultGeneratedConfig() (dbDriver.Config, error) {
 	switch dbc.DriverType {
 	case MySQLDriver:
@@ -127,10 +126,9 @@ func (dbc *DBClient) GetDefaultGeneratedConfig() (dbDriver.Config, error) {
 	case CockroachDriver:
 		return cockroachConfig.SetDefaults(nil)
 	}
-	return nil, err.NewDefined(codes.ErrDriverNoDefaultConfigFound)
+	return nil, errors2.NewDefined(codes.ErrDriverNoDefaultConfigFound)
 }
 
-//
 func (dbc *DBClient) GetInstanceConfig(instanceName string) (dbDriver.Config, error) {
 
 	switch dbc.DriverType {
@@ -144,5 +142,5 @@ func (dbc *DBClient) GetInstanceConfig(instanceName string) (dbDriver.Config, er
 		}
 	}
 
-	return nil, err.NewDefined(codes.ErrDbInstanceConfigurationIsMissing)
+	return nil, errors2.NewDefined(codes.ErrDbInstanceConfigurationIsMissing)
 }

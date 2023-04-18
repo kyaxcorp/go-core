@@ -1,8 +1,8 @@
-package err
+package errors2
 
 import (
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
 	"github.com/kyaxcorp/go-core/core/helpers/error_reporting"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
 	"github.com/kyaxcorp/go-core/core/logger/application/vars"
 )

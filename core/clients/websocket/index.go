@@ -7,7 +7,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/clients/websocket/instances"
 	mainConfig "github.com/kyaxcorp/go-core/core/config"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 )
 
 // New -> creates a new client based on the provided configuration
@@ -27,7 +27,7 @@ func GetDefaultClient() (*client.Client, error) {
 // GetClient -> gets the existing created instance if it's already created... if it's not created, then it's being created
 func GetClient(ctx context.Context, instanceName string) (*client.Client, error) {
 	if instanceName == "" {
-		return nil, err.New(0, "websocket client instance name is empty")
+		return nil, errors2.New(0, "websocket client instance name is empty")
 	}
 	// check if there is an existing instance
 	srv, _err := instances.GetInstance(instanceName)
@@ -47,17 +47,17 @@ func GetClient(ctx context.Context, instanceName string) (*client.Client, error)
 // Multiple instances can be generated based on the same configuration
 func NewClient(ctx context.Context, instanceName string) (*client.Client, error) {
 	if instanceName == "" {
-		return nil, err.New(0, "websocket client instance name is empty")
+		return nil, errors2.New(0, "websocket client instance name is empty")
 	}
 	if cfg, _err := GetConfig(instanceName); _err == nil {
 		return New(ctx, cfg)
 	}
-	return nil, err.New(0, "websocket client configuration missing")
+	return nil, errors2.New(0, "websocket client configuration missing")
 }
 
 func GetConfig(instanceName string) (config.Config, error) {
 	if cfg, ok := mainConfig.GetConfig().Clients.WebSocket.Instances[instanceName]; ok {
 		return cfg, nil
 	}
-	return config.Config{}, err.New(0, "websocket client config doesn't exist")
+	return config.Config{}, errors2.New(0, "websocket client config doesn't exist")
 }

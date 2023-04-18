@@ -6,7 +6,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gin-gonic/gin"
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/authentication"
 	"github.com/kyaxcorp/go-core/core/listeners/http/middlewares/connection"
 )
