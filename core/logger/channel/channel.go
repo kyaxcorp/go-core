@@ -2,7 +2,7 @@ package channel
 
 import (
 	mainConfig "github.com/kyaxcorp/go-core/core/config"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/logger"
 	"github.com/kyaxcorp/go-core/core/logger/model"
 	loggerPaths "github.com/kyaxcorp/go-core/core/logger/paths"
@@ -23,7 +23,7 @@ func GetDefaultChannel() (*model.Logger, error) {
 	if cfg.Logging.DefaultChannel == "" {
 		msg := "logger default channel name is empty"
 		l().Warn().Msg(msg)
-		return nil, err.New(0, msg)
+		return nil, errors2.New(0, msg)
 	}
 	return GetChannel(Config{
 		ChannelName: cfg.Logging.DefaultChannel,
@@ -46,7 +46,7 @@ func GetChannel(c Config) (*model.Logger, error) {
 
 		msg := "logger channel doesn't exist"
 		l().Warn().Str("logger_channel", c.ChannelName).Msg(msg)
-		return nil, err.New(0, msg)
+		return nil, errors2.New(0, msg)
 	}
 
 	// Exists

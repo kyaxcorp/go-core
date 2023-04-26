@@ -3,7 +3,7 @@ package filter
 import (
 	"github.com/kyaxcorp/go-core/core/clients/db/helper"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"strconv"

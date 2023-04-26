@@ -5,7 +5,7 @@ import (
 	// cassandraConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cassandra/config"
 
 	cfgData "github.com/kyaxcorp/go-core/core/config/data"
-	"github.com/kyaxcorp/go-core/core/helpers/err"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
 	//brokerConfig "github.com/kyaxcorp/go-core/core/services/broker/config"
 	"github.com/spf13/viper"
@@ -25,12 +25,12 @@ func SaveConfigFromMemory(cfg Config) error {
 	// If it's diff, then overwrite it!
 	configPath := GetConfigFilePath()
 	if configPath == "" {
-		return err.New(0, "config path is empty")
+		return errors2.New(0, "config path is empty")
 	}
 
 	configTmpPath := GetConfigTmpFilePath()
 	if configTmpPath == "" {
-		return err.New(0, "config tmp path is empty")
+		return errors2.New(0, "config tmp path is empty")
 	}
 	// Save the temporary config file
 	_err = c.WriteConfigAs(configTmpPath)

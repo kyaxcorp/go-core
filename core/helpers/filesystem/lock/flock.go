@@ -3,7 +3,7 @@ package lock
 import (
 	"github.com/gofrs/flock"
 	"github.com/kyaxcorp/go-core/core/config"
-	"github.com/kyaxcorp/go-core/core/helpers/err/define"
+	"github.com/kyaxcorp/go-core/core/helpers/errors2/define"
 	fsPath "github.com/kyaxcorp/go-core/core/helpers/filesystem/path"
 	"github.com/kyaxcorp/go-core/core/helpers/folder"
 	"github.com/kyaxcorp/go-core/core/helpers/hash"
