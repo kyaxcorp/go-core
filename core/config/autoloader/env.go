@@ -53,6 +53,10 @@ func setEnv() error {
 			dbInstance.Credentials.SSLMode = sslMode
 		}
 
+		if logLevel := os.Getenv(getInstanceEnvVarName(connectionName, "CRDB_LOG_LEVEL")); logLevel != "" {
+			dbInstance.Logger.Level = conv.StrToInt(logLevel)
+		}
+
 		cfgData.MainConfig.Clients.Cockroach.Instances[connectionName] = dbInstance
 	}
 	//---------------------------------------------------------------------------------\\
