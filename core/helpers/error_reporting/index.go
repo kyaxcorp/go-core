@@ -2,7 +2,7 @@ package error_reporting
 
 import (
 	"github.com/getsentry/sentry-go"
-	"github.com/kyaxcorp/go-core/core/helpers/version"
+	"go.szostok.io/version"
 	"log"
 	"time"
 )
@@ -17,7 +17,7 @@ type Options struct {
 }
 
 func New(o Options) {
-	v := version.GetAppVersion()
+	v := version.Get()
 	dsn := o.DSN
 	tracesSampleRate := o.TracesSampleRate
 	if tracesSampleRate == 0 {
@@ -53,7 +53,9 @@ func New(o Options) {
 		// Either set environment and release here or set the SENTRY_ENVIRONMENT
 		// and SENTRY_RELEASE environment variables.
 		//Environment: "",
-		Release: v.ProjectName + "@" + v.Version,
+		//Release: v. + "@" + v.Version,
+		// TODO: add PROJECT NAME
+		Release: "@" + v.Version,
 		// Enable printing of SDK debug messages.
 		// Useful when getting started or trying to figure something out.
 		Debug: o.Debug,
