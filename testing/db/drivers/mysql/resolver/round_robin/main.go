@@ -10,7 +10,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/_struct"
 	"github.com/kyaxcorp/go-core/core/helpers/errors2"
-	"github.com/kyaxcorp/go-core/core/helpers/version"
 	loggerConfig "github.com/kyaxcorp/go-core/core/logger/config"
 	"log"
 	"time"
@@ -53,11 +52,11 @@ func LoadConfigs() bool {
 
 func main() {
 	// Define version
-	version.Init(version.AppVersion{
-		ProjectName: "db-resolver",
-		Version:     "1.0.0",
-		BuildBy:     "MrDiffer",
-	})
+	//version.Init(version.AppVersion{
+	//	ProjectName: "db-resolver",
+	//	Version:     "1.0.0",
+	//	BuildBy:     "MrDiffer",
+	//})
 
 	// Define error reporting and capture panics
 	//error_reporting.New("https://fc46abe043fb4273b67437eba3ef909c@error.kyax.de/2", false)
