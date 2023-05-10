@@ -5,7 +5,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/_context"
 	"github.com/kyaxcorp/go-core/core/helpers/process/name"
 	"github.com/spf13/cobra"
-	"go.szostok.io/version/extension"
 )
 
 func New(ctx context.Context) *Menu {
@@ -18,15 +17,6 @@ func New(ctx context.Context) *Menu {
 		Short: "Main CLI -> " + execChecksum,
 		Long:  `Main CLI -> ` + execChecksum,
 	}
-
-	// Add version info
-	rootCmd.AddCommand(
-		// 1. Register the 'version' command
-		extension.NewVersionCobraCmd(
-			// 2. Explicitly enable upgrade notice
-			extension.WithUpgradeNotice("repo-owner", "repo-name"),
-		),
-	)
 
 	return &Menu{
 		cfgFile:     "",
