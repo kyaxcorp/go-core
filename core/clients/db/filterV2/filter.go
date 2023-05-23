@@ -145,10 +145,12 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 
 		//m := make(map[string]string)
 		found := make(map[string]bool)
-		for _, field := range s.Fields {
+		//for _, field := range s.Fields {
+		for bindName, field := range s.FieldsByBindName {
 			dbFieldName := field.DBName
 			quotedDbFieldName := strconv.Quote(field.DBName)
-			modelFieldName := field.Name
+			//modelFieldName := field.Name
+			modelFieldName := bindName
 			//m[modelFieldName] = dbFieldName
 
 			filteredDbFieldName := strings.ToLower(modelFieldName)
@@ -170,11 +172,24 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 				// Save as it is
 				// Here, we can have multiple models, so, we should set only the first ones that we find!
 				// Multiple models can have same fields, so let's do a check if the field already exists!
+				// ============ AS FIELD NAME ============= \\
 				if _, ok := f.cachedDBFields[filteredDbFieldName]; !ok {
 					f.cachedDBFields[filteredDbFieldName] = dbField
 				}
 				// Save with model name and field name
 				f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = dbField
+				f.cachedDBFields[tableName+"."+filteredDbFieldName] = dbField
+				// ============ AS FIELD NAME ============= \\
+
+				//
+
+				// ============ AS DB FIELD NAME ============= \\
+				// Save as the db column name
+				f.cachedDBFields[dbFieldName] = dbField
+				f.cachedDBFields[inputModelName+"."+dbFieldName] = dbField
+				f.cachedDBFields[tableName+"."+dbFieldName] = dbField
+				// ============ AS DB FIELD NAME ============= \\
+
 			}
 
 			found[modelFieldName] = true
@@ -182,54 +197,6 @@ func (f *Input) SetModels(models ...InputModel) *Input {
 			//log.Println(modelFieldName + " -> " + dbFieldName)
 		}
 
-		// Try also getting from tags...
-
-		/*mHelper := _struct.New(model)
-		fields := mHelper.Map()
-		for fieldName, _ := range fields {
-			if _, ok := found[fieldName]; !ok {
-				dbFieldName := mHelper.GetFieldTagKeyValue(fieldName, "gorm", "column")
-				if dbFieldName != "" {
-					// it exists, add manually
-
-					modelFieldName := fieldName
-					filteredDbFieldName := strings.ToLower(modelFieldName)
-
-					// We will lowercase the field name from the structure/model!
-					f.models[inputModelName].dbColumns[filteredDbFieldName] = dbFieldName
-
-					if f.enableDBFieldsCaching {
-						// Save as it is
-						f.cachedDBFields[filteredDbFieldName] = dbFieldName
-						// Save with model name and field name
-						f.cachedDBFields[inputModelName+"."+filteredDbFieldName] = dbFieldName
-					}
-
-					found[modelFieldName] = true
-				}
-			}
-
-		}*/
-
-		//
-
-		//
-		/*result, _ := f.db.Migrator().ColumnTypes(model)
-		for _, v := range result {
-			// TODO: what to do with the column tag which can change entirely the name
-			// 		for which we can't reverse the name...
-			//		we need the function column types to return the original field name for which the conversion
-			//		has been made!
-			// 		or we should loop by ourselves and get the names
-
-			dbFieldName := v.Name()
-			filteredDbFieldName := strings.ReplaceAll(dbFieldName, "_", "")
-			//log.Println(v.Name(), v.DatabaseTypeName(), filteredDbFieldName)
-
-			f.models[inputModelName].dbColumns[filteredDbFieldName] = dbFieldName
-			// Let's get it back to original name and after that map!
-			//log.Println()
-		}*/
 	}
 
 	return f
@@ -259,9 +226,9 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 
 	if strings.Contains(fieldName, ".") {
 		// Case 1
-		splitted := strings.Split(lowerFieldName, ".")
-		modelName := splitted[0]
-		fName := splitted[1]
+		split := strings.Split(lowerFieldName, ".")
+		modelName := split[0] // model Name or Table Name
+		fName := strings.Join(split[1:len(split)-1], ".")
 		if _, ok := f.models[modelName]; !ok {
 			return "", define.Err(1, "this model doesn't exist -> "+modelName)
 		}
