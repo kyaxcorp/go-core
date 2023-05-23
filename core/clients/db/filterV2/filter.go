@@ -224,11 +224,12 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 		return dbField.QuotedTableNameFieldName, nil
 	}
 
-	if strings.Contains(fieldName, ".") {
+	if strings.Contains(fieldName, ":") {
 		// Case 1
-		split := strings.Split(lowerFieldName, ".")
+		split := strings.Split(lowerFieldName, ":")
 		modelName := split[0] // model Name or Table Name
-		fName := strings.Join(split[1:len(split)-1], ".")
+		//fName := strings.Join(split[1:len(split)-1], ".")
+		fName := split[1]
 		if _, ok := f.models[modelName]; !ok {
 			return "", define.Err(1, "this model doesn't exist -> "+modelName)
 		}
