@@ -229,11 +229,11 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 	// Embedded Sub Structs
 	// Associations
 
-	if strings.Contains(fieldName, ":") {
+	if strings.Contains(fieldName, ".") {
 		// Case 1
 
 		// ================ Try getting from the specific model ===================\\
-		split := strings.Split(lowerFieldName, ":")
+		split := strings.Split(lowerFieldName, ".")
 		modelName := split[0] // model Name or Table Name
 		//fName := strings.Join(split[1:len(split)-1], ".")
 		fName := split[1]
