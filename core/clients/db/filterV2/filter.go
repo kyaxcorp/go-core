@@ -224,18 +224,33 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 		return dbField.QuotedTableNameFieldName, nil
 	}
 
+	// Handle:
+	// JOINS
+	// Embedded Sub Structs
+	// Associations
+
 	if strings.Contains(fieldName, ":") {
 		// Case 1
+
+		// ================ Try getting from the specific model ===================\\
 		split := strings.Split(lowerFieldName, ":")
 		modelName := split[0] // model Name or Table Name
 		//fName := strings.Join(split[1:len(split)-1], ".")
 		fName := split[1]
-		if _, ok := f.models[modelName]; !ok {
-			return "", define.Err(1, "this model doesn't exist -> "+modelName)
+		if _, modelOk := f.models[modelName]; modelOk {
+			//return "", define.Err(1, "this model doesn't exist -> "+modelName)
+			if _, columnOk := f.models[modelName].dbColumns[fName]; columnOk {
+				//return "", define.Err(2, "this field doesn't exist -> "+fName)
+				return strconv.Quote(f.models[modelName].dbTableName) + "." + strconv.Quote(f.models[modelName].dbColumns[fName]), nil
+			}
 		}
-		if _, ok := f.models[modelName].dbColumns[fName]; !ok {
-			return "", define.Err(2, "this field doesn't exist -> "+fName)
-		}
+		// ================ Try getting from the specific model ===================\\
+
+		//
+
+		//if _, ok := f.models[modelName].dbColumns[fName]; !ok {
+		//	return "", define.Err(2, "this field doesn't exist -> "+fName)
+		//}
 
 		//return f.models[modelName].dbColumns[fName], nil
 		//
@@ -246,31 +261,32 @@ func (f *Input) getDBFieldName(fieldName string) (string, error) {
 		// 30.06.2022 -> am adaugat Double Quoting... "" pentru ca cind faci Joins("CreatedBy") si faci Search CreatedBy.first_name
 		// dar eroare : ERROR: no data source matches prefix: updatedby in this context (SQLSTATE 42P01)
 		// Gorm by default adauga doudble quotes
-
-		return strconv.Quote(f.models[modelName].dbTableName) + "." + strconv.Quote(f.models[modelName].dbColumns[fName]), nil
-	} else {
-		// Case 2
-
-		found := false
-		dbFieldName := ""
-		dbTableName := ""
-		for _, model := range f.models {
-			//log.Println("model", model.dbColumns)
-			if dbField, ok := model.dbColumns[lowerFieldName]; ok {
-				found = true
-				dbFieldName = dbField
-				dbTableName = model.dbTableName
-				break
-			}
-		}
-		if !found {
-			return "", define.Err(3, "this field doesn't exist -> "+lowerFieldName)
-		}
-		// 30.06.2022 -> am adaugat Double Quoting... "" pentru ca cind faci Joins("CreatedBy") si faci Search CreatedBy.first_name
-		// dar eroare : ERROR: no data source matches prefix: updatedby in this context (SQLSTATE 42P01)
-		// Gorm by default adauga doudble quotes
-		return strconv.Quote(dbTableName) + "." + strconv.Quote(dbFieldName), nil
 	}
+	// Case 2
+
+	// ================= Try getting from the first model found ==================\\
+
+	found := false
+	dbFieldName := ""
+	dbTableName := ""
+	for _, model := range f.models {
+		//log.Println("model", model.dbColumns)
+		if dbField, ok := model.dbColumns[lowerFieldName]; ok {
+			found = true
+			dbFieldName = dbField
+			dbTableName = model.dbTableName
+			break
+		}
+	}
+	if !found {
+		return "", define.Err(1, "this field doesn't exist -> "+lowerFieldName)
+	}
+
+	// 30.06.2022 -> am adaugat Double Quoting... "" pentru ca cind faci Joins("CreatedBy") si faci Search CreatedBy.first_name
+	// dar eroare : ERROR: no data source matches prefix: updatedby in this context (SQLSTATE 42P01)
+	// Gorm by default adauga doudble quotes
+	return strconv.Quote(dbTableName) + "." + strconv.Quote(dbFieldName), nil
+	// ================= Try getting from the first model found ==================\\
 }
 
 func (f *Input) getDBFieldNameOrPanic(fieldName string) string {
