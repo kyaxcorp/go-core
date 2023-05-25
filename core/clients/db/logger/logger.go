@@ -2,6 +2,7 @@ package logger
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/kyaxcorp/go-core/core/helpers/conv"
@@ -11,6 +12,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/logger/model"
 	"github.com/kyaxcorp/go-core/core/logger/paths"
 	"github.com/rs/zerolog"
+	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"
 	"time"
@@ -101,7 +103,13 @@ func (l *GormLogger) Error(
 ) {
 	// We will print all gorm errors... even ErrRecordNotFound
 	// if you don't need to see these errors, then you can simply set the log level to another level or even disable it!
-	l.print(l.l().Error(), ctx, msg, data...)
+
+	l.print(
+		l.l().Error(),
+		ctx,
+		msg,
+		data...,
+	)
 
 	errors2.NewCustom(errors2.CustomError{
 		Code:    0,
@@ -125,7 +133,8 @@ func (l *GormLogger) Trace(
 	elapsedInfo := color.Style{color.LightRed}.Render("sql:" + elapsedStr + "ms")
 
 	// db_instance has being added for Application specific logs
-	if _err != nil {
+
+	if _err != nil && !errors.Is(_err, gorm.ErrRecordNotFound) {
 		l.l().Error().
 			Str("db_instance", l.instanceName).
 			Str("sql_file", sqlFile).
