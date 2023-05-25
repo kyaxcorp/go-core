@@ -1,4 +1,4 @@
-package db
+package logger
 
 import (
 	"context"
@@ -99,6 +99,8 @@ func (l *GormLogger) Error(
 	msg string,
 	data ...interface{},
 ) {
+	// We will print all gorm errors... even ErrRecordNotFound
+	// if you don't need to see these errors, then you can simply set the log level to another level or even disable it!
 	l.print(l.l().Error(), ctx, msg, data...)
 
 	errors2.NewCustom(errors2.CustomError{
