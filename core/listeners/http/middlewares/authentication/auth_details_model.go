@@ -31,6 +31,7 @@ type DeviceDetails struct {
 type UserDetails struct {
 	//UserID    uint64
 	// By using string we can set any type of identification...
+	// TODO: try setting user id to interface, but we should also create the indexes for it...
 	UserID    string
 	Email     string
 	FirstName string
@@ -38,9 +39,9 @@ type UserDetails struct {
 	Username  string
 	IsActive  bool
 	// UserType -> admin, client etc...
-	UserType string
+	UserType interface{}
 	// Role -> SuperAdmin, Admin, SalesMan etc...
-	Role string
+	Role interface{}
 
 	// Secondary
 	Phone1 string
