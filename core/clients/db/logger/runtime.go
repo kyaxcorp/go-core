@@ -29,3 +29,11 @@ func NewQuickConsole(db *gorm.DB, r Runtime) error {
 	db.Logger = l
 	return nil
 }
+
+func QuickScope(r Runtime) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		dbc := db.WithContext(db.Statement.Context)
+		NewQuickConsole(dbc, r)
+		return dbc
+	}
+}
