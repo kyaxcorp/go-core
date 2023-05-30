@@ -20,12 +20,20 @@ func (a *AuthDetails) GetFullName() string {
 	return a.UserDetails.GetFullName()
 }
 
-func (a *AuthDetails) GetRole() string {
+func (a *AuthDetails) GetRole() interface{} {
 	return a.UserDetails.GetRole()
 }
 
-func (a *AuthDetails) GetUserType() string {
+func (a *AuthDetails) GetRoleStr() string {
+	return a.UserDetails.GetRoleStr()
+}
+
+func (a *AuthDetails) GetUserType() interface{} {
 	return a.UserDetails.GetUserType()
+}
+
+func (a *AuthDetails) GetUserTypeStr() string {
+	return a.UserDetails.GetUserTypeStr()
 }
 
 //-------------------------------------\\
