@@ -32,7 +32,7 @@ func NewQuickConsole(db *gorm.DB, r Runtime) error {
 
 func QuickScope(r Runtime) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		dbc := db.WithContext(db.Statement.Context)
+		dbc := db.Session(&gorm.Session{})
 		NewQuickConsole(dbc, r)
 		return dbc
 	}
