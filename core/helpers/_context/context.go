@@ -10,6 +10,9 @@ type CancelCtx struct {
 	cancel context.CancelFunc
 }
 
+var rootCtx *CancelCtx
+var backgroundCtx context.Context
+
 func (c *CancelCtx) Done() <-chan struct{} {
 	return c.ctx.Done()
 }
@@ -34,9 +37,6 @@ func (c *CancelCtx) Cancel() {
 func (c *CancelCtx) Context() context.Context {
 	return c.ctx
 }
-
-var rootCtx *CancelCtx
-var backgroundCtx context.Context
 
 // GetDefaultContext Get the ROOT Context
 func GetDefaultContext() context.Context {
