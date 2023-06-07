@@ -26,6 +26,9 @@ type DeviceDetails struct {
 	Name            string
 	PlatformVersion string
 	AppVersion      string
+
+	// this is the device struct
+	Device interface{}
 }
 
 type UserDetails struct {
@@ -46,6 +49,9 @@ type UserDetails struct {
 	// Secondary
 	Phone1 string
 	Phone2 string
+
+	// this is the user struct
+	User interface{}
 }
 
 type AuthTokenDetails struct {
@@ -55,4 +61,7 @@ type AuthTokenDetails struct {
 	CreatedDate time.Time
 	ExpireDate  time.Time
 	TTL         uint64
+
+	// this is the AuthToken struct
+	AuthToken interface{}
 }
