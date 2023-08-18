@@ -222,6 +222,12 @@ func StartAutoLoader(c Config) error {
 
 	//
 
+	if len(beforeLoadSetDefaults) > 0 {
+		for _, cb := range beforeLoadSetDefaults {
+			cb()
+		}
+	}
+
 	// We should save the configuration only if has being changed!
 	// But this can be made by saving in other temporary location, and after that comparing the contents of the both files!
 
