@@ -221,6 +221,7 @@ func StartAutoLoader(c Config) error {
 	// =================== VIPER SET ======================\\
 
 	//
+	createMaps()
 
 	if len(beforeLoadSetDefaults) > 0 {
 		for _, cb := range beforeLoadSetDefaults {
