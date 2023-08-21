@@ -15,6 +15,33 @@ import (
 	loggingConfig "github.com/kyaxcorp/go-core/core/logger/config"
 )
 
+func createMaps() {
+	if cfgData.MainConfig.Clients.MySQL.Instances == nil {
+		// Creating  the map, where we will set afterwards the default object
+		cfgData.MainConfig.Clients.MySQL.Instances = make(map[string]mysqlConfig.Config)
+	}
+	if cfgData.MainConfig.Clients.Cockroach.Instances == nil {
+		// Creating  the map, where we will set afterwards the default object
+		cfgData.MainConfig.Clients.Cockroach.Instances = make(map[string]cockroachConfig.Config)
+	}
+	if cfgData.MainConfig.Listeners.Http.Instances == nil {
+		// Creating  the map, where we will set afterwards the default object
+		cfgData.MainConfig.Listeners.Http.Instances = make(map[string]httpConfig.Config)
+	}
+	if cfgData.MainConfig.Listeners.WebSocket.Instances == nil {
+		// Creating  the map, where we will set afterwards the default object
+		cfgData.MainConfig.Listeners.WebSocket.Instances = make(map[string]websocketServerConfig.Config)
+	}
+	if cfgData.MainConfig.Clients.WebSocket.Instances == nil {
+		// Creating  the map, where we will set afterwards the default object
+		cfgData.MainConfig.Clients.WebSocket.Instances = make(map[string]websocketClientConfig.Config)
+	}
+	if cfgData.MainConfig.Logging.Channels == nil {
+		// Creating  the map, where we will set afterwards the default object
+		cfgData.MainConfig.Logging.Channels = make(map[string]loggingConfig.Config)
+	}
+}
+
 func setDefaults(cfg Config) error {
 	// Create the map!
 	//MainConfig.ClientsStatus.MySQL.Connections = make(map[string]mysql.Config)
@@ -38,10 +65,10 @@ func setDefaults(cfg Config) error {
 		}
 
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Clients.MySQL.Instances == nil {
-			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Clients.MySQL.Instances = make(map[string]mysqlConfig.Config)
-		}
+		//if cfgData.MainConfig.Clients.MySQL.Instances == nil {
+		//	// Creating  the map, where we will set afterwards the default object
+		//	cfgData.MainConfig.Clients.MySQL.Instances = make(map[string]mysqlConfig.Config)
+		//}
 		cfgData.MainConfig.Clients.MySQL.Instances["default"] = *dbInstance
 	}
 
@@ -72,10 +99,10 @@ func setDefaults(cfg Config) error {
 		}
 
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Clients.Cockroach.Instances == nil {
-			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Clients.Cockroach.Instances = make(map[string]cockroachConfig.Config)
-		}
+		//if cfgData.MainConfig.Clients.Cockroach.Instances == nil {
+		//	// Creating  the map, where we will set afterwards the default object
+		//	cfgData.MainConfig.Clients.Cockroach.Instances = make(map[string]cockroachConfig.Config)
+		//}
 		cfgData.MainConfig.Clients.Cockroach.Instances["default"] = *dbInstance
 	}
 
@@ -137,10 +164,10 @@ func setDefaults(cfg Config) error {
 			panic(_err)
 		}
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Listeners.Http.Instances == nil {
-			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Listeners.Http.Instances = make(map[string]httpConfig.Config)
-		}
+		//if cfgData.MainConfig.Listeners.Http.Instances == nil {
+		//	// Creating  the map, where we will set afterwards the default object
+		//	cfgData.MainConfig.Listeners.Http.Instances = make(map[string]httpConfig.Config)
+		//}
 		cfgData.MainConfig.Listeners.Http.Instances["default"] = *_http
 	}
 
@@ -196,10 +223,10 @@ func setDefaults(cfg Config) error {
 			panic(_err)
 		}
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Listeners.WebSocket.Instances == nil {
-			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Listeners.WebSocket.Instances = make(map[string]websocketServerConfig.Config)
-		}
+		//if cfgData.MainConfig.Listeners.WebSocket.Instances == nil {
+		//	// Creating  the map, where we will set afterwards the default object
+		//	cfgData.MainConfig.Listeners.WebSocket.Instances = make(map[string]websocketServerConfig.Config)
+		//}
 		cfgData.MainConfig.Listeners.WebSocket.Instances["default"] = *_websocketServer
 	}
 
@@ -257,10 +284,10 @@ func setDefaults(cfg Config) error {
 		}
 
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Clients.WebSocket.Instances == nil {
-			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Clients.WebSocket.Instances = make(map[string]websocketClientConfig.Config)
-		}
+		//if cfgData.MainConfig.Clients.WebSocket.Instances == nil {
+		//	// Creating  the map, where we will set afterwards the default object
+		//	cfgData.MainConfig.Clients.WebSocket.Instances = make(map[string]websocketClientConfig.Config)
+		//}
 
 		// Set finally the default config
 		cfgData.MainConfig.Clients.WebSocket.Instances["default"] = *_webSocketClient
@@ -324,10 +351,10 @@ func setDefaults(cfg Config) error {
 			panic(_err)
 		}
 		// If the map is empty... we need to create it
-		if cfgData.MainConfig.Logging.Channels == nil {
-			// Creating  the map, where we will set afterwards the default object
-			cfgData.MainConfig.Logging.Channels = make(map[string]loggingConfig.Config)
-		}
+		//if cfgData.MainConfig.Logging.Channels == nil {
+		//	// Creating  the map, where we will set afterwards the default object
+		//	cfgData.MainConfig.Logging.Channels = make(map[string]loggingConfig.Config)
+		//}
 		cfgData.MainConfig.Logging.Channels["default"] = *_logging
 	}
 

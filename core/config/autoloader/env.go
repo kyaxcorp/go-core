@@ -74,6 +74,11 @@ func setEnv() error {
 			addresses := strings.Split(listeningAddresses, ",")
 			instance.ListeningAddresses = addresses
 		}
+		if listeningSSLAddresses := os.Getenv(getInstanceEnvVarName(instanceName, "HTTP_LISTENING_SSL_ADDRESSES")); listeningSSLAddresses != "" {
+			addresses := strings.Split(listeningSSLAddresses, ",")
+			instance.ListeningAddressesSSL = addresses
+		}
+
 		cfgData.MainConfig.Listeners.Http.Instances[instanceName] = instance
 	}
 	//---------------------------------------------------------------------------------\\
