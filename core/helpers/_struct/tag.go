@@ -31,11 +31,15 @@ func (h *Helper) GetFieldTagKeyValue(fieldName string, tagName string, tagKey st
 	tagVal := h.GetTagValByInputRef(nil, fieldName, tagName)
 
 	// Check if the key even exists...
-	if !strings.Contains(tagVal, tagKey) {
+	return GetTagKeyValue(tagVal, tagKey)
+}
+
+func GetTagKeyValue(tag string, tagKey string) string {
+	if !strings.Contains(tag, tagKey) {
 		return ""
 	}
 
-	keys := strings.Split(tagVal, ";")
+	keys := strings.Split(tag, ";")
 	if len(keys) == 0 {
 		return ""
 	}
