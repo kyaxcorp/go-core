@@ -66,6 +66,44 @@ func setEnv() error {
 	//
 
 	//---------------------------------------------------------------------------------\\
+	//--------------------------\\    MYSQL CLIENT    //-------------------------------\\
+	//---------------------------------------------------------------------------------\\
+	for connectionName, dbInstance := range cfgData.MainConfig.Clients.MySQL.Instances {
+
+		if host := os.Getenv(getInstanceEnvVarName(connectionName, "MYSQL_HOST")); host != "" {
+			dbInstance.Credentials.Host = host
+		}
+
+		if port := os.Getenv(getInstanceEnvVarName(connectionName, "MYSQL_PORT")); port != "" {
+			dbInstance.Credentials.Port = conv.StrToInt(port)
+		}
+
+		if user := os.Getenv(getInstanceEnvVarName(connectionName, "MYSQL_USERNAME")); user != "" {
+			dbInstance.Credentials.User = user
+		}
+
+		if password := os.Getenv(getInstanceEnvVarName(connectionName, "MYSQL_PASSWORD")); password != "" {
+			dbInstance.Credentials.Password = password
+		}
+
+		if dbName := os.Getenv(getInstanceEnvVarName(connectionName, "MYSQL_DB_NAME")); dbName != "" {
+			dbInstance.Credentials.DbName = dbName
+		}
+
+		if logLevel := os.Getenv(getInstanceEnvVarName(connectionName, "MYSQL_LOG_LEVEL")); logLevel != "" {
+			dbInstance.Logger.Level = conv.StrToInt(logLevel)
+		}
+
+		cfgData.MainConfig.Clients.MySQL.Instances[connectionName] = dbInstance
+	}
+
+	//---------------------------------------------------------------------------------\\
+	//--------------------------\\    MYSQL CLIENT    //-------------------------------\\
+	//---------------------------------------------------------------------------------\\
+
+	//
+
+	//---------------------------------------------------------------------------------\\
 	//-----------------------\\    HTTP SERVER/LISTENER    //--------------------------\\
 	//---------------------------------------------------------------------------------\\
 	for instanceName, instance := range cfgData.MainConfig.Listeners.Http.Instances {

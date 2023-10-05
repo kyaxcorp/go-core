@@ -1,4 +1,4 @@
-package channels
+package channel_func_vars
 
 import (
 	"log"
