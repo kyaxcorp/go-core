@@ -5,7 +5,6 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/fsnotify"
-	"github.com/kyaxcorp/go-core/core/helpers/str"
 	"github.com/kyaxcorp/go-core/core/listeners/websocket/server"
 	"github.com/rs/zerolog"
 	"path/filepath"
@@ -102,12 +101,20 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 						return
 					}
 
-					if !str.IsJSON(data) {
-						errorMsg := "file data is not a json"
-						wsNotifier.onError(errorMsg)
-						_error().Str("data", data).Msg(errorMsg)
+					var d json.RawMessage
+					jErr := json.Unmarshal([]byte(data), &d)
+					if jErr != nil {
+						wsNotifier.onError(jErr.Error())
+						_error().Err(jErr).Msg("failed to unmarshal")
 						return
 					}
+
+					//if !str.IsJSON(data) {
+					//	errorMsg := "file data is not a json"
+					//	wsNotifier.onError(errorMsg)
+					//	_error().Str("data", data).Msg(errorMsg)
+					//	return
+					//}
 
 					var dataDecoded interface{}
 					err = json.Unmarshal([]byte(data), dataDecoded)
