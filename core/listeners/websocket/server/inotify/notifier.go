@@ -23,13 +23,13 @@ type ListeningPath struct {
 type OnNotificationRead func(h *server.Hub, data interface{}, plainData string)
 
 type WSNotifier struct {
-	WebSocketServer *server.Server
-	ListeningPaths  []ListeningPath
-	WSHub           *server.Hub
-	DelayRead       time.Duration
-
-	OnNotificationRead OnNotificationRead
-	OnError            func(msg string)
+	WebSocketServer             *server.Server
+	ListeningPaths              []ListeningPath
+	WSHub                       *server.Hub
+	DelayRead                   time.Duration
+	OnNotificationReadGoRoutine bool
+	OnNotificationRead          OnNotificationRead
+	OnError                     func(msg string)
 }
 
 func (wsNotifier *WSNotifier) onError(msg string) {
@@ -83,6 +83,7 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 
 			// Add to watcher!
 			fsNotifier.Watch(listeningPath.Path, fsnotify.WatchConfig{
+				CallbackGoRoutine: wsNotifier.OnNotificationReadGoRoutine,
 				Callback: func(e fsnotify.EventData) {
 
 					if wsNotifier.DelayRead > 0 {
