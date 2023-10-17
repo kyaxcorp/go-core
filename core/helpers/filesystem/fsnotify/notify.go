@@ -38,6 +38,7 @@ type WatchCallback func(e EventData)
 
 // This is the structure when we send the configuration to the watcher!
 type WatchConfig struct {
+	CallbackGoRoutine bool
 	// This is the callback which should be called!
 	Callback WatchCallback
 	// What operations should listen on!
@@ -194,12 +195,18 @@ func (n *Notifier) Start() *Notifier {
 
 					//log.Println("aaa", event.Op, Op(event.Op))
 
-					watchConfig.Callback(EventData{
+					ev := EventData{
 						Path: event.Name,
 						Time: time.Now(),
 						Name: filepath.Base(event.Name), // Filter the file Name!
 						Op:   Op(event.Op),
-					})
+					}
+
+					if watchConfig.CallbackGoRoutine {
+						go watchConfig.Callback(ev)
+					} else {
+						watchConfig.Callback(ev)
+					}
 				}
 
 				/*log.Println("event:", event)
