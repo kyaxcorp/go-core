@@ -104,7 +104,7 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 					var d json.RawMessage
 					jErr := json.Unmarshal([]byte(data), &d)
 					if jErr != nil {
-						wsNotifier.onError(jErr.Error())
+						wsNotifier.onError(jErr.Error() + " => " + data)
 						_error().Err(jErr).Msg("failed to unmarshal")
 						return
 					}
