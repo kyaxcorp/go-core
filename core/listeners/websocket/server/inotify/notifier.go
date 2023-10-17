@@ -85,7 +85,7 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 			fsNotifier.Watch(listeningPath.Path, fsnotify.WatchConfig{
 				Callback: func(e fsnotify.EventData) {
 
-					if wsNotifier.DelayRead != 0 {
+					if wsNotifier.DelayRead > 0 {
 						time.Sleep(wsNotifier.DelayRead)
 					}
 
