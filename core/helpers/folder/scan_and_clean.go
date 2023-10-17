@@ -4,8 +4,7 @@ import (
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/function"
-	"io/fs"
-	"io/ioutil"
+	"os"
 )
 
 type ScanAndCleanResult struct {
@@ -20,12 +19,15 @@ type ScanAndCleanResult struct {
 func ScanAndClean(
 	path string,
 	maxNrOfItems int,
-	onDelete func(item fs.FileInfo, itemPath string),
-	onScan func(item fs.FileInfo, itemPath string),
+	//onDelete func(item fs.FileInfo, itemPath string),
+	onDelete func(item os.DirEntry, itemPath string),
+	//onScan func(item fs.FileInfo, itemPath string),
+	onScan func(item os.DirEntry, itemPath string),
 	onFinish func(result ScanAndCleanResult),
 ) error {
 	// Scan the directory
-	files, _err := ioutil.ReadDir(path)
+	//files, _err := ioutil.ReadDir(path)
+	files, _err := os.ReadDir(path)
 	if _err != nil {
 		// log.Fatal(_err)
 		return _err
@@ -61,7 +63,6 @@ func ScanAndClean(
 	var undeletedItems []string
 	// Loop through files
 	for _, f := range files {
-
 		// Create the full item path
 		itemPath := file.FilterPath(path + filesystem.DirSeparator() + f.Name())
 		// Call the onScan callback
