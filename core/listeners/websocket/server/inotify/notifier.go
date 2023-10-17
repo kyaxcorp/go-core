@@ -26,6 +26,7 @@ type WSNotifier struct {
 	WebSocketServer *server.Server
 	ListeningPaths  []ListeningPath
 	WSHub           *server.Hub
+	DelayRead       time.Duration
 
 	OnNotificationRead OnNotificationRead
 	OnError            func(msg string)
@@ -83,6 +84,10 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 			// Add to watcher!
 			fsNotifier.Watch(listeningPath.Path, fsnotify.WatchConfig{
 				Callback: func(e fsnotify.EventData) {
+
+					if wsNotifier.DelayRead != 0 {
+						time.Sleep(wsNotifier.DelayRead)
+					}
 
 					// Check if it's a file!
 					if !file.IsFile(e.Path) {
