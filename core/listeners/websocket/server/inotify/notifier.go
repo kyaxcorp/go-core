@@ -2,6 +2,7 @@ package inotify
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/kyaxcorp/go-core/core/helpers/file"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem"
 	"github.com/kyaxcorp/go-core/core/helpers/filesystem/fsnotify"
@@ -104,7 +105,7 @@ func New(wsNotifier *WSNotifier) *WSNotifier {
 					var d json.RawMessage
 					jErr := json.Unmarshal([]byte(data), &d)
 					if jErr != nil {
-						wsNotifier.onError(jErr.Error() + " => " + data)
+						wsNotifier.onError(jErr.Error() + fmt.Sprintf("=> %s => %s", e.Path, data))
 						_error().Err(jErr).Msg("failed to unmarshal")
 						return
 					}
