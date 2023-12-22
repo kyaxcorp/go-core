@@ -52,6 +52,12 @@ type Between struct {
 	End   *string `json:"end"`
 }
 
+type BetweenUnixTimestamp struct {
+	Name  string `json:"name"`
+	Start *int64 `json:"start"`
+	End   *int64 `json:"end"`
+}
+
 type IsEmpty struct {
 	Name string `json:"name"`
 }
@@ -80,6 +86,12 @@ type NotBetween struct {
 	Name  string  `json:"name"`
 	Start *string `json:"start"`
 	End   *string `json:"end"`
+}
+
+type NotBetweenUnixTimestamp struct {
+	Name  string `json:"name"`
+	Start *int64 `json:"start"`
+	End   *int64 `json:"end"`
 }
 
 type IsNotEmpty struct {
