@@ -37,4 +37,7 @@ type Condition struct {
 
 	Between    *Between    `json:"between"`
 	NotBetween *NotBetween `json:"not_between"`
+
+	BetweenUnixTimestamp    *BetweenUnixTimestamp    `json:"between_unix_timestamp"`
+	NotBetweenUnixTimestamp *NotBetweenUnixTimestamp `json:"not_between_unix_timestamp"`
 }

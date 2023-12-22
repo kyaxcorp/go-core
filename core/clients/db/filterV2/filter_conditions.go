@@ -2,6 +2,7 @@ package filterV2
 
 import (
 	"gorm.io/gorm"
+	"time"
 )
 
 func (f *Input) ApplyConditions() *Input {
@@ -231,6 +232,24 @@ func (f *Input) processGroupCondition(input *GroupConditionInput) *gorm.DB {
 				dbFieldName = f.getDBFieldNameOrPanic(cond.NotBetween.Name)
 				dbParams.Query = "(" + dbFieldName + " NOT BETWEEN ? AND ? )"
 				dbParams.Args = []interface{}{cond.NotBetween.Start, cond.NotBetween.End}
+				//db = db.Where("("+cond.NotBetween.Name+" NOT BETWEEN ? AND ? )", cond.NotBetween.Start, cond.NotBetween.End)
+			} else if cond.BetweenUnixTimestamp != nil && cond.BetweenUnixTimestamp.Name != "" {
+				validateFieldNameAndPanic(cond.BetweenUnixTimestamp.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.BetweenUnixTimestamp.Name)
+				dbParams.Query = "(" + dbFieldName + " BETWEEN ? AND ? )"
+				dbParams.Args = []interface{}{
+					time.Unix(*cond.BetweenUnixTimestamp.Start, 0).Format("2006-01-02 15:04:05"),
+					time.Unix(*cond.BetweenUnixTimestamp.End, 0).Format("2006-01-02 15:04:05"),
+				}
+				//db = db.Where("("+cond.Between.Name+" BETWEEN ? AND ? )", cond.Between.Start, cond.Between.End)
+			} else if cond.NotBetweenUnixTimestamp != nil && cond.NotBetweenUnixTimestamp.Name != "" {
+				validateFieldNameAndPanic(cond.NotBetweenUnixTimestamp.Name)
+				dbFieldName = f.getDBFieldNameOrPanic(cond.NotBetweenUnixTimestamp.Name)
+				dbParams.Query = "(" + dbFieldName + " NOT BETWEEN ? AND ? )"
+				dbParams.Args = []interface{}{
+					time.Unix(*cond.NotBetweenUnixTimestamp.Start, 0).Format("2006-01-02 15:04:05"),
+					time.Unix(*cond.NotBetweenUnixTimestamp.End, 0).Format("2006-01-02 15:04:05"),
+				}
 				//db = db.Where("("+cond.NotBetween.Name+" NOT BETWEEN ? AND ? )", cond.NotBetween.Start, cond.NotBetween.End)
 			}
 
