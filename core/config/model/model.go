@@ -76,6 +76,19 @@ type Model struct {
 		// This param disables the override function on bootstrap only if necessary!
 		DisableTimezoneOverride string `yaml:"disable_timezone_override" mapstructure:"disable_timezone_override" default:"no"`
 	}
+
+	Storage struct {
+		Local struct{}
+		// TODO:
+		MinIO struct {
+			DefaultConn struct {
+				// This is the default Instance Name
+				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
+			}
+			Instances map[string]cockroachConfig.Config
+		}
+	}
+
 	// Different connections to different services
 	Clients struct {
 		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach"`
@@ -87,6 +100,7 @@ type Model struct {
 			}
 			Instances map[string]cockroachConfig.Config
 		}
+
 		// TODO: add PgSQL as a separate
 		MySQL struct {
 			DefaultConn struct {
