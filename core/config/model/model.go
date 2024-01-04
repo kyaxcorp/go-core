@@ -77,6 +77,28 @@ type Model struct {
 		DisableTimezoneOverride string `yaml:"disable_timezone_override" mapstructure:"disable_timezone_override" default:"no"`
 	}
 
+	/*	type MinIO struct {
+			// https://github.com/beyondstorage/go-storage-example/blob/master/new_minio.go
+
+			// Credentials hmac:access_key_id:secret_access_key
+			Credentials string `yaml:"credentials" mapstructure:"credentials" default:"" env:"" json:"credentials,omitempty"`
+			// Endpoint https:host:port https://127.0.0.1:9000
+			Endpoint string `yaml:"endpoint" mapstructure:"endpoint" default:"" env:"" json:"endpoint,omitempty"`
+			// BucketName name is the bucket name.
+			BucketName string `yaml:"bucket_name" mapstructure:"bucket_name" default:"" env:"" json:"bucket_name,omitempty"`
+			// WorkDir Relative operations will be based on this WorkDir.
+			WorkDir string `yaml:"work_dir" mapstructure:"work_dir" default:"" env:"" json:"work_dir,omitempty"`
+		}
+
+			type StorageConfig struct {
+			MinIO MinIO
+		}
+
+			type Storage struct {
+			Default   string
+			Instances map[string]StorageConfig
+		}*/
+
 	Storage struct {
 		Local struct{}
 		// TODO:
