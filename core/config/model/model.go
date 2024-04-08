@@ -113,7 +113,7 @@ type Model struct {
 
 	// Different connections to different services
 	Clients struct {
-		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach"`
+		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach" env:"DEFAULT_DB_CLIENT"`
 		Cockroach       struct {
 			// This is the default connection name -> from which we
 			DefaultConn struct {
