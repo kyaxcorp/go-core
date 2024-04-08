@@ -76,9 +76,44 @@ type Model struct {
 		// This param disables the override function on bootstrap only if necessary!
 		DisableTimezoneOverride string `yaml:"disable_timezone_override" mapstructure:"disable_timezone_override" default:"no"`
 	}
+
+	/*	type MinIO struct {
+			// https://github.com/beyondstorage/go-storage-example/blob/master/new_minio.go
+
+			// Credentials hmac:access_key_id:secret_access_key
+			Credentials string `yaml:"credentials" mapstructure:"credentials" default:"" env:"" json:"credentials,omitempty"`
+			// Endpoint https:host:port https://127.0.0.1:9000
+			Endpoint string `yaml:"endpoint" mapstructure:"endpoint" default:"" env:"" json:"endpoint,omitempty"`
+			// BucketName name is the bucket name.
+			BucketName string `yaml:"bucket_name" mapstructure:"bucket_name" default:"" env:"" json:"bucket_name,omitempty"`
+			// WorkDir Relative operations will be based on this WorkDir.
+			WorkDir string `yaml:"work_dir" mapstructure:"work_dir" default:"" env:"" json:"work_dir,omitempty"`
+		}
+
+			type StorageConfig struct {
+			MinIO MinIO
+		}
+
+			type Storage struct {
+			Default   string
+			Instances map[string]StorageConfig
+		}*/
+
+	Storage struct {
+		Local struct{}
+		// TODO:
+		MinIO struct {
+			DefaultConn struct {
+				// This is the default Instance Name
+				InstanceId string `yaml:"instance_id" mapstructure:"instance_id" default:"default"`
+			}
+			Instances map[string]cockroachConfig.Config
+		}
+	}
+
 	// Different connections to different services
 	Clients struct {
-		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach"`
+		DefaultDBClient string `yaml:"default_db_client" mapstructure:"default_db_client" default:"cockroach" env:"DEFAULT_DB_CLIENT"`
 		Cockroach       struct {
 			// This is the default connection name -> from which we
 			DefaultConn struct {
@@ -87,6 +122,7 @@ type Model struct {
 			}
 			Instances map[string]cockroachConfig.Config
 		}
+
 		// TODO: add PgSQL as a separate
 		MySQL struct {
 			DefaultConn struct {
