@@ -23,6 +23,13 @@ func (dbc *DBClient) GetDriverInstance() *dbinstance.Instance {
 
 	// This is for creating
 	driverInstancesLock.Lock()
+	defer driverInstancesLock.Unlock()
+
+	// Check again
+	if instance, ok := driverInstances[dbc.DriverType]; ok {
+		return instance
+	}
+
 	driverInstances[dbc.DriverType] = dbinstance.NewInstance()
 	// Define the auto creator!
 	driverInstances[dbc.DriverType].OnMissingAutoCreate = func(instanceName string) (*gorm.DB, error) {
@@ -37,7 +44,6 @@ func (dbc *DBClient) GetDriverInstance() *dbinstance.Instance {
 	}
 	// Set just as reference for faster access
 	dbc.instanceRef = driverInstances[dbc.DriverType]
-	driverInstancesLock.Unlock()
 	return dbc.instanceRef
 	// That's for responding...
 	//driverInstancesLock.RLock()

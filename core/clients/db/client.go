@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"sync"
+
 	dbClient "github.com/kyaxcorp/go-core/core/clients/db/constructor"
 	dbDriver "github.com/kyaxcorp/go-core/core/clients/db/driver"
 	cockroachConfig "github.com/kyaxcorp/go-core/core/clients/db/driver/cockroach/config"
@@ -63,13 +65,25 @@ func New(
 	return dbClient.NewClient(ctx, config)
 }
 
+var defaultClientMutex sync.RWMutex
+
 // GetDefaultClient -> this is a common function which helps getting the default Database client
 // based on the current configuration!
 func GetDefaultClient() (*gorm.DB, error) {
-	// TODO: do we need a lock?!
+	defaultClientMutex.RLock()
+	if DefaultInstanceClient != nil {
+		defaultClientMutex.RUnlock()
+		return DefaultInstanceClient, nil
+	}
+	defaultClientMutex.RUnlock()
+	defaultClientMutex.Lock()
+	defer defaultClientMutex.Unlock()
+
+	// Check again
 	if DefaultInstanceClient != nil {
 		return DefaultInstanceClient, nil
 	}
+
 	cl := getDefaultDBClient()
 	// TODO: add function and variable which can override the get default client!...
 	c, _err := cl.GetDefaultClient()
