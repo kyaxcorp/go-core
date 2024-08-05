@@ -72,9 +72,9 @@ type Model struct {
 		// How many seconds should wait until the app gracefully shuts down all the services before os.exit(0)
 		OnShutdownWaitSeconds int `yaml:"on_shutdown_wait_seconds" mapstructure:"on_shutdown_wait_seconds" default:"2"`
 		// This is the default timezone... wherever it runs, when the app starts, it will override the timezone with this value
-		TimeZone string `yaml:"time_zone" mapstructure:"time_zone" default:"UTC"`
+		TimeZone string `yaml:"time_zone" mapstructure:"time_zone" default:"UTC" env:"APP_TIME_ZONE"`
 		// This param disables the override function on bootstrap only if necessary!
-		DisableTimezoneOverride string `yaml:"disable_timezone_override" mapstructure:"disable_timezone_override" default:"no"`
+		DisableTimezoneOverride string `yaml:"disable_timezone_override" mapstructure:"disable_timezone_override" default:"no" env:"APP_DISABLE_TIME_ZONE_OVERRIDE"`
 	}
 
 	/*	type MinIO struct {
