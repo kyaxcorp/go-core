@@ -29,8 +29,8 @@ func (c *Client) writePump() {
 	}
 	// Defer
 	defer func() {
-		_err := c.Disconnect()
-		_error().Err(_err).Msg("disconnect error")
+		err := c.Disconnect()
+		_error().Err(err).Msg("disconnect error")
 	}()
 
 	info().Msg("running...")
@@ -41,7 +41,7 @@ func (c *Client) writePump() {
 	c.pingTicker = time.NewTicker(c.server.PingPeriod.Get())
 	calledClose := false
 
-	var _err error
+	var err error
 	var messageType int
 	var w io.WriteCloser
 
@@ -57,10 +57,10 @@ func (c *Client) writePump() {
 
 			// Well, if we send an empty... message it can give false! so in this case the connection will be closed...
 			// it should always be called!
-			_err = c.conn.SetWriteDeadline(time.Now().Add(c.server.WriteWait.Get()))
+			err = c.conn.SetWriteDeadline(time.Now().Add(c.server.WriteWait.Get()))
 
-			if _err != nil {
-				_error().Err(_err).Msg("set write deadline")
+			if err != nil {
+				_error().Err(err).Msg("set write deadline")
 			}
 
 			if !ok {
@@ -79,19 +79,19 @@ func (c *Client) writePump() {
 					closeMsg = "ws server has an internal error"
 				}
 
-				_err = c.conn.WriteMessage(
+				err = c.conn.WriteMessage(
 					msg.Close,
 					websocket.FormatCloseMessage(closeCode, closeMsg),
 				)
-				if _err != nil {
-					_error().Err(_err).Msg("failed to send close code")
+				if err != nil {
+					_error().Err(err).Msg("failed to send close code")
 				}
 				return
 			}
 
 			// TODO: check if the the type is right!
 
-			messageType, _err = strconv.Atoi(string(message[0]))
+			messageType, err = strconv.Atoi(string(message[0]))
 
 			switch messageType {
 			case msg.Close:
@@ -108,17 +108,17 @@ func (c *Client) writePump() {
 					closeMsg = "you have being disconnected gracefully"
 				}
 
-				if _err = c.conn.WriteMessage(
+				if err = c.conn.WriteMessage(
 					msg.Close,
 					websocket.FormatCloseMessage(closeCode, closeMsg),
-				); _err != nil {
+				); err != nil {
 					return
 				}
 				info().Msg("continuing...")
 				continue
 			}
 
-			if _err != nil {
+			if err != nil {
 				warn().Msg("incorrect message type")
 				return
 			}
@@ -127,8 +127,8 @@ func (c *Client) writePump() {
 			// log.Println("send Message ", Message)
 
 			// Choose a Writer by type! (we have defined that first byte is the Message Type!)
-			w, _err = c.conn.NextWriter(messageType)
-			if _err != nil {
+			w, err = c.conn.NextWriter(messageType)
+			if err != nil {
 				return
 			}
 			// log.Println("Writing the Message")
@@ -138,9 +138,9 @@ func (c *Client) writePump() {
 
 			// Writing the message to the client
 			// We exclude the first byte because it includes the messageType
-			_, _err = w.Write(message[1:])
-			if _err != nil {
-				_error().Err(_err).Msg("failed write bytes")
+			_, err = w.Write(message[1:])
+			if err != nil {
+				_error().Err(err).Msg("failed write bytes")
 				// Count
 				c.nrOfSentFailedMessages.Inc(1)
 				// Even if we failed to write... we should close the writer!
@@ -151,8 +151,8 @@ func (c *Client) writePump() {
 			}
 
 			// Closing the writer
-			if _err = w.Close(); _err != nil {
-				_error().Err(_err).Msg("failed to close the writer")
+			if err = w.Close(); err != nil {
+				_error().Err(err).Msg("failed to close the writer")
 				return
 			}
 		case <-c.pingTicker.C:
@@ -163,22 +163,22 @@ func (c *Client) writePump() {
 			if c.lastReceivedPongTime.Get().Unix()-180 > c.lastSentPingTime.Get().Unix() {
 				// It's dead...or the client simply doesn't send any pongs...
 				// close the connection...
-				_error().Err(_err).Msg("ping ticker -> haven't receive for 3 minutes any pong messages from the client... closing now...")
-				_err = c.Disconnect()
-				warn().Msg(_err.Error())
+				_error().Err(err).Msg("ping ticker -> haven't receive for 3 minutes any pong messages from the client... closing now...")
+				err = c.Disconnect()
+				warn().Msg(err.Error())
 				return
 			}
 
 			// it should always be called!
-			_err = c.conn.SetWriteDeadline(time.Now().Add(c.server.WriteWait.Get()))
-			if _err != nil {
-				_error().Err(_err).Msg("ping ticker -> set write deadline")
+			err = c.conn.SetWriteDeadline(time.Now().Add(c.server.WriteWait.Get()))
+			if err != nil {
+				_error().Err(err).Msg("ping ticker -> set write deadline")
 			}
 
 			c.lastSendPingTry.SetNow()
-			if _err = c.conn.WriteMessage(msg.Ping, nil); _err != nil {
+			if err = c.conn.WriteMessage(msg.Ping, nil); _err != nil {
 				// Failed
-				_error().Err(_err).Msg("ping ticker -> failed to send ping")
+				_error().Err(err).Msg("ping ticker -> failed to send ping")
 				c.nrOfFailedSendPings.Inc(1)
 				return
 			}
