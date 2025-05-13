@@ -1,7 +1,6 @@
 package sync
 
 import (
-	"reflect"
 	"sync"
 )
 
@@ -47,9 +46,4 @@ func (l *Mutex) Lock() {
 
 func (l *Mutex) Unlock() {
 	l.lock.Unlock()
-}
-
-func (l *Mutex) IsLocked() bool {
-	state := reflect.ValueOf(&l.lock).Elem().FieldByName("state")
-	return state.Int()&mutexLocked == mutexLocked
 }
